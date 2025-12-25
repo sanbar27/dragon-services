@@ -1,0 +1,834 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dragon Services | Tickets</title>
+  <meta name="description" content="Dragon Services — premium Discord ticket bot. Support & Trade tickets, fast setup, clean panels, logs, and more." />
+
+  <!-- Social preview -->
+  <meta property="og:title" content="Dragon Services | Tickets" />
+  <meta property="og:description" content="Premium Discord ticket bot — Support & Trade tickets, setup panel, logs, clean UI." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="assets/dragon.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="assets/dragon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --bg0:#050714;
+      --bg1:#070a18;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --border: rgba(255,255,255,.10);
+      --text: #eaf0ff;
+      --muted: rgba(234,240,255,.70);
+      --blue: #6d5cff;
+      --cyan: #35d5ff;
+      --pink: #ff4fd8;
+      --shadow: 0 22px 70px rgba(0,0,0,.60);
+      --radius: 18px;
+      --radius2: 26px;
+      --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family:var(--font);
+      color:var(--text);
+      background:
+        radial-gradient(1200px 700px at 15% 15%, rgba(109,92,255,.22), transparent 55%),
+        radial-gradient(900px 700px at 85% 25%, rgba(53,213,255,.12), transparent 55%),
+        radial-gradient(900px 700px at 60% 85%, rgba(255,79,216,.10), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    /* Animated BG */
+    .bg{
+      position:fixed; inset:0; z-index:-2; pointer-events:none;
+    }
+    .noise{
+      position:absolute; inset:-200px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(109,92,255,.18), transparent 45%),
+        radial-gradient(circle at 80% 35%, rgba(53,213,255,.12), transparent 45%),
+        radial-gradient(circle at 55% 85%, rgba(255,79,216,.10), transparent 45%);
+      filter: blur(40px);
+      opacity:.95;
+      animation: float 10s ease-in-out infinite;
+    }
+    @keyframes float{
+      0%,100%{ transform: translate3d(0,0,0) scale(1); }
+      50%{ transform: translate3d(24px,-18px,0) scale(1.02); }
+    }
+
+    canvas#stars{
+      position:absolute; inset:0; width:100%; height:100%;
+      opacity:.40;
+    }
+
+    .container{max-width:1180px; margin:0 auto; padding:0 20px}
+
+    /* Top bar */
+    .topbar{
+      position:sticky; top:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background: rgba(5,7,20,.55);
+      backdrop-filter: blur(16px);
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      text-decoration:none; color:var(--text);
+    }
+    .logo{
+      width:42px; height:42px; border-radius:14px;
+      box-shadow: 0 0 30px rgba(109,92,255,.20);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+    }
+    .bname{font-weight:900; letter-spacing:.2px}
+    .btag{font-size:12px; color:var(--muted); margin-top:2px}
+
+    .nav{
+      display:flex; gap:16px; align-items:center;
+    }
+    .nav a{
+      color:var(--muted);
+      text-decoration:none;
+      font-weight:700;
+      font-size:14px;
+      padding:10px 10px;
+      border-radius:12px;
+      transition:.18s ease;
+    }
+    .nav a:hover{
+      color:var(--text);
+      background: rgba(255,255,255,.06);
+    }
+
+    .actions{display:flex; gap:10px; align-items:center}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      gap:10px;
+      padding:12px 14px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      background: rgba(255,255,255,.05);
+      text-decoration:none;
+      font-weight:800;
+      cursor:pointer;
+      transition: transform .14s ease, background .16s ease, border-color .16s ease, filter .16s ease;
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
+      user-select:none;
+    }
+    .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
+    .btn:active{transform: translateY(0px)}
+    .btn.primary{
+      background: linear-gradient(90deg, rgba(109,92,255,.95), rgba(53,213,255,.55));
+      border-color: rgba(53,213,255,.35);
+      box-shadow: 0 24px 60px rgba(109,92,255,.18);
+    }
+    .btn.primary:hover{filter: brightness(1.04)}
+    .btn.ghost{background: rgba(255,255,255,.04)}
+    .iconbtn{
+      width:44px; height:44px; padding:0;
+      border-radius:16px;
+    }
+
+    .menuBtn{display:none}
+    @media (max-width: 920px){
+      .nav{display:none}
+      .menuBtn{display:inline-flex}
+    }
+
+    /* Mobile drawer */
+    .drawer{
+      position:fixed; inset:0; z-index:80;
+      background: rgba(0,0,0,.55);
+      display:none;
+    }
+    .drawer.open{display:block}
+    .drawerPanel{
+      position:absolute; right:14px; top:14px;
+      width:min(360px, calc(100vw - 28px));
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(10,12,28,.92);
+      backdrop-filter: blur(16px);
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: var(--shadow);
+      display:grid; gap:10px;
+    }
+    .drawerPanel a{
+      text-decoration:none;
+      color:var(--muted);
+      font-weight:900;
+      padding:12px 12px;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.08);
+      background: rgba(255,255,255,.05);
+    }
+    .drawerPanel a:hover{color:var(--text); background: rgba(255,255,255,.07)}
+    .closeX{justify-self:end}
+
+    /* Hero */
+    .hero{
+      padding: 58px 0 22px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap: 22px;
+      align-items:start;
+    }
+    @media (max-width: 920px){
+      .hero{grid-template-columns:1fr; padding-top:36px}
+    }
+
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius:999px;
+      background: rgba(255,255,255,.05);
+      border:1px solid rgba(255,255,255,.10);
+      color: var(--muted);
+      font-weight:900;
+      font-size:13px;
+      width: fit-content;
+    }
+    .dot{
+      width:10px; height:10px; border-radius:50%;
+      background:#2cff7b;
+      box-shadow: 0 0 18px rgba(44,255,123,.35);
+    }
+
+    h1{
+      margin:16px 0 10px;
+      font-size: clamp(38px, 4.4vw, 64px);
+      line-height:1.03;
+      letter-spacing: -1px;
+    }
+    .grad{
+      background: linear-gradient(90deg, var(--cyan), var(--blue), var(--pink));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .lead{
+      margin:0 0 18px;
+      color: var(--muted);
+      font-size:16px;
+      line-height:1.65;
+      max-width: 60ch;
+    }
+    .cta{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px}
+
+    .stats{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap:10px;
+      margin-top: 10px;
+    }
+    @media (max-width: 520px){ .stats{grid-template-columns:1fr} }
+    .stat{
+      padding:14px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+    }
+    .statTop{font-size:18px}
+    .statBig{font-weight:900; margin-top:6px}
+    .statSub{color:var(--muted); font-size:13px; margin-top:4px}
+
+    /* Right card preview */
+    .card{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+    }
+    .preview{padding:18px}
+    .cardTop{
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:12px;
+      gap:10px;
+    }
+    .badge{
+      font-weight:900;
+      padding:8px 10px;
+      border-radius: 999px;
+      background: rgba(109,92,255,.16);
+      border:1px solid rgba(109,92,255,.28);
+      white-space:nowrap;
+    }
+    .chips{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
+    .chip{
+      font-size:12px;
+      font-weight:900;
+      color: rgba(234,240,255,.92);
+      padding:7px 10px;
+      border-radius:999px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+    }
+
+    .panel{
+      padding:16px;
+      border-radius: 22px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.08);
+    }
+    .panelHead{
+      display:flex; align-items:center; gap:12px;
+      margin-bottom:10px;
+    }
+    .panelAvatar{
+      width:46px; height:46px; border-radius:16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+    }
+    .panelTitle{font-weight:1000; font-size:16px}
+    .panelDesc{color:var(--muted); margin:6px 0 12px; line-height:1.55}
+    .panelBtns{display:grid; grid-template-columns:1fr; gap:10px}
+
+    .panelBtn{
+      text-align:left;
+      padding:12px 14px;
+      border-radius: 16px;
+      background: rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.10);
+      color:var(--text);
+      font-weight:900;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .panelBtn:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.08);
+      border-color: rgba(53,213,255,.28);
+    }
+    .panelBtn small{color:var(--muted); font-weight:800}
+    .smallNote{color:var(--muted); font-size:12px; margin-top:10px}
+
+    .mini{padding:16px; margin-top:12px}
+    .miniRow{display:flex; gap:12px; align-items:flex-start; padding:10px 0}
+    .miniRow + .miniRow{border-top:1px solid rgba(255,255,255,.08)}
+    .miniIcon{
+      width:38px; height:38px; border-radius: 14px;
+      display:grid; place-items:center;
+      background: rgba(53,213,255,.12);
+      border:1px solid rgba(53,213,255,.22);
+      font-weight:900;
+    }
+    .miniTitle{font-weight:1000}
+    .miniText{color:var(--muted); font-size:13px; margin-top:4px; line-height:1.45}
+
+    /* Sections */
+    .section{padding: 28px 0}
+    .section h2{
+      margin:0 0 12px;
+      font-size:28px;
+      letter-spacing:-.4px;
+    }
+    .muted{color:var(--muted)}
+
+    .grid{
+      display:grid;
+      grid-template-columns: repeat(4, minmax(0,1fr));
+      gap:12px;
+    }
+    @media (max-width: 920px){ .grid{grid-template-columns: repeat(2, minmax(0,1fr))} }
+    @media (max-width: 520px){ .grid{grid-template-columns: 1fr} }
+
+    .feature{padding:16px}
+    .icon{font-size:22px}
+    .ftitle{font-weight:1000; margin-top:8px}
+    .ftext{color:var(--muted); margin-top:6px; line-height:1.55}
+
+    .cmds .cmd{
+      padding:18px 16px;
+      text-align:left;
+      font-weight:1000;
+      font-size:16px;
+      cursor:pointer;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+    }
+    .cmds .cmd:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.07);
+      border-color: rgba(109,92,255,.28);
+    }
+    .kbd{
+      font-size:12px; font-weight:900;
+      color: rgba(234,240,255,.85);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      white-space:nowrap;
+    }
+
+    /* FAQ */
+    .faq details{padding:16px}
+    .faq summary{
+      cursor:pointer;
+      font-weight:1000;
+      list-style:none;
+    }
+    .faq summary::-webkit-details-marker{display:none}
+    .faq p{color:var(--muted); margin:10px 0 0; line-height:1.65}
+
+    /* Footer */
+    .footer{
+      padding:22px 0 46px;
+      display:flex; justify-content:space-between; align-items:center;
+      gap:14px;
+      border-top:1px solid rgba(255,255,255,.08);
+      margin-top:12px;
+    }
+    .footLeft{display:flex; align-items:center; gap:12px}
+    .footRight a{color:var(--muted); text-decoration:none; font-weight:900}
+    .footRight a:hover{color:var(--text)}
+
+    /* Animations on scroll */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px);
+      transition: opacity .6s ease, transform .6s ease;
+    }
+    .reveal.show{
+      opacity:1;
+      transform: translateY(0px);
+    }
+
+    /* Toast + top */
+    .toTop{
+      position:fixed;
+      right:18px; bottom:18px;
+      width:46px; height:46px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      display:none;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+    }
+    .toTop.show{display:inline-grid; place-items:center}
+
+    .toast{
+      position:fixed;
+      left:50%; bottom:18px;
+      transform: translateX(-50%);
+      padding:12px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(53,213,255,.25);
+      background: rgba(7,10,18,.85);
+      color: rgba(234,240,255,.92);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      display:none;
+      font-weight:900;
+      z-index:90;
+    }
+    .toast.show{display:block}
+
+    /* Little top ribbon (optional) */
+    .ribbon{
+      display:flex;
+      gap:24px;
+      align-items:center;
+      justify-content:center;
+      padding:10px 12px;
+      background: linear-gradient(90deg, rgba(109,92,255,.95), rgba(255,79,216,.65));
+      color: rgba(255,255,255,.95);
+      font-weight:900;
+      letter-spacing:.2px;
+      font-size:13px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .ribbon a{color:#fff; text-decoration:none; opacity:.95}
+    .ribbon a:hover{opacity:1; text-decoration:underline}
+    @media (max-width: 920px){
+      .ribbon{display:none}
+    }
+  </style>
+</head>
+
+<body id="top">
+  <div class="bg">
+    <div class="noise"></div>
+    <canvas id="stars"></canvas>
+  </div>
+
+  <!-- Optional ribbon like the screenshot vibe -->
+  <div class="ribbon">
+    <span>🔥 Dragon Services</span>
+    <span>•</span>
+    <a href="#features">Features</a>
+    <span>•</span>
+    <a href="#commands">Commands</a>
+    <span>•</span>
+    <a href="#setup">Publish</a>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="#top">
+      <img class="logo" src="assets/dragon.png" alt="Dragon Services" />
+      <div>
+        <div class="bname">Dragon Services</div>
+        <div class="btag">Tickets Bot</div>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="#features">Features</a>
+      <a href="#commands">Commands</a>
+      <a href="#faq">FAQ</a>
+      <a href="#setup">Publish</a>
+    </nav>
+
+    <div class="actions">
+      <button class="btn ghost iconbtn" id="copyInvite" type="button" title="Copy invite">📋</button>
+      <a class="btn primary" id="inviteBtn" href="#" target="_blank" rel="noreferrer">➕ Add to Discord</a>
+      <button class="btn ghost iconbtn menuBtn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
+    </div>
+  </header>
+
+  <!-- Mobile drawer -->
+  <div class="drawer" id="drawer" aria-hidden="true">
+    <div class="drawerPanel">
+      <button class="btn ghost iconbtn closeX" id="closeDrawer" type="button" aria-label="Close">✕</button>
+      <a href="#features">Features</a>
+      <a href="#commands">Commands</a>
+      <a href="#faq">FAQ</a>
+      <a href="#setup">Publish</a>
+      <a class="btn primary" id="inviteBtn2" href="#" target="_blank" rel="noreferrer">➕ Add to Discord</a>
+      <button class="btn ghost" id="copyInvite2" type="button">📋 Copy invite link</button>
+    </div>
+  </div>
+
+  <main class="container">
+    <section class="hero">
+      <div class="hero-left reveal">
+        <div class="pill"><span class="dot"></span> Online • Fast • Clean UI</div>
+
+        <h1>
+          Ticket bot <span class="grad">premium</span> for Discord
+        </h1>
+
+        <p class="lead">
+          Support Tickets + Trade Tickets, clean panels, setup, logs, and smart permission checks.
+          Built for public servers and smooth staff workflows.
+        </p>
+
+        <div class="cta">
+          <a class="btn primary" id="inviteBtn3" href="#" target="_blank" rel="noreferrer">➕ Add to Discord</a>
+          <button class="btn ghost" id="copyInvite3" type="button">📋 Copy invite link</button>
+        </div>
+
+        <div class="stats">
+          <div class="stat">
+            <div class="statTop">⚡</div>
+            <div class="statBig">Instant</div>
+            <div class="statSub">Ticket creation</div>
+          </div>
+          <div class="stat">
+            <div class="statTop">🧩</div>
+            <div class="statBig">Panels</div>
+            <div class="statSub">Buttons + menus</div>
+          </div>
+          <div class="stat">
+            <div class="statTop">🔒</div>
+            <div class="statBig">Safe</div>
+            <div class="statSub">Role checks</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="hero-right">
+        <div class="card preview reveal">
+          <div class="cardTop">
+            <div class="badge">Ticket Panel</div>
+            <div class="chips">
+              <span class="chip">Support</span>
+              <span class="chip">Trade</span>
+              <span class="chip">Logs</span>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panelHead">
+              <img class="panelAvatar" src="assets/dragon.png" alt="bot" />
+              <div>
+                <div class="panelTitle">Open a ticket</div>
+                <div class="panelDesc">Choose what you need — the bot creates a private channel.</div>
+              </div>
+            </div>
+
+            <div class="panelBtns">
+              <button class="panelBtn" type="button" onclick="fakeClick('Support Ticket')">
+                <span>🎟️ Support Ticket</span>
+                <small>Fast help</small>
+              </button>
+              <button class="panelBtn" type="button" onclick="fakeClick('Trade Ticket')">
+                <span>🤝 Trade Ticket</span>
+                <small>Private deal</small>
+              </button>
+            </div>
+
+            <div class="smallNote">Tip: staff can use <b>/close</b> directly in ticket channels.</div>
+          </div>
+        </div>
+
+        <div class="card mini reveal">
+          <div class="miniRow">
+            <div class="miniIcon">✅</div>
+            <div>
+              <div class="miniTitle">Clean design</div>
+              <div class="miniText">Dark blue + black, modern cards, smooth glow.</div>
+            </div>
+          </div>
+          <div class="miniRow">
+            <div class="miniIcon">🧠</div>
+            <div>
+              <div class="miniTitle">Easy to use</div>
+              <div class="miniText">Public help + clean setup flow for server owners.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <h2 class="reveal">Features</h2>
+      <div class="grid">
+        <div class="feature card reveal">
+          <div class="icon">🎛️</div>
+          <div class="ftitle">Setup panel</div>
+          <div class="ftext">Pick categories, roles, logs, then post panels.</div>
+        </div>
+        <div class="feature card reveal">
+          <div class="icon">🔐</div>
+          <div class="ftitle">Private tickets</div>
+          <div class="ftext">Only the user + staff can see the channel.</div>
+        </div>
+        <div class="feature card reveal">
+          <div class="icon">🧾</div>
+          <div class="ftitle">Logs</div>
+          <div class="ftext">Ticket create/close actions sent to your log channel.</div>
+        </div>
+        <div class="feature card reveal">
+          <div class="icon">✨</div>
+          <div class="ftitle">Premium UI</div>
+          <div class="ftext">Clean panels, buttons, and safe error messages.</div>
+        </div>
+      </div>
+    </section>
+
+    <section id="commands" class="section">
+      <h2 class="reveal">Commands</h2>
+      <p class="muted reveal">Click a command to copy it.</p>
+
+      <div class="grid cmds">
+        <button class="cmd card reveal" data-copy="/help">
+          <span>/help</span> <span class="kbd">copy</span>
+        </button>
+        <button class="cmd card reveal" data-copy="/close">
+          <span>/close</span> <span class="kbd">copy</span>
+        </button>
+        <button class="cmd card reveal" data-copy="?setup">
+          <span>?setup (owner)</span> <span class="kbd">copy</span>
+        </button>
+        <button class="cmd card reveal" data-copy="?help">
+          <span>?help (owner)</span> <span class="kbd">copy</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="faq" class="section">
+      <h2 class="reveal">FAQ</h2>
+      <div class="faq">
+        <details class="card reveal">
+          <summary>Why does it say “Finish setup” when I click the ticket panel?</summary>
+          <p>If setup isn’t completed (categories/roles/log channel), the bot blocks ticket creation and tells you to finish setup first.</p>
+        </details>
+        <details class="card reveal">
+          <summary>How long do slash commands take to appear globally?</summary>
+          <p>Usually fast, but global commands can take from a few minutes up to longer sometimes. If you use guild-only commands, they appear instantly in that server.</p>
+        </details>
+        <details class="card reveal">
+          <summary>How do I change the icon in the tab + Discord preview?</summary>
+          <p>Replace <b>assets/dragon.png</b> with your new image (same file name), commit, and refresh the page.</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="setup" class="section">
+      <h2 class="reveal">Publish on GitHub Pages</h2>
+      <div class="card reveal" style="padding:16px; color:var(--muted); line-height:1.75">
+        <ol style="margin:0; padding-left:18px">
+          <li>Upload your files to GitHub: <b>index.html</b> + <b>assets/dragon.png</b></li>
+          <li>Repo → <b>Settings → Pages</b></li>
+          <li>Source: <b>Deploy from a branch</b></li>
+          <li>Branch: <b>main</b>, folder: <b>/ (root)</b></li>
+          <li>Save → open your <b>github.io</b> link</li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="footLeft">
+        <img class="logo" src="assets/dragon.png" alt="Dragon Services" style="width:36px;height:36px;border-radius:12px" />
+        <div>
+          <div class="bname">Dragon Services</div>
+          <div class="muted">© <span id="year"></span> • Tickets Bot</div>
+        </div>
+      </div>
+      <div class="footRight">
+        <a href="#top">Back to top</a>
+      </div>
+    </footer>
+  </main>
+
+  <button id="toTop" class="toTop" type="button" aria-label="Back to top">⬆️</button>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    // ===== CONFIG =====
+    const CLIENT_ID = "1442592762108186675";
+    const PERMISSIONS = "277025770560";
+    const INVITE_URL =
+      `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}` +
+      `&scope=bot%20applications.commands&permissions=${PERMISSIONS}`;
+
+    // ===== SET LINKS =====
+    const inviteBtn = document.getElementById("inviteBtn");
+    const inviteBtn2 = document.getElementById("inviteBtn2");
+    const inviteBtn3 = document.getElementById("inviteBtn3");
+    [inviteBtn, inviteBtn2, inviteBtn3].forEach(a => { if(a) a.href = INVITE_URL; });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    // ===== TOAST + COPY =====
+    const toast = document.getElementById("toast");
+    let toastTimer = null;
+
+    function showToast(msg){
+      toast.textContent = msg;
+      toast.classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(()=> toast.classList.remove("show"), 1700);
+    }
+
+    async function copyText(text){
+      try{
+        await navigator.clipboard.writeText(text);
+        showToast("Copied ✅");
+      }catch{
+        showToast("Copy failed ❌");
+      }
+    }
+
+    document.getElementById("copyInvite")?.addEventListener("click", ()=>copyText(INVITE_URL));
+    document.getElementById("copyInvite2")?.addEventListener("click", ()=>copyText(INVITE_URL));
+    document.getElementById("copyInvite3")?.addEventListener("click", ()=>copyText(INVITE_URL));
+
+    document.querySelectorAll("[data-copy]").forEach(btn=>{
+      btn.addEventListener("click", ()=>copyText(btn.getAttribute("data-copy")));
+    });
+
+    // ===== FAKE PANEL CLICK =====
+    window.fakeClick = (name) => showToast(`${name} (demo)`);
+
+    // ===== TOP BUTTON =====
+    const toTop = document.getElementById("toTop");
+    window.addEventListener("scroll", ()=>{
+      if(window.scrollY > 500) toTop.classList.add("show");
+      else toTop.classList.remove("show");
+    }, {passive:true});
+    toTop.addEventListener("click", ()=>window.scrollTo({top:0, behavior:"smooth"}));
+
+    // ===== MOBILE DRAWER =====
+    const drawer = document.getElementById("drawer");
+    const menuBtn = document.getElementById("menuBtn");
+    const closeDrawer = document.getElementById("closeDrawer");
+
+    function setDrawer(open){
+      if(!drawer) return;
+      drawer.classList.toggle("open", open);
+      drawer.setAttribute("aria-hidden", String(!open));
+    }
+    menuBtn?.addEventListener("click", ()=>setDrawer(true));
+    closeDrawer?.addEventListener("click", ()=>setDrawer(false));
+    drawer?.addEventListener("click", (e)=>{ if(e.target === drawer) setDrawer(false); });
+    drawer?.querySelectorAll("a").forEach(a=>a.addEventListener("click", ()=>setDrawer(false)));
+
+    // ===== REVEAL ON SCROLL =====
+    const io = new IntersectionObserver((entries)=>{
+      for(const e of entries){
+        if(e.isIntersecting) e.target.classList.add("show");
+      }
+    }, {threshold: .15});
+    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+    // ===== STARS CANVAS =====
+    const canvas = document.getElementById("stars");
+    const ctx = canvas.getContext("2d");
+
+    function resize(){
+      canvas.width = Math.floor(innerWidth * devicePixelRatio);
+      canvas.height = Math.floor(innerHeight * devicePixelRatio);
+      canvas.style.width = innerWidth + "px";
+      canvas.style.height = innerHeight + "px";
+    }
+    addEventListener("resize", resize, {passive:true});
+    resize();
+
+    let stars = [];
+    function initStars(){
+      const count = Math.min(200, Math.floor(innerWidth / 7));
+      stars = Array.from({length: count}, ()=>({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: (Math.random()*1.6 + .2) * devicePixelRatio,
+        a: Math.random()*.6 + .12,
+        s: (Math.random()*.35 + .05) * devicePixelRatio
+      }));
+    }
+    initStars();
+
+    function draw(){
+      ctx.clearRect(0,0,canvas.width, canvas.height);
+      for(const st of stars){
+        st.y += st.s;
+        if(st.y > canvas.height + 10){
+          st.y = -10;
+          st.x = Math.random() * canvas.width;
+        }
+        ctx.globalAlpha = st.a;
+        ctx.beginPath();
+        ctx.arc(st.x, st.y, st.r, 0, Math.PI*2);
+        ctx.fillStyle = "#ffffff";
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      requestAnimationFrame(draw);
+    }
+    draw();
+  </script>
+</body>
+</html>
