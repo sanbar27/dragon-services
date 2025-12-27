@@ -12,7 +12,6 @@
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/dragon.png" />
 
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="assets/dragon.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -21,24 +20,24 @@
 
   <style>
     :root{
-      /* New theme: blue + purple + black */
-      --bg0:#03040b;
-      --bg1:#070a18;
-      --bg2:#0a0f2a;
+      /* NEW THEME */
+      --bg0:#040511;
+      --bg1:#070A1C;
+      --bg2:#06072A;
 
       --card: rgba(255,255,255,.06);
-      --card2: rgba(255,255,255,.09);
+      --card2: rgba(255,255,255,.08);
       --border: rgba(255,255,255,.10);
 
-      --text: #eaf0ff;
-      --muted: rgba(234,240,255,.72);
+      --text: #eef2ff;
+      --muted: rgba(238,242,255,.72);
 
-      --blue: #2d7dff;
-      --indigo:#5a45ff;
-      --purple:#b14bff;
+      --blue: #3b82f6;
+      --purple: #8b5cf6;
+      --cyan: #22d3ee;
       --pink: #ff4fd8;
 
-      --shadow: 0 22px 70px rgba(0,0,0,.65);
+      --shadow: 0 22px 70px rgba(0,0,0,.60);
       --radius: 18px;
       --radius2: 26px;
       --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -51,194 +50,265 @@
       font-family:var(--font);
       color:var(--text);
       background:
-        radial-gradient(1100px 700px at 12% 18%, rgba(45,125,255,.22), transparent 55%),
-        radial-gradient(900px 700px at 86% 24%, rgba(90,69,255,.18), transparent 55%),
-        radial-gradient(900px 700px at 62% 90%, rgba(177,75,255,.16), transparent 58%),
-        linear-gradient(180deg, var(--bg0), var(--bg2));
+        radial-gradient(900px 600px at 15% 15%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(900px 600px at 85% 25%, rgba(34,211,238,.12), transparent 55%),
+        radial-gradient(900px 700px at 60% 85%, rgba(59,130,246,.12), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
 
-    /* ===== LOADER ===== */
-    .loader{
-      position:fixed; inset:0;
-      z-index:9999;
-      display:grid;
-      place-items:center;
+    /* ===== LOADER + PLAN GATE ===== */
+    .gate{
+      position:fixed; inset:0; z-index:200;
+      display:grid; place-items:center;
       background:
-        radial-gradient(900px 600px at 30% 20%, rgba(45,125,255,.22), transparent 55%),
-        radial-gradient(900px 600px at 70% 30%, rgba(177,75,255,.18), transparent 55%),
-        linear-gradient(180deg, #02030a, #05071a);
-      transition: opacity .45s ease, visibility .45s ease;
+        radial-gradient(900px 650px at 20% 20%, rgba(139,92,246,.22), transparent 60%),
+        radial-gradient(900px 650px at 80% 30%, rgba(34,211,238,.12), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg2));
+      transition: opacity .45s ease, transform .45s ease;
     }
-    .loader.hide{
+    .gate.hide{
       opacity:0;
-      visibility:hidden;
       pointer-events:none;
-    }
-    .loaderCard{
-      width:min(520px, calc(100vw - 44px));
-      border-radius: 26px;
-      padding: 22px;
-      background: rgba(255,255,255,.06);
-      border: 1px solid rgba(255,255,255,.10);
-      box-shadow: var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-    .loaderCard:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: linear-gradient(90deg, rgba(45,125,255,.0), rgba(90,69,255,.35), rgba(177,75,255,.35), rgba(45,125,255,.0));
-      filter: blur(16px);
-      opacity:.9;
-      animation: shimmer 2.4s ease-in-out infinite;
-    }
-    @keyframes shimmer{
-      0%,100%{ transform: translateX(-10%) }
-      50%{ transform: translateX(10%) }
-    }
-    .loaderInner{
-      position:relative;
-      border-radius:22px;
-      padding: 18px;
-      background: rgba(0,0,0,.25);
-      border:1px solid rgba(255,255,255,.08);
-    }
-    .loaderTop{
-      display:flex; gap:14px; align-items:center;
-    }
-    .loaderLogo{
-      width:52px; height:52px;
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      box-shadow: 0 0 40px rgba(90,69,255,.25);
-      animation: pop 1.8s ease-in-out infinite;
-    }
-    @keyframes pop{
-      0%,100%{ transform: translateY(0) scale(1) }
-      50%{ transform: translateY(-3px) scale(1.02) }
-    }
-    .loaderTitle{
-      font-weight:1000;
-      letter-spacing:.2px;
-      font-size:18px;
-      margin:0;
-    }
-    .loaderSub{
-      color:var(--muted);
-      margin:3px 0 0;
-      font-weight:800;
-      font-size:13px;
-    }
-    .bar{
-      height: 12px;
-      border-radius: 999px;
-      background: rgba(255,255,255,.08);
-      border:1px solid rgba(255,255,255,.10);
-      overflow:hidden;
-      margin-top: 14px;
-    }
-    .barFill{
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background: linear-gradient(90deg, rgba(45,125,255,1), rgba(90,69,255,1), rgba(177,75,255,1));
-      box-shadow: 0 10px 30px rgba(90,69,255,.25);
-      transition: width .45s ease;
-    }
-    .loaderTips{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.55;
+      transform: scale(1.02);
     }
 
-    /* Animated BG */
-    .bg{
-      position:fixed; inset:0; z-index:-2; pointer-events:none;
+    .gateCard{
+      width:min(980px, calc(100vw - 36px));
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 20px;
+      position:relative;
+      overflow:hidden;
     }
-    .noise{
-      position:absolute; inset:-220px;
+
+    .gateGlow{
+      position:absolute; inset:-120px;
       background:
-        radial-gradient(circle at 20% 20%, rgba(45,125,255,.20), transparent 45%),
-        radial-gradient(circle at 80% 35%, rgba(90,69,255,.16), transparent 45%),
-        radial-gradient(circle at 55% 85%, rgba(177,75,255,.14), transparent 45%);
-      filter: blur(44px);
+        radial-gradient(circle at 20% 20%, rgba(139,92,246,.22), transparent 55%),
+        radial-gradient(circle at 80% 30%, rgba(34,211,238,.18), transparent 55%),
+        radial-gradient(circle at 55% 85%, rgba(59,130,246,.14), transparent 55%);
+      filter: blur(42px);
       opacity:.95;
       animation: float 10s ease-in-out infinite;
+      pointer-events:none;
+      z-index:0;
     }
     @keyframes float{
       0%,100%{ transform: translate3d(0,0,0) scale(1); }
-      50%{ transform: translate3d(22px,-18px,0) scale(1.02); }
-    }
-    canvas#stars{
-      position:absolute; inset:0; width:100%; height:100%;
-      opacity:.38;
+      50%{ transform: translate3d(18px,-16px,0) scale(1.02); }
     }
 
-    /* Floating blob */
-    .blob{
-      position:fixed;
-      width: 520px;
-      height: 520px;
-      left: -180px;
-      top: 35%;
+    .gateTop{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      position:relative;
+      z-index:1;
+    }
+    .gateBrand{
+      display:flex; align-items:center; gap:12px;
+    }
+    .gateLogo{
+      width:46px; height:46px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      box-shadow: 0 0 40px rgba(139,92,246,.18);
+    }
+    .gateName{font-weight:1000; letter-spacing:.2px}
+    .gateTag{font-size:12px; color:var(--muted); margin-top:2px}
+
+    .loaderRow{
+      display:flex; align-items:center; gap:12px;
+      color: rgba(238,242,255,.9);
+      font-weight:900;
+      position:relative;
+      z-index:1;
+      margin-top: 12px;
+    }
+    .spinner{
+      width:18px; height:18px;
       border-radius: 50%;
-      background: radial-gradient(circle at 30% 30%, rgba(45,125,255,.30), rgba(177,75,255,.10), transparent 60%);
-      filter: blur(28px);
-      opacity:.55;
-      z-index:-3;
-      animation: blobMove 12s ease-in-out infinite;
+      border: 2px solid rgba(255,255,255,.18);
+      border-top-color: rgba(34,211,238,.9);
+      animation: spin .75s linear infinite;
     }
-    @keyframes blobMove{
-      0%,100%{ transform: translate(0,0) scale(1) }
-      50%{ transform: translate(40px,-50px) scale(1.05) }
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    .gateHero{
+      margin-top: 14px;
+      position:relative;
+      z-index:1;
+      display:grid;
+      grid-template-columns: 1.1fr .9fr;
+      gap: 14px;
+      align-items:stretch;
+    }
+    @media (max-width: 920px){
+      .gateHero{grid-template-columns:1fr}
+    }
+    .gateLeft{
+      padding: 14px 10px;
+    }
+    .gateTitle{
+      margin: 10px 0 8px;
+      font-size: clamp(26px, 3.2vw, 44px);
+      line-height:1.06;
+      letter-spacing:-.8px;
+    }
+    .grad{
+      background: linear-gradient(90deg, var(--cyan), var(--purple), var(--blue));
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+    }
+    .gateDesc{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 62ch;
+      font-size: 15px;
     }
 
+    .planGrid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      padding: 14px 6px 6px;
+      position:relative;
+      z-index:1;
+    }
+    @media (max-width: 920px){
+      .planGrid{grid-template-columns:1fr}
+    }
+    .plan{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      border-radius: 22px;
+      padding: 16px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.25);
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      cursor:pointer;
+      position:relative;
+      overflow:hidden;
+      user-select:none;
+    }
+    .plan:hover{
+      transform: translateY(-2px);
+      border-color: rgba(34,211,238,.28);
+      background: rgba(255,255,255,.075);
+    }
+    .plan:active{transform: translateY(0px)}
+    .planBadge{
+      display:inline-flex;
+      gap:8px;
+      align-items:center;
+      padding: 8px 10px;
+      border-radius: 999px;
+      font-weight:1000;
+      font-size: 12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      color: rgba(238,242,255,.92);
+    }
+    .planH{
+      margin: 12px 0 6px;
+      font-weight:1000;
+      font-size: 18px;
+      letter-spacing:-.2px;
+    }
+    .planP{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 13px;
+    }
+    .planCTA{
+      margin-top: 12px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      font-weight:1000;
+      color: rgba(238,242,255,.92);
+    }
+    .arrow{
+      width:38px; height:38px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      display:grid; place-items:center;
+      background: rgba(255,255,255,.05);
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .plan:hover .arrow{
+      transform: translateX(2px);
+      border-color: rgba(139,92,246,.28);
+    }
+    .premium{
+      opacity:.92;
+    }
+    .premium::after{
+      content:"";
+      position:absolute; inset:0;
+      background: repeating-linear-gradient(
+        135deg,
+        rgba(255,255,255,.04),
+        rgba(255,255,255,.04) 10px,
+        rgba(0,0,0,0) 10px,
+        rgba(0,0,0,0) 20px
+      );
+      opacity:.25;
+      pointer-events:none;
+    }
+    .coming{
+      margin-left: 8px;
+      font-size: 11px;
+      font-weight:1000;
+      padding: 6px 8px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(139,92,246,.12);
+      color: rgba(238,242,255,.95);
+      vertical-align: middle;
+      white-space:nowrap;
+    }
+
+    /* ===== SITE (existing) ===== */
+
+    .bg{position:fixed; inset:0; z-index:-2; pointer-events:none;}
+    .noise{
+      position:absolute; inset:-200px;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(139,92,246,.18), transparent 45%),
+        radial-gradient(circle at 80% 35%, rgba(34,211,238,.12), transparent 45%),
+        radial-gradient(circle at 55% 85%, rgba(59,130,246,.10), transparent 45%);
+      filter: blur(42px);
+      opacity:.95;
+      animation: float 10s ease-in-out infinite;
+    }
+    canvas#stars{position:absolute; inset:0; width:100%; height:100%; opacity:.42;}
     .container{max-width:1180px; margin:0 auto; padding:0 20px}
 
-    /* Top ribbon */
-    .ribbon{
-      display:flex;
-      gap:24px;
-      align-items:center;
-      justify-content:center;
-      padding:10px 12px;
-      background: linear-gradient(90deg, rgba(45,125,255,.95), rgba(90,69,255,.75), rgba(177,75,255,.70));
-      color: rgba(255,255,255,.95);
-      font-weight:900;
-      letter-spacing:.2px;
-      font-size:13px;
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-    .ribbon a{color:#fff; text-decoration:none; opacity:.95}
-    .ribbon a:hover{opacity:1; text-decoration:underline}
-    @media (max-width: 920px){ .ribbon{display:none} }
-
-    /* Top bar */
     .topbar{
       position:sticky; top:0; z-index:50;
       display:flex; align-items:center; justify-content:space-between;
       padding:14px 18px;
       border-bottom:1px solid rgba(255,255,255,.08);
-      background: rgba(3,4,11,.55);
+      background: rgba(4,5,17,.55);
       backdrop-filter: blur(16px);
     }
-    .brand{
-      display:flex; gap:12px; align-items:center;
-      text-decoration:none; color:var(--text);
-    }
+    .brand{display:flex; gap:12px; align-items:center; text-decoration:none; color:var(--text);}
     .logo{
       width:42px; height:42px; border-radius:14px;
-      box-shadow: 0 0 34px rgba(90,69,255,.25);
-      border:1px solid rgba(255,255,255,.12);
+      box-shadow: 0 0 30px rgba(139,92,246,.20);
+      border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.06);
     }
     .bname{font-weight:900; letter-spacing:.2px}
     .btag{font-size:12px; color:var(--muted); margin-top:2px}
 
-    .nav{display:flex; gap:16px; align-items:center}
+    .nav{display:flex; gap:16px; align-items:center;}
     .nav a{
       color:var(--muted);
       text-decoration:none;
@@ -248,73 +318,41 @@
       border-radius:12px;
       transition:.18s ease;
     }
-    .nav a:hover{
-      color:var(--text);
-      background: rgba(255,255,255,.06);
-    }
+    .nav a:hover{color:var(--text); background: rgba(255,255,255,.06);}
 
     .actions{display:flex; gap:10px; align-items:center}
-
-    /* Buttons */
     .btn{
-      position:relative;
       display:inline-flex; align-items:center; justify-content:center;
       gap:10px;
       padding:12px 14px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.10);
       color:var(--text);
       background: rgba(255,255,255,.05);
       text-decoration:none;
       font-weight:900;
       cursor:pointer;
       transition: transform .14s ease, background .16s ease, border-color .16s ease, filter .16s ease;
-      box-shadow: 0 18px 55px rgba(0,0,0,.28);
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
       user-select:none;
-      overflow:hidden;
     }
     .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
     .btn:active{transform: translateY(0px)}
+
     .btn.primary{
-      background: linear-gradient(90deg, rgba(45,125,255,.95), rgba(90,69,255,.75), rgba(177,75,255,.65));
-      border-color: rgba(90,69,255,.35);
-      box-shadow: 0 24px 70px rgba(90,69,255,.22);
+      background: linear-gradient(90deg, rgba(139,92,246,.95), rgba(34,211,238,.55));
+      border-color: rgba(34,211,238,.35);
+      box-shadow: 0 24px 60px rgba(139,92,246,.18);
     }
     .btn.primary:hover{filter: brightness(1.05)}
     .btn.ghost{background: rgba(255,255,255,.04)}
-    .btn.youtube{
-      background: rgba(255,255,255,.05);
-      border-color: rgba(45,125,255,.30);
-    }
-    .btn.youtube:hover{
-      border-color: rgba(177,75,255,.40);
-      box-shadow: 0 22px 70px rgba(45,125,255,.18);
-    }
-
-    /* Ripple effect */
-    .ripple{
-      position:absolute;
-      border-radius:999px;
-      transform: scale(0);
-      animation: ripple .55s ease-out;
-      background: rgba(255,255,255,.25);
-      pointer-events:none;
-    }
-    @keyframes ripple{
-      to { transform: scale(3.6); opacity:0; }
-    }
-
-    .iconbtn{width:44px; height:44px; padding:0; border-radius:16px}
+    .iconbtn{width:44px; height:44px; padding:0; border-radius:16px;}
     .menuBtn{display:none}
-    @media (max-width: 920px){
-      .nav{display:none}
-      .menuBtn{display:inline-flex}
-    }
+    @media (max-width: 920px){ .nav{display:none} .menuBtn{display:inline-flex} }
 
-    /* Mobile drawer */
     .drawer{
       position:fixed; inset:0; z-index:80;
-      background: rgba(0,0,0,.58);
+      background: rgba(0,0,0,.55);
       display:none;
     }
     .drawer.open{display:block}
@@ -322,7 +360,7 @@
       position:absolute; right:14px; top:14px;
       width:min(360px, calc(100vw - 28px));
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(10,12,28,.94);
+      background: rgba(10,12,28,.92);
       backdrop-filter: blur(16px);
       border-radius: 18px;
       padding: 14px;
@@ -332,7 +370,7 @@
     .drawerPanel a{
       text-decoration:none;
       color:var(--muted);
-      font-weight:900;
+      font-weight:1000;
       padding:12px 12px;
       border-radius:14px;
       border:1px solid rgba(255,255,255,.08);
@@ -341,7 +379,6 @@
     .drawerPanel a:hover{color:var(--text); background: rgba(255,255,255,.07)}
     .closeX{justify-self:end}
 
-    /* Hero */
     .hero{
       padding: 58px 0 22px;
       display:grid;
@@ -349,18 +386,16 @@
       gap: 22px;
       align-items:start;
     }
-    @media (max-width: 920px){
-      .hero{grid-template-columns:1fr; padding-top:36px}
-    }
+    @media (max-width: 920px){ .hero{grid-template-columns:1fr; padding-top:36px} }
 
     .pill{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px;
       border-radius:999px;
       background: rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.10);
       color: var(--muted);
-      font-weight:900;
+      font-weight:1000;
       font-size:13px;
       width: fit-content;
     }
@@ -375,12 +410,6 @@
       font-size: clamp(38px, 4.4vw, 64px);
       line-height:1.03;
       letter-spacing: -1px;
-    }
-    .grad{
-      background: linear-gradient(90deg, var(--blue), var(--indigo), var(--purple));
-      -webkit-background-clip:text;
-      background-clip:text;
-      color:transparent;
     }
     .lead{
       margin:0 0 18px;
@@ -401,36 +430,28 @@
     .stat{
       padding:14px;
       border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
-      box-shadow: 0 18px 55px rgba(0,0,0,.18);
+      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+      transform-origin:center;
+      transition: transform .18s ease, border-color .18s ease;
+    }
+    .stat:hover{
+      transform: translateY(-2px) scale(1.01);
+      border-color: rgba(139,92,246,.24);
     }
     .statTop{font-size:18px}
     .statBig{font-weight:1000; margin-top:6px}
     .statSub{color:var(--muted); font-size:13px; margin-top:4px}
 
-    /* Cards */
     .card{
-      border: 1px solid rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
       border-radius: var(--radius2);
       box-shadow: var(--shadow);
-      position:relative;
-      overflow:hidden;
     }
-    /* Glow border effect */
-    .card:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: linear-gradient(120deg, rgba(45,125,255,.0), rgba(90,69,255,.28), rgba(177,75,255,.24), rgba(45,125,255,.0));
-      filter: blur(18px);
-      opacity:.0;
-      transition: opacity .2s ease;
-      pointer-events:none;
-    }
-    .card:hover:before{opacity:.85}
-
     .preview{padding:18px}
+
     .cardTop{
       display:flex; align-items:center; justify-content:space-between;
       margin-bottom:12px;
@@ -440,19 +461,19 @@
       font-weight:1000;
       padding:8px 10px;
       border-radius: 999px;
-      background: rgba(90,69,255,.18);
-      border:1px solid rgba(90,69,255,.30);
+      background: rgba(139,92,246,.16);
+      border:1px solid rgba(139,92,246,.28);
       white-space:nowrap;
     }
     .chips{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
     .chip{
       font-size:12px;
       font-weight:1000;
-      color: rgba(234,240,255,.92);
+      color: rgba(238,242,255,.92);
       padding:7px 10px;
       border-radius:999px;
       background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.10);
     }
 
     .panel{
@@ -461,14 +482,33 @@
       background: rgba(0,0,0,.22);
       border: 1px solid rgba(255,255,255,.08);
       position:relative;
+      overflow:hidden;
     }
+    .panel::before{
+      content:"";
+      position:absolute; inset:-60px;
+      background:
+        radial-gradient(circle at 20% 10%, rgba(34,211,238,.20), transparent 55%),
+        radial-gradient(circle at 80% 35%, rgba(139,92,246,.22), transparent 55%);
+      filter: blur(30px);
+      opacity:.55;
+      pointer-events:none;
+      transform: translateY(0);
+      animation: panelFloat 7.5s ease-in-out infinite;
+    }
+    @keyframes panelFloat{
+      0%,100%{ transform: translateY(0) }
+      50%{ transform: translateY(-10px) }
+    }
+    .panel > *{ position:relative; z-index:1; }
+
     .panelHead{
       display:flex; align-items:center; gap:12px;
       margin-bottom:10px;
     }
     .panelAvatar{
       width:46px; height:46px; border-radius:16px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.06);
     }
     .panelTitle{font-weight:1000; font-size:16px}
@@ -480,7 +520,7 @@
       padding:12px 14px;
       border-radius: 16px;
       background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.10);
       color:var(--text);
       font-weight:1000;
       cursor:pointer;
@@ -489,9 +529,9 @@
       gap:12px;
     }
     .panelBtn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.08);
-      border-color: rgba(90,69,255,.30);
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.085);
+      border-color: rgba(34,211,238,.30);
     }
     .panelBtn small{color:var(--muted); font-weight:900}
     .smallNote{color:var(--muted); font-size:12px; margin-top:10px}
@@ -502,14 +542,13 @@
     .miniIcon{
       width:38px; height:38px; border-radius: 14px;
       display:grid; place-items:center;
-      background: rgba(90,69,255,.14);
-      border:1px solid rgba(90,69,255,.24);
+      background: rgba(34,211,238,.12);
+      border:1px solid rgba(34,211,238,.22);
       font-weight:1000;
     }
     .miniTitle{font-weight:1000}
     .miniText{color:var(--muted); font-size:13px; margin-top:4px; line-height:1.45}
 
-    /* Sections */
     .section{padding: 28px 0}
     .section h2{
       margin:0 0 12px;
@@ -544,11 +583,11 @@
     .cmds .cmd:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,.07);
-      border-color: rgba(177,75,255,.30);
+      border-color: rgba(139,92,246,.28);
     }
     .kbd{
       font-size:12px; font-weight:1000;
-      color: rgba(234,240,255,.85);
+      color: rgba(238,242,255,.85);
       padding:6px 10px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
@@ -556,17 +595,11 @@
       white-space:nowrap;
     }
 
-    /* FAQ */
     .faq details{padding:16px}
-    .faq summary{
-      cursor:pointer;
-      font-weight:1000;
-      list-style:none;
-    }
+    .faq summary{cursor:pointer; font-weight:1000; list-style:none;}
     .faq summary::-webkit-details-marker{display:none}
     .faq p{color:var(--muted); margin:10px 0 0; line-height:1.65}
 
-    /* Footer */
     .footer{
       padding:22px 0 46px;
       display:flex; justify-content:space-between; align-items:center;
@@ -575,29 +608,28 @@
       margin-top:12px;
     }
     .footLeft{display:flex; align-items:center; gap:12px}
-    .footRight a{color:var(--muted); text-decoration:none; font-weight:900}
+    .footRight a{color:var(--muted); text-decoration:none; font-weight:1000}
     .footRight a:hover{color:var(--text)}
 
-    /* Animations on scroll */
     .reveal{
       opacity:0;
       transform: translateY(14px);
       transition: opacity .7s ease, transform .7s ease;
     }
-    .reveal.show{opacity:1; transform: translateY(0px)}
+    .reveal.show{opacity:1; transform: translateY(0px);}
 
-    /* Top button + toast */
     .toTop{
       position:fixed;
       right:18px; bottom:18px;
       width:46px; height:46px;
       border-radius: 16px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.06);
       color:var(--text);
       cursor:pointer;
       display:none;
       box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      z-index:60;
     }
     .toTop.show{display:inline-grid; place-items:center}
 
@@ -607,40 +639,90 @@
       transform: translateX(-50%);
       padding:12px 14px;
       border-radius: 16px;
-      border:1px solid rgba(90,69,255,.35);
+      border:1px solid rgba(34,211,238,.25);
       background: rgba(7,10,18,.85);
-      color: rgba(234,240,255,.92);
+      color: rgba(238,242,255,.92);
       box-shadow: 0 18px 60px rgba(0,0,0,.55);
       display:none;
       font-weight:1000;
-      z-index:90;
+      z-index:210; /* above site */
     }
     .toast.show{display:block}
 
-    /* Smooth scroll */
-    html{scroll-behavior:smooth;}
+    .ribbon{
+      display:flex;
+      gap:24px;
+      align-items:center;
+      justify-content:center;
+      padding:10px 12px;
+      background: linear-gradient(90deg, rgba(139,92,246,.95), rgba(34,211,238,.60));
+      color: rgba(255,255,255,.95);
+      font-weight:1000;
+      letter-spacing:.2px;
+      font-size:13px;
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    .ribbon a{color:#fff; text-decoration:none; opacity:.95}
+    .ribbon a:hover{opacity:1; text-decoration:underline}
+    @media (max-width: 920px){ .ribbon{display:none} }
   </style>
 </head>
 
 <body id="top">
-  <!-- Loader -->
-  <div class="loader" id="loader" aria-hidden="false">
-    <div class="loaderCard">
-      <div class="loaderInner">
-        <div class="loaderTop">
-          <img class="loaderLogo" src="assets/dragon.png" alt="Dragon Services" />
+  <!-- LOADING + PLAN CHOICE -->
+  <div class="gate" id="gate" aria-hidden="false">
+    <div class="gateCard">
+      <div class="gateGlow"></div>
+
+      <div class="gateTop">
+        <div class="gateBrand">
+          <img class="gateLogo" src="assets/dragon.png" alt="Dragon Services" />
           <div>
-            <p class="loaderTitle">Dragon Services</p>
-            <p class="loaderSub">Loading premium UI…</p>
+            <div class="gateName">Dragon Services</div>
+            <div class="gateTag">Tickets • Clean UI • Fast Setup</div>
           </div>
         </div>
-        <div class="bar" aria-label="Loading progress">
-          <div class="barFill" id="barFill"></div>
-        </div>
-        <div class="loaderTips" id="loaderTip">
-          Tip: Use <b>/close</b> in ticket channels.
+
+        <div class="loaderRow" id="loaderRow">
+          <div class="spinner"></div>
+          <div id="loaderText">Loading assets…</div>
         </div>
       </div>
+
+      <div class="gateHero">
+        <div class="gateLeft">
+          <div class="gateTitle">
+            Choose your <span class="grad">version</span>
+          </div>
+          <p class="gateDesc">
+            Free bot is available right now. Premium is coming soon with extra features.
+            Pick what you want — smooth UI, clean panels, and safe permission checks.
+          </p>
+        </div>
+
+        <div class="planGrid">
+          <div class="plan" id="planFree" role="button" tabindex="0" aria-label="Choose Free">
+            <div class="planBadge">🆓 FREE</div>
+            <div class="planH">Ticket Bot</div>
+            <p class="planP">Support + Trade tickets, logs, setup flow, clean panels.</p>
+            <div class="planCTA">
+              <span>Enter Free</span>
+              <span class="arrow">➜</span>
+            </div>
+          </div>
+
+          <div class="plan premium" id="planPremium" role="button" tabindex="0" aria-label="Choose Premium">
+            <div class="planBadge">💎 PREMIUM <span class="coming">Coming soon</span></div>
+            <div class="planH">Premium Bot</div>
+            <p class="planP">Extra premium features, paid access, more automation.</p>
+            <div class="planCTA">
+              <span>Coming soon</span>
+              <span class="arrow">🔒</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
     </div>
   </div>
 
@@ -648,10 +730,9 @@
     <div class="noise"></div>
     <canvas id="stars"></canvas>
   </div>
-  <div class="blob"></div>
 
   <div class="ribbon">
-    <span>⚡ Dragon Services</span>
+    <span>💜 Dragon Services</span>
     <span>•</span>
     <a href="#features">Features</a>
     <span>•</span>
@@ -673,24 +754,25 @@
       <a href="#features">Features</a>
       <a href="#commands">Commands</a>
       <a href="#faq">FAQ</a>
+      <a href="#setup">Setup</a>
     </nav>
 
     <div class="actions">
-      <a class="btn youtube" id="ytBtnTop" href="#" target="_blank" rel="noreferrer" title="YouTube">▶️ YouTube</a>
+      <a class="btn ghost iconbtn" id="ytBtn" href="#" target="_blank" rel="noreferrer" title="YouTube">▶️</a>
       <button class="btn ghost iconbtn" id="copyInvite" type="button" title="Copy invite">📋</button>
       <a class="btn primary" id="inviteBtn" href="#" target="_blank" rel="noreferrer">➕ Add to Discord</a>
       <button class="btn ghost iconbtn menuBtn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
     </div>
   </header>
 
-  <!-- Mobile drawer -->
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawerPanel">
       <button class="btn ghost iconbtn closeX" id="closeDrawer" type="button" aria-label="Close">✕</button>
       <a href="#features">Features</a>
       <a href="#commands">Commands</a>
       <a href="#faq">FAQ</a>
-      <a class="btn youtube" id="ytBtnDrawer" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
+      <a href="#setup">Setup</a>
+      <a class="btn ghost" id="ytBtn2" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
       <a class="btn primary" id="inviteBtn2" href="#" target="_blank" rel="noreferrer">➕ Add to Discord</a>
       <button class="btn ghost" id="copyInvite2" type="button">📋 Copy invite link</button>
     </div>
@@ -712,8 +794,8 @@
 
         <div class="cta">
           <a class="btn primary" id="inviteBtn3" href="#" target="_blank" rel="noreferrer">➕ Add to Discord</a>
-          <a class="btn youtube" id="ytBtnHero" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
           <button class="btn ghost" id="copyInvite3" type="button">📋 Copy invite link</button>
+          <a class="btn ghost" id="ytBtn3" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
         </div>
 
         <div class="stats">
@@ -729,8 +811,8 @@
           </div>
           <div class="stat">
             <div class="statTop">🔒</div>
-            <div class="statBig">Safe</div>
-            <div class="statSub">Role checks</div>
+            <div class="statBig">No admin</div>
+            <div class="statSub">Minimal perms</div>
           </div>
         </div>
       </div>
@@ -774,15 +856,15 @@
           <div class="miniRow">
             <div class="miniIcon">✅</div>
             <div>
-              <div class="miniTitle">New theme</div>
-              <div class="miniText">Blue + purple + black, glow edges, smoother hover.</div>
+              <div class="miniTitle">Clean design</div>
+              <div class="miniText">Blue + purple theme, modern cards, smooth glow.</div>
             </div>
           </div>
           <div class="miniRow">
-            <div class="miniIcon">💫</div>
+            <div class="miniIcon">🧠</div>
             <div>
-              <div class="miniTitle">More motion</div>
-              <div class="miniText">Loader screen, ripple clicks, and stronger gradients.</div>
+              <div class="miniTitle">Easy to use</div>
+              <div class="miniText">Public help + clean setup flow for server owners.</div>
             </div>
           </div>
         </div>
@@ -843,13 +925,20 @@
           <p>If setup isn’t completed (categories/roles/log channel), the bot blocks ticket creation and tells you to finish setup first.</p>
         </details>
         <details class="card reveal">
+          <summary>Does the bot need Administrator?</summary>
+          <p>No. The invite uses only the permissions needed for tickets (create/manage channels, read/send messages, embeds, files, etc.).</p>
+        </details>
+        <details class="card reveal">
           <summary>How do I change the icon in the tab + Discord preview?</summary>
           <p>Replace <b>assets/dragon.png</b> with your new image (same file name), commit, and refresh the page.</p>
         </details>
-        <details class="card reveal">
-          <summary>Where is your YouTube?</summary>
-          <p>Press the <b>▶️ YouTube</b> button in the top bar or on the hero section.</p>
-        </details>
+      </div>
+    </section>
+
+    <section id="setup" class="section">
+      <h2 class="reveal">Setup</h2>
+      <div class="card reveal" style="padding:16px; color:var(--muted); line-height:1.75">
+        <b>Quick tip:</b> make sure the bot role is above the ticket staff role if you use overwrites.
       </div>
     </section>
 
@@ -872,8 +961,13 @@
 
   <script>
     // ===== CONFIG =====
-    const INVITE_URL = "https://discord.com/oauth2/authorize?client_id=1442592762108186675";
-    const YOUTUBE_URL = "https://www.youtube.com/channel/UC8Ovc5xT-tXXIjxLnVe72dQ";
+    const CLIENT_ID = "1442592762108186675";
+
+    // No admin. Typical ticket-bot perms (create/manage channels + messages etc.)
+    // permissions=388176 -> View Channels, Send Messages, Read History, Manage Channels, Embed Links, Attach Files, Manage Messages, Use External Emojis, Add Reactions
+    const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=bot%20applications.commands&permissions=388176`;
+
+    const YT_URL = "https://www.youtube.com/channel/UC8Ovc5xT-tXXIjxLnVe72dQ";
 
     // ===== SET LINKS =====
     const inviteBtn = document.getElementById("inviteBtn");
@@ -881,63 +975,12 @@
     const inviteBtn3 = document.getElementById("inviteBtn3");
     [inviteBtn, inviteBtn2, inviteBtn3].forEach(a => { if(a) a.href = INVITE_URL; });
 
-    const ytBtnTop = document.getElementById("ytBtnTop");
-    const ytBtnDrawer = document.getElementById("ytBtnDrawer");
-    const ytBtnHero = document.getElementById("ytBtnHero");
-    [ytBtnTop, ytBtnDrawer, ytBtnHero].forEach(a => { if(a) a.href = YOUTUBE_URL; });
+    const ytBtn = document.getElementById("ytBtn");
+    const ytBtn2 = document.getElementById("ytBtn2");
+    const ytBtn3 = document.getElementById("ytBtn3");
+    [ytBtn, ytBtn2, ytBtn3].forEach(a => { if(a) a.href = YT_URL; });
 
     document.getElementById("year").textContent = new Date().getFullYear();
-
-    // ===== LOADER =====
-    const loader = document.getElementById("loader");
-    const barFill = document.getElementById("barFill");
-    const loaderTip = document.getElementById("loaderTip");
-
-    const tips = [
-      "Tip: Use <b>/close</b> in ticket channels.",
-      "Tip: Add staff roles in setup for private tickets.",
-      "Tip: Logs help staff track tickets fast.",
-      "Tip: Clean UI = less confusion for users."
-    ];
-
-    function setBar(pct){ barFill.style.width = Math.max(0, Math.min(100, pct)) + "%"; }
-    function setTip(i){ loaderTip.innerHTML = tips[i % tips.length]; }
-
-    // Fake loading progress (smooth + looks premium)
-    (function runLoader(){
-      let pct = 0;
-      let tipIndex = 0;
-      setTip(tipIndex);
-
-      const start = performance.now();
-      const minShowMs = 850; // ensures loader is visible even on fast load
-
-      const interval = setInterval(()=>{
-        pct += Math.random() * 18;
-        if (pct > 92) pct = 92;
-        setBar(pct);
-      }, 140);
-
-      const tipTimer = setInterval(()=>{
-        tipIndex++;
-        setTip(tipIndex);
-      }, 700);
-
-      window.addEventListener("load", ()=>{
-        const elapsed = performance.now() - start;
-        const wait = Math.max(0, minShowMs - elapsed);
-
-        setTimeout(()=>{
-          clearInterval(interval);
-          clearInterval(tipTimer);
-          setBar(100);
-          setTimeout(()=>{
-            loader.classList.add("hide");
-            loader.setAttribute("aria-hidden", "true");
-          }, 240);
-        }, wait);
-      });
-    })();
 
     // ===== TOAST + COPY =====
     const toast = document.getElementById("toast");
@@ -1001,28 +1044,6 @@
     }, {threshold: .15});
     document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
-    // ===== RIPPLE ON BUTTONS =====
-    function addRipple(e){
-      const btn = e.currentTarget;
-      const rect = btn.getBoundingClientRect();
-      const size = Math.max(rect.width, rect.height);
-      const x = e.clientX - rect.left - size/2;
-      const y = e.clientY - rect.top - size/2;
-
-      const span = document.createElement("span");
-      span.className = "ripple";
-      span.style.width = span.style.height = size + "px";
-      span.style.left = x + "px";
-      span.style.top = y + "px";
-      btn.appendChild(span);
-
-      setTimeout(()=>span.remove(), 650);
-    }
-
-    document.querySelectorAll(".btn, .panelBtn, .cmd").forEach(el=>{
-      el.addEventListener("click", addRipple, {passive:true});
-    });
-
     // ===== STARS CANVAS =====
     const canvas = document.getElementById("stars");
     const ctx = canvas.getContext("2d");
@@ -1042,9 +1063,9 @@
       stars = Array.from({length: count}, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: (Math.random()*1.7 + .2) * devicePixelRatio,
-        a: Math.random()*.55 + .12,
-        s: (Math.random()*.38 + .06) * devicePixelRatio
+        r: (Math.random()*1.6 + .2) * devicePixelRatio,
+        a: Math.random()*.6 + .12,
+        s: (Math.random()*.35 + .05) * devicePixelRatio
       }));
     }
     initStars();
@@ -1067,6 +1088,56 @@
       requestAnimationFrame(draw);
     }
     draw();
+
+    // ===== LOADING + PLAN GATE =====
+    const gate = document.getElementById("gate");
+    const loaderText = document.getElementById("loaderText");
+    const loaderRow = document.getElementById("loaderRow");
+    const planFree = document.getElementById("planFree");
+    const planPremium = document.getElementById("planPremium");
+
+    let canEnter = false;
+
+    function enterSite(){
+      if(!canEnter) return;
+      gate.classList.add("hide");
+      gate.setAttribute("aria-hidden", "true");
+      showToast("Welcome ✅");
+      setTimeout(() => {
+        // small smooth scroll to top area
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }, 250);
+    }
+
+    function markLoaded(){
+      canEnter = true;
+      loaderText.textContent = "Ready ✅ Choose FREE or PREMIUM";
+      loaderRow.querySelector(".spinner")?.remove();
+    }
+
+    // Wait for the page and images
+    window.addEventListener("load", () => {
+      // extra tiny delay so it feels premium
+      setTimeout(markLoaded, 350);
+    });
+
+    function onFree(){
+      if(!canEnter){
+        showToast("Still loading…");
+        return;
+      }
+      enterSite();
+    }
+
+    function onPremium(){
+      showToast("Premium is coming soon 🔥");
+    }
+
+    planFree?.addEventListener("click", onFree);
+    planPremium?.addEventListener("click", onPremium);
+
+    planFree?.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" ") onFree(); });
+    planPremium?.addEventListener("keydown", (e)=>{ if(e.key==="Enter" || e.key===" ") onPremium(); });
   </script>
 </body>
 </html>
