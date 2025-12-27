@@ -27,10 +27,11 @@
       --border: rgba(255,255,255,.10);
       --text: #eef2ff;
       --muted: rgba(238,242,255,.72);
+
       --blue: #5b7cff;
       --purple: #8a5cff;
       --cyan: #34d6ff;
-      --pink: #ff4fd8;
+
       --shadow: 0 22px 70px rgba(0,0,0,.62);
       --radius: 18px;
       --radius2: 26px;
@@ -89,9 +90,7 @@
       box-shadow: var(--shadow);
       padding: 18px;
     }
-    .loaderTop{
-      display:flex; align-items:center; gap:12px;
-    }
+    .loaderTop{ display:flex; align-items:center; gap:12px; }
     .loaderLogo{
       width:54px; height:54px; border-radius:18px;
       border:1px solid rgba(255,255,255,.12);
@@ -287,28 +286,28 @@
       padding: 16px;
       cursor:pointer;
       transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      isolation:isolate;
     }
     .pick:hover{
       transform: translateY(-2px);
       background: rgba(255,255,255,.06);
       border-color: rgba(52,214,255,.22);
     }
-    .pickGlow{
-      position:absolute; inset:-120px;
-      background: radial-gradient(circle at 30% 30%, rgba(52,214,255,.18), transparent 50%),
-                  radial-gradient(circle at 70% 40%, rgba(91,124,255,.16), transparent 55%),
-                  radial-gradient(circle at 55% 75%, rgba(138,92,255,.14), transparent 55%);
-      filter: blur(36px);
-      opacity:.85;
-      transform: translate3d(0,0,0);
+    .pick::after{
+      content:"";
+      position:absolute; inset:-2px;
+      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.14), transparent 45%),
+                  radial-gradient(circle at 80% 35%, rgba(91,124,255,.14), transparent 55%),
+                  radial-gradient(circle at 55% 85%, rgba(138,92,255,.12), transparent 55%);
+      opacity:.0;
       transition: opacity .2s ease;
-      pointer-events:none;
+      z-index:-1;
     }
-    .pick:hover .pickGlow{ opacity:1; }
+    .pick:hover::after{opacity:1}
+
     .pickTop{
       display:flex; align-items:center; justify-content:space-between;
       gap:12px;
-      position:relative;
     }
     .tag{
       font-weight:1000;
@@ -320,23 +319,21 @@
     }
     .tag.free{ border-color: rgba(52,214,255,.22); background: rgba(52,214,255,.10); }
     .tag.prem{ border-color: rgba(138,92,255,.25); background: rgba(138,92,255,.10); }
-    .pickTitle{
-      font-weight:1000;
-      font-size: 18px;
-      margin-top: 12px;
-      position:relative;
+    .kbd{
+      font-size:12px; font-weight:1000;
+      color: rgba(238,242,255,.85);
+      padding:6px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      white-space:nowrap;
     }
-    .pickText{
-      color: var(--muted);
-      margin-top: 8px;
-      line-height: 1.6;
-      position:relative;
-      font-weight:800;
-    }
+    .pickTitle{ font-weight:1000; font-size: 18px; margin-top: 12px; }
+    .pickText{ color: var(--muted); margin-top: 8px; line-height: 1.6; font-weight:800; }
+
     .pickBtns{
       display:flex; gap:10px; flex-wrap:wrap;
       margin-top: 14px;
-      position:relative;
     }
     .miniBtn{
       padding:10px 12px;
@@ -352,6 +349,50 @@
     .miniBtn.primary{
       background: linear-gradient(90deg, rgba(52,214,255,.75), rgba(91,124,255,.95), rgba(138,92,255,.75));
       border-color: rgba(52,214,255,.22);
+    }
+
+    /* Premium pricing cards */
+    .pricing{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 920px){ .pricing{grid-template-columns:1fr} }
+    .plan{
+      border-radius: 22px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      padding: 14px;
+      position:relative;
+      overflow:hidden;
+      transition: transform .16s ease, background .16s ease, border-color .16s ease;
+    }
+    .plan:hover{
+      transform: translateY(-2px);
+      background: rgba(255,255,255,.06);
+      border-color: rgba(138,92,255,.24);
+    }
+    .planTop{display:flex; justify-content:space-between; align-items:center; gap:10px}
+    .planName{font-weight:1000}
+    .planPrice{font-weight:1000}
+    .planPrice span{color: var(--muted); font-weight:900; font-size:12px}
+    .planList{
+      margin:10px 0 12px;
+      padding-left: 18px;
+      color: var(--muted);
+      font-weight:800;
+      line-height:1.55;
+      font-size:13px;
+    }
+    .planActions{display:flex; gap:10px; flex-wrap:wrap}
+    .planHot{
+      position:absolute; top:12px; right:12px;
+      font-size:11px; font-weight:1000;
+      padding:6px 8px;
+      border-radius:999px;
+      border:1px solid rgba(52,214,255,.22);
+      background: rgba(52,214,255,.10);
     }
 
     /* Main content wrapper (hidden until Free picked) */
@@ -510,11 +551,7 @@
     .miniText{color:var(--muted); font-size:13px; margin-top:4px; line-height:1.45; font-weight:800}
 
     .section{padding: 28px 0}
-    .section h2{
-      margin:0 0 12px;
-      font-size:28px;
-      letter-spacing:-.4px;
-    }
+    .section h2{ margin:0 0 12px; font-size:28px; letter-spacing:-.4px; }
     .muted{color:var(--muted)}
 
     .grid{
@@ -544,15 +581,6 @@
       transform: translateY(-2px);
       background: rgba(255,255,255,.07);
       border-color: rgba(91,124,255,.22);
-    }
-    .kbd{
-      font-size:12px; font-weight:1000;
-      color: rgba(238,242,255,.85);
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      white-space:nowrap;
     }
 
     .faq details{padding:16px}
@@ -609,7 +637,7 @@
     }
     .toast.show{display:block}
 
-    /* Premium modal */
+    /* Modal (Payment) */
     .modal{
       position:fixed; inset:0; z-index:120;
       display:none;
@@ -619,7 +647,7 @@
     }
     .modal.show{display:grid}
     .modalCard{
-      width:min(560px, calc(100vw - 36px));
+      width:min(620px, calc(100vw - 36px));
       border-radius: 26px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(10,12,28,.92);
@@ -633,7 +661,81 @@
     }
     .modalTitle{ font-weight:1000; font-size:18px; }
     .modalText{ color:var(--muted); line-height:1.65; font-weight:800; margin: 8px 0 12px; }
+
+    .payBox{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: 18px;
+      padding: 12px;
+      display:grid;
+      gap:10px;
+      margin-bottom: 12px;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 12px;
+      word-break: break-all;
+      color: rgba(238,242,255,.92);
+      background: rgba(0,0,0,.25);
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: 14px;
+      padding: 10px;
+    }
+    .twoCol{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 640px){ .twoCol{grid-template-columns:1fr} }
+
+    .field label{
+      display:block;
+      color: rgba(238,242,255,.85);
+      font-weight:900;
+      font-size:12px;
+      margin-bottom:6px;
+    }
+    .field input, .field select{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--text);
+      font-weight:800;
+      outline:none;
+    }
+    .field input::placeholder{color: rgba(238,242,255,.55)}
+    .hintSmall{color: var(--muted); font-weight:800; font-size:12px; line-height:1.5}
+
+    .qrWrap{
+      display:flex; gap:12px; align-items:center; justify-content:space-between;
+      flex-wrap:wrap;
+    }
+    .qr{
+      width: 140px; height: 140px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.04);
+      display:grid; place-items:center;
+      overflow:hidden;
+    }
+    .qr canvas{width:140px; height:140px}
+
+    .warn{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      border-radius: 16px;
+      padding: 10px;
+      color: rgba(238,242,255,.88);
+      font-weight:900;
+      font-size:12px;
+      line-height:1.5;
+    }
   </style>
+
+  <!-- QR library (simple) -->
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.3/build/qrcode.min.js"></script>
 </head>
 
 <body id="top">
@@ -706,7 +808,7 @@
             <div class="pill"><span class="dot"></span> Online • Blue/Purple • Clean</div>
             <div class="gateTitle">Choose your <span class="grad">Dragon</span> panel</div>
             <p class="gateDesc">
-              Pick <b>Free</b> to use the ticket bot right now. <b>Premium</b> is coming soon with extra features.
+              Pick <b>Free</b> to use the ticket bot right now. Pick <b>Premium</b> to unlock extra commands + advanced customization.
             </p>
           </div>
           <div style="display:flex; gap:10px; align-items:center;">
@@ -717,7 +819,6 @@
         <div class="gateGrid">
           <!-- FREE -->
           <div class="pick" id="pickFree" role="button" tabindex="0" aria-label="Select Free">
-            <div class="pickGlow" aria-hidden="true"></div>
             <div class="pickTop">
               <div class="tag free">FREE</div>
               <div class="kbd">instant access</div>
@@ -734,18 +835,69 @@
 
           <!-- PREMIUM -->
           <div class="pick" id="pickPrem" role="button" tabindex="0" aria-label="Select Premium">
-            <div class="pickGlow" aria-hidden="true"></div>
             <div class="pickTop">
               <div class="tag prem">PREMIUM</div>
-              <div class="kbd">coming soon</div>
+              <div class="kbd">unlock keys</div>
             </div>
             <div class="pickTitle">Dragon Tickets — Premium</div>
             <div class="pickText">
-              Premium is not released yet. Soon: advanced panels, more customisation, premium-only extras.
+              Premium keys unlock extra commands (customization + advanced tools). Buy a plan, pay with LTC, then submit your TXID + Discord ID.
             </div>
-            <div class="pickBtns">
-              <button class="miniBtn primary" id="premInfo">View Premium</button>
-              <a class="miniBtn" id="premYoutube" href="#" target="_blank" rel="noreferrer">Watch updates</a>
+
+            <div class="pricing">
+              <div class="plan">
+                <div class="planTop">
+                  <div class="planName">15 Days Key</div>
+                  <div class="planPrice">$1 <span>USD</span></div>
+                </div>
+                <ul class="planList">
+                  <li>Premium commands access</li>
+                  <li>Fast activation after TXID</li>
+                  <li>Best for testing</li>
+                </ul>
+                <div class="planActions">
+                  <button class="miniBtn primary buyBtn" data-plan="15 Days" data-usd="1">Buy 15 Days</button>
+                  <button class="miniBtn ghost viewPremCmds" type="button">Premium commands</button>
+                </div>
+              </div>
+
+              <div class="plan">
+                <div class="planHot">MOST POPULAR</div>
+                <div class="planTop">
+                  <div class="planName">1 Month Key</div>
+                  <div class="planPrice">$2 <span>USD</span></div>
+                </div>
+                <ul class="planList">
+                  <li>Premium commands access</li>
+                  <li>Priority activation</li>
+                  <li>Best value</li>
+                </ul>
+                <div class="planActions">
+                  <button class="miniBtn primary buyBtn" data-plan="1 Month" data-usd="2">Buy 1 Month</button>
+                  <button class="miniBtn ghost viewPremCmds" type="button">Premium commands</button>
+                </div>
+              </div>
+
+              <div class="plan">
+                <div class="planTop">
+                  <div class="planName">3 Months Key</div>
+                  <div class="planPrice">$4 <span>USD</span></div>
+                </div>
+                <ul class="planList">
+                  <li>Premium commands access</li>
+                  <li>Priority activation</li>
+                  <li>Best for big servers</li>
+                </ul>
+                <div class="planActions">
+                  <button class="miniBtn primary buyBtn" data-plan="3 Months" data-usd="4">Buy 3 Months</button>
+                  <button class="miniBtn ghost viewPremCmds" type="button">Premium commands</button>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px; display:flex; gap:10px; flex-wrap:wrap;">
+              <a class="miniBtn" id="premYoutube" href="#" target="_blank" rel="noreferrer">▶️ Watch updates</a>
+              <button class="miniBtn" id="premHow" type="button">How it works</button>
             </div>
           </div>
         </div>
@@ -753,20 +905,122 @@
     </section>
   </main>
 
-  <!-- PREMIUM MODAL -->
-  <div class="modal" id="premModal" aria-hidden="true">
+  <!-- PAYMENT MODAL -->
+  <div class="modal" id="payModal" aria-hidden="true">
     <div class="modalCard">
       <div class="modalTop">
-        <div class="modalTitle">Premium — Coming Soon ✨</div>
-        <button class="btn ghost iconbtn" id="closePrem" type="button" aria-label="Close">✕</button>
+        <div class="modalTitle" id="payTitle">Premium Purchase</div>
+        <button class="btn ghost iconbtn" id="closePay" type="button" aria-label="Close">✕</button>
+      </div>
+
+      <div class="modalText" id="payDesc">
+        Send Litecoin (LTC) to the address below, then paste your TXID + Discord ID for activation.
+      </div>
+
+      <div class="payBox">
+        <div class="twoCol">
+          <div class="field">
+            <label>Selected plan</label>
+            <input id="planField" disabled value="—" />
+          </div>
+          <div class="field">
+            <label>Price</label>
+            <input id="priceField" disabled value="—" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Litecoin address</label>
+          <div class="mono" id="ltcAddressBox">LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8</div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+            <button class="btn ghost" id="copyAddr" type="button">📋 Copy address</button>
+            <button class="btn ghost" id="copyPayLink" type="button">🔗 Copy LTC URI</button>
+          </div>
+          <div class="hintSmall" style="margin-top:8px;">
+            Note: price is shown in USD. If you want exact LTC amount, you need a live exchange rate (that requires a backend). For now: send the equivalent LTC at current rate.
+          </div>
+        </div>
+
+        <div class="qrWrap">
+          <div class="warn">
+            ✅ After you send LTC, open the transaction in your wallet and copy the <b>TXID</b> (Transaction ID).<br/>
+            Then submit: <b>Discord ID + TXID</b> below.
+          </div>
+          <div class="qr" id="qrBox" aria-label="QR code"></div>
+        </div>
+      </div>
+
+      <div class="twoCol">
+        <div class="field">
+          <label>Your Discord ID</label>
+          <input id="discordId" placeholder="Example: 123456789012345678" />
+        </div>
+        <div class="field">
+          <label>TXID (Transaction ID)</label>
+          <input id="txid" placeholder="Paste TXID here" />
+        </div>
+      </div>
+
+      <div class="field" style="margin-top:10px;">
+        <label>Email (optional)</label>
+        <input id="email" placeholder="For faster contact (optional)" />
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+        <button class="btn primary" id="submitPayment" type="button">✅ Submit for activation</button>
+        <button class="btn ghost" id="howToFindTxid" type="button">Where is TXID?</button>
+      </div>
+
+      <div class="hintSmall" style="margin-top:10px;">
+        Activation is manual unless you build a backend. This page collects your info locally and opens a message you can send to the owner (copy/paste).
+      </div>
+    </div>
+  </div>
+
+  <!-- PREMIUM COMMANDS MODAL (marketing) -->
+  <div class="modal" id="premCmdModal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalTop">
+        <div class="modalTitle">Premium Commands ✨</div>
+        <button class="btn ghost iconbtn" id="closePremCmd" type="button" aria-label="Close">✕</button>
       </div>
       <div class="modalText">
-        Premium isn’t available yet. When it launches, you’ll be able to buy access safely (recommended: Stripe/PayPal),
-        and the bot can auto-unlock premium for your Discord ID.
+        Premium keys unlock special commands inside your server (examples):
+      </div>
+
+      <div class="payBox">
+        <div class="warn">
+          🔥 <b>/premium-help</b> — shows all premium commands<br/>
+          🎨 <b>/premium-theme</b> — custom panel colors / style<br/>
+          🖼️ <b>/premium-panel-icon</b> — custom panel icon image<br/>
+          🧠 <b>/premium-autolog</b> — advanced logging options<br/>
+          ⚡ <b>/premium-boost</b> — faster setup + extra panel options<br/>
+          (You can edit this list later to match your bot.)
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <button class="btn primary" id="cmdOk" type="button">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS MODAL -->
+  <div class="modal" id="howModal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalTop">
+        <div class="modalTitle">How Premium Works</div>
+        <button class="btn ghost iconbtn" id="closeHow" type="button" aria-label="Close">✕</button>
+      </div>
+      <div class="modalText">
+        1) Choose a plan (15d / 1m / 3m)<br/>
+        2) Pay in LTC to the address shown<br/>
+        3) Copy your TXID from your wallet<br/>
+        4) Submit TXID + Discord ID<br/>
+        5) You get activated (manual) and can use <b>/premium-help</b>
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap;">
-        <a class="btn primary" id="modalYoutube" href="#" target="_blank" rel="noreferrer">▶️ Follow on YouTube</a>
-        <button class="btn ghost" id="modalOk" type="button">OK</button>
+        <button class="btn primary" id="howOk" type="button">OK</button>
       </div>
     </div>
   </div>
@@ -924,8 +1178,8 @@
             <p>No. The invite uses only the permissions needed for tickets: manage channels + send messages + logs. No admin.</p>
           </details>
           <details class="card reveal">
-            <summary>How do I change the icon in the tab + Discord preview?</summary>
-            <p>Replace <b>assets/dragon.png</b> with your new image (same file name), commit, and refresh the page.</p>
+            <summary>How do premium keys activate?</summary>
+            <p>You buy a key, pay with LTC, then submit TXID + Discord ID. Activation is manual unless you build a backend.</p>
           </details>
         </div>
       </section>
@@ -964,19 +1218,16 @@
 
     const YT_URL = "https://www.youtube.com/channel/UC8Ovc5xT-tXXIjxLnVe72dQ";
 
-    // ===== SET LINKS =====
-    const inviteBtn = document.getElementById("inviteBtn");
-    const inviteBtn2 = document.getElementById("inviteBtn2");
-    const inviteBtn3 = document.getElementById("inviteBtn3");
-    [inviteBtn, inviteBtn2, inviteBtn3].forEach(a => { if(a) a.href = INVITE_URL; });
+    // Your LTC address
+    const LTC_ADDRESS = "LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8";
 
-    const youtubeBtn = document.getElementById("youtubeBtn");
-    const youtubeBtn2 = document.getElementById("youtubeBtn2");
-    const youtubeBtn3 = document.getElementById("youtubeBtn3");
-    const premYoutube = document.getElementById("premYoutube");
-    const modalYoutube = document.getElementById("modalYoutube");
-    const footerYoutube = document.getElementById("footerYoutube");
-    [youtubeBtn, youtubeBtn2, youtubeBtn3, premYoutube, modalYoutube, footerYoutube].forEach(a => { if(a) a.href = YT_URL; });
+    // ===== SET LINKS =====
+    [document.getElementById("inviteBtn"), document.getElementById("inviteBtn2"), document.getElementById("inviteBtn3")]
+      .forEach(a => { if(a) a.href = INVITE_URL; });
+
+    [document.getElementById("youtubeBtn"), document.getElementById("youtubeBtn2"), document.getElementById("youtubeBtn3"),
+     document.getElementById("premYoutube"), document.getElementById("footerYoutube")]
+      .forEach(a => { if(a) a.href = YT_URL; });
 
     document.getElementById("year").textContent = new Date().getFullYear();
 
@@ -1120,18 +1371,12 @@
     }
     runLoader();
 
-    // ===== Gate logic (Free / Premium) =====
+    // ===== Gate logic (Free) =====
     const gateRoot = document.getElementById("gateRoot");
     const app = document.getElementById("app");
     const pickFree = document.getElementById("pickFree");
     const freeOpen = document.getElementById("freeOpen");
     const freeInvite = document.getElementById("freeInvite");
-
-    const pickPrem = document.getElementById("pickPrem");
-    const premInfo = document.getElementById("premInfo");
-    const premModal = document.getElementById("premModal");
-    const closePrem = document.getElementById("closePrem");
-    const modalOk = document.getElementById("modalOk");
 
     function openFree(){
       gateRoot.style.display = "none";
@@ -1139,24 +1384,10 @@
       showToast("Free panel opened ✅");
       window.scrollTo({top:0, behavior:"smooth"});
     }
-    function openPremium(){
-      premModal.classList.add("show");
-      premModal.setAttribute("aria-hidden", "false");
-    }
-    function closePremium(){
-      premModal.classList.remove("show");
-      premModal.setAttribute("aria-hidden", "true");
-    }
 
     pickFree.addEventListener("click", (e)=>{ if(e.target.closest("button")) return; openFree(); });
     freeOpen.addEventListener("click", openFree);
     freeInvite.addEventListener("click", ()=> window.open(INVITE_URL, "_blank"));
-
-    pickPrem.addEventListener("click", (e)=>{ if(e.target.closest("a,button")) return; openPremium(); });
-    premInfo.addEventListener("click", openPremium);
-    closePrem.addEventListener("click", closePremium);
-    modalOk.addEventListener("click", closePremium);
-    premModal.addEventListener("click", (e)=>{ if(e.target === premModal) closePremium(); });
 
     // Back to gate
     document.getElementById("backGate")?.addEventListener("click", (e)=>{
@@ -1164,13 +1395,12 @@
       app.classList.remove("show");
       app.style.display = "none";
       gateRoot.style.display = "block";
-      // restore
       setTimeout(()=>{ app.style.display = ""; }, 0);
       window.scrollTo({top:0, behavior:"smooth"});
       showToast("Back to Free / Premium");
     });
 
-    // Brand click goes home (if app open -> scroll top; if gate open -> nothing)
+    // Brand click goes home (if app open -> scroll top)
     document.getElementById("brandHome")?.addEventListener("click", (e)=>{
       if(app.classList.contains("show")){
         e.preventDefault();
@@ -1187,14 +1417,123 @@
       });
     });
 
-    // Optional: keyboard accessibility
-    [pickFree, pickPrem].forEach(el=>{
+    // Keyboard accessibility for pick
+    [pickFree, document.getElementById("pickPrem")].forEach(el=>{
       el.addEventListener("keydown", (e)=>{
         if(e.key === "Enter" || e.key === " "){
           e.preventDefault();
-          el === pickFree ? openFree() : openPremium();
+          el.id === "pickFree" ? openFree() : openPayModal("1 Month", 2);
         }
       });
+    });
+
+    // ===== Premium commands modal (marketing) =====
+    const premCmdModal = document.getElementById("premCmdModal");
+    function openPremCmds(){ premCmdModal.classList.add("show"); premCmdModal.setAttribute("aria-hidden","false"); }
+    function closePremCmds(){ premCmdModal.classList.remove("show"); premCmdModal.setAttribute("aria-hidden","true"); }
+    document.querySelectorAll(".viewPremCmds").forEach(b => b.addEventListener("click", openPremCmds));
+    document.getElementById("closePremCmd")?.addEventListener("click", closePremCmds);
+    document.getElementById("cmdOk")?.addEventListener("click", closePremCmds);
+    premCmdModal.addEventListener("click", (e)=>{ if(e.target === premCmdModal) closePremCmds(); });
+
+    // ===== How it works modal =====
+    const howModal = document.getElementById("howModal");
+    const premHow = document.getElementById("premHow");
+    function openHow(){ howModal.classList.add("show"); howModal.setAttribute("aria-hidden","false"); }
+    function closeHow(){ howModal.classList.remove("show"); howModal.setAttribute("aria-hidden","true"); }
+    premHow?.addEventListener("click", openHow);
+    document.getElementById("closeHow")?.addEventListener("click", closeHow);
+    document.getElementById("howOk")?.addEventListener("click", closeHow);
+    howModal.addEventListener("click", (e)=>{ if(e.target === howModal) closeHow(); });
+
+    // ===== Payment modal =====
+    const payModal = document.getElementById("payModal");
+    const closePay = document.getElementById("closePay");
+    const ltcAddressBox = document.getElementById("ltcAddressBox");
+    const planField = document.getElementById("planField");
+    const priceField = document.getElementById("priceField");
+    const qrBox = document.getElementById("qrBox");
+
+    ltcAddressBox.textContent = LTC_ADDRESS;
+
+    function openPayModal(plan, usd){
+      planField.value = plan;
+      priceField.value = `$${usd} USD`;
+      payModal.classList.add("show");
+      payModal.setAttribute("aria-hidden", "false");
+
+      // Make LTC URI (no fixed amount, because USD->LTC needs live rate)
+      const uri = `litecoin:${LTC_ADDRESS}`;
+
+      // Render QR
+      qrBox.innerHTML = "";
+      try{
+        const canvas = document.createElement("canvas");
+        qrBox.appendChild(canvas);
+        QRCode.toCanvas(canvas, uri, { width: 140 }, (err)=>{
+          if(err) console.warn(err);
+        });
+      }catch(e){
+        qrBox.textContent = "QR error";
+      }
+
+      showToast("Payment opened 💎");
+    }
+
+    function closePayModal(){
+      payModal.classList.remove("show");
+      payModal.setAttribute("aria-hidden", "true");
+    }
+
+    document.querySelectorAll(".buyBtn").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        openPayModal(btn.dataset.plan, btn.dataset.usd);
+      });
+    });
+
+    closePay?.addEventListener("click", closePayModal);
+    payModal.addEventListener("click", (e)=>{ if(e.target === payModal) closePayModal(); });
+
+    document.getElementById("copyAddr")?.addEventListener("click", ()=>copyText(LTC_ADDRESS));
+
+    document.getElementById("copyPayLink")?.addEventListener("click", ()=>{
+      const uri = `litecoin:${LTC_ADDRESS}`;
+      copyText(uri);
+    });
+
+    document.getElementById("howToFindTxid")?.addEventListener("click", ()=>{
+      showToast("In Exodus: Wallet → History → Transaction → TXID ✅");
+    });
+
+    // Submit (no backend): creates a copyable message for you / your support
+    document.getElementById("submitPayment")?.addEventListener("click", ()=>{
+      const did = document.getElementById("discordId").value.trim();
+      const tx = document.getElementById("txid").value.trim();
+      const em = document.getElementById("email").value.trim();
+      const plan = planField.value;
+      const price = priceField.value;
+
+      if(!did || !tx){
+        showToast("Add Discord ID + TXID ❌");
+        return;
+      }
+
+      const msg =
+`Dragon Services Premium Activation
+Plan: ${plan} (${price})
+Discord ID: ${did}
+TXID: ${tx}
+Email: ${em || "N/A"}
+Paid to: ${LTC_ADDRESS}`;
+
+      copyText(msg);
+      showToast("Copied activation message ✅");
+    });
+
+    // Make clicking the premium card open the modal too (nice UX)
+    document.getElementById("pickPrem")?.addEventListener("click", (e)=>{
+      if(e.target.closest("button,a")) return;
+      openPayModal("1 Month", 2);
     });
   </script>
 </body>
