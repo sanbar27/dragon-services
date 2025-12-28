@@ -4,15 +4,15 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Dragon Services | Tickets</title>
-  <meta name="description" content="Dragon Services — ticket bot with clean panels, logs, and a premium upgrade." />
+  <meta name="description" content="Dragon Services — ticket bot for Discord. Free + Premium options, clean panels, logs, and more." />
 
-  <!-- Social preview -->
   <meta property="og:title" content="Dragon Services | Tickets" />
-  <meta property="og:description" content="Ticket bot with clean panels, logs, and a premium upgrade." />
+  <meta property="og:description" content="Ticket bot for Discord — Free + Premium options, clean panels, logs, and more." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/dragon.png" />
 
   <link rel="icon" type="image/png" href="assets/dragon.png" />
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -23,19 +23,18 @@
       --bg1:#060827;
       --card: rgba(255,255,255,.06);
       --card2: rgba(255,255,255,.09);
-      --border: rgba(255,255,255,.10);
+      --border: rgba(255,255,255,.11);
       --text: #eef2ff;
       --muted: rgba(238,242,255,.72);
-      --blue: #5b7cff;
-      --purple: #8a5cff;
+
       --cyan: #34d6ff;
-      --pink: #ff4fd8;
+      --blue: #5b7cff;
+      --purple:#8a5cff;
+      --pink:#ff4fd8;
 
-      --shadow: 0 26px 90px rgba(0,0,0,.68);
-      --shadow2: 0 18px 60px rgba(0,0,0,.45);
+      --shadow: 0 22px 70px rgba(0,0,0,.62);
       --radius: 18px;
-      --radius2: 28px;
-
+      --radius2: 26px;
       --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
 
@@ -53,82 +52,62 @@
       overflow-x:hidden;
     }
 
-    /* Animated BG */
+    /* BG */
     .bg{ position:fixed; inset:0; z-index:-2; pointer-events:none; }
     .noise{
-      position:absolute; inset:-200px;
+      position:absolute; inset:-220px;
       background:
         radial-gradient(circle at 20% 20%, rgba(91,124,255,.18), transparent 45%),
         radial-gradient(circle at 80% 35%, rgba(138,92,255,.14), transparent 45%),
         radial-gradient(circle at 55% 85%, rgba(52,214,255,.10), transparent 45%);
-      filter: blur(50px);
+      filter: blur(48px);
       opacity:.95;
-      animation: float 10.5s ease-in-out infinite;
-      transform: translate3d(0,0,0);
+      animation: float 11s ease-in-out infinite;
     }
     @keyframes float{
       0%,100%{ transform: translate3d(0,0,0) scale(1); }
-      50%{ transform: translate3d(26px,-18px,0) scale(1.03); }
+      50%{ transform: translate3d(22px,-16px,0) scale(1.02); }
     }
-    canvas#stars{ position:absolute; inset:0; width:100%; height:100%; opacity:.34; }
-    .sheen{
-      position:absolute; inset:0; opacity:.18; mix-blend-mode:screen;
-      background: linear-gradient(120deg, transparent 10%, rgba(255,255,255,.10) 30%, transparent 55%);
-      animation: sheen 7s ease-in-out infinite;
-    }
-    @keyframes sheen{
-      0%,100%{ transform: translateX(-20%) skewX(-12deg); opacity:.10; }
-      50%{ transform: translateX(20%) skewX(-12deg); opacity:.22; }
-    }
+    canvas#stars{ position:absolute; inset:0; width:100%; height:100%; opacity:.35; }
 
     .container{max-width:1180px; margin:0 auto; padding:0 20px}
 
-    /* ---------- LOADER ---------- */
+    /* Loader */
     .loaderWrap{
       position:fixed; inset:0; z-index:999;
       display:grid; place-items:center;
-      background:
-        radial-gradient(1000px 800px at 20% 20%, rgba(91,124,255,.16), transparent 50%),
-        radial-gradient(1000px 800px at 80% 35%, rgba(138,92,255,.16), transparent 50%),
-        radial-gradient(800px 700px at 55% 85%, rgba(52,214,255,.10), transparent 55%),
-        linear-gradient(180deg, #030416, #060827);
-      transition: opacity .65s ease, transform .65s cubic-bezier(.2,.9,.2,1);
+      background: radial-gradient(1000px 800px at 20% 20%, rgba(91,124,255,.18), transparent 55%),
+                  radial-gradient(1000px 800px at 80% 35%, rgba(138,92,255,.18), transparent 55%),
+                  linear-gradient(180deg, #030416, #060827);
+      transition: opacity .55s ease, transform .55s ease;
     }
     .loaderWrap.hide{ opacity:0; pointer-events:none; transform: scale(1.02); }
     .loaderCard{
       width:min(560px, calc(100vw - 40px));
-      border-radius: 28px;
-      border:1px solid rgba(255,255,255,.10);
+      border-radius: 26px;
+      border:1px solid var(--border);
       background: rgba(255,255,255,.05);
       box-shadow: var(--shadow);
       padding: 18px;
-      position:relative;
-      overflow:hidden;
     }
-    .loaderCard:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.18), transparent 55%),
-                  radial-gradient(circle at 80% 35%, rgba(91,124,255,.20), transparent 55%),
-                  radial-gradient(circle at 55% 85%, rgba(138,92,255,.16), transparent 55%);
-      filter: blur(18px);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .loaderTop{
-      position:relative;
-      display:flex; align-items:center; gap:12px;
-    }
+    .loaderTop{ display:flex; align-items:center; gap:12px; }
     .loaderLogo{
-      width:56px; height:56px; border-radius:18px;
+      width:54px; height:54px; border-radius:18px;
       border:1px solid rgba(255,255,255,.12);
       background: rgba(255,255,255,.06);
       box-shadow: 0 0 34px rgba(91,124,255,.18);
     }
     .loaderName{ font-weight:1000; font-size:18px; letter-spacing:.2px; }
-    .loaderSub{ color:var(--muted); font-weight:900; font-size:13px; margin-top:2px; }
+    .loaderSub{ color:var(--muted); font-weight:800; font-size:13px; margin-top:2px; }
+    .spinner{
+      width:16px; height:16px; border-radius:50%;
+      border:2px solid rgba(255,255,255,.22);
+      border-top-color: rgba(52,214,255,.9);
+      animation: spin .9s linear infinite;
+      margin-left:auto;
+    }
+    @keyframes spin{to{transform:rotate(360deg)}}
     .bar{
-      position:relative;
       margin-top:14px;
       height:12px;
       border-radius:999px;
@@ -142,32 +121,24 @@
       border-radius:999px;
       background: linear-gradient(90deg, rgba(52,214,255,.95), rgba(91,124,255,.95), rgba(138,92,255,.95));
       box-shadow: 0 0 20px rgba(91,124,255,.25);
-      transition: width .25s ease;
+      transition: width .22s ease;
     }
     .loaderHint{
       margin-top:10px;
-      color: rgba(238,242,255,.86);
-      font-weight:1000;
+      color: rgba(238,242,255,.82);
+      font-weight:900;
       display:flex; justify-content:space-between; align-items:center;
       font-size:13px;
-      position:relative;
     }
-    .spinner{
-      width:16px; height:16px; border-radius:50%;
-      border:2px solid rgba(255,255,255,.22);
-      border-top-color: rgba(52,214,255,.9);
-      animation: spin .85s linear infinite;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
 
-    /* Top bar */
+    /* Topbar */
     .topbar{
-      position:sticky; top:0; z-index:50;
+      position:sticky; top:0; z-index:60;
       display:flex; align-items:center; justify-content:space-between;
       padding:14px 18px;
       border-bottom:1px solid rgba(255,255,255,.08);
-      background: rgba(4,5,21,.56);
-      backdrop-filter: blur(18px);
+      background: rgba(4,5,21,.58);
+      backdrop-filter: blur(16px);
     }
     .brand{
       display:flex; gap:12px; align-items:center;
@@ -180,9 +151,9 @@
       background: rgba(255,255,255,.06);
     }
     .bname{font-weight:1000; letter-spacing:.2px}
-    .btag{font-size:12px; color:var(--muted); margin-top:2px; font-weight:900}
+    .btag{font-size:12px; color:var(--muted); margin-top:2px; font-weight:800}
 
-    .nav{ display:flex; gap:16px; align-items:center; }
+    .nav{ display:flex; gap:14px; align-items:center; }
     .nav a{
       color:var(--muted);
       text-decoration:none;
@@ -207,31 +178,18 @@
       font-weight:1000;
       cursor:pointer;
       transition: transform .14s ease, background .16s ease, border-color .16s ease, filter .16s ease;
-      box-shadow: var(--shadow2);
+      box-shadow: 0 18px 50px rgba(0,0,0,.25);
       user-select:none;
-      position:relative;
-      overflow:hidden;
+      white-space:nowrap;
     }
-    .btn:before{
-      content:"";
-      position:absolute; inset:-60px;
-      background: radial-gradient(circle at 30% 30%, rgba(52,214,255,.18), transparent 55%),
-                  radial-gradient(circle at 70% 40%, rgba(91,124,255,.18), transparent 55%),
-                  radial-gradient(circle at 55% 75%, rgba(138,92,255,.14), transparent 55%);
-      filter: blur(28px);
-      opacity:.0;
-      transition: opacity .18s ease;
-      pointer-events:none;
-    }
-    .btn:hover:before{opacity:.85}
     .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
     .btn:active{transform: translateY(0px)}
     .btn.primary{
       background: linear-gradient(90deg, rgba(52,214,255,.75), rgba(91,124,255,.95), rgba(138,92,255,.75));
       border-color: rgba(52,214,255,.25);
-      box-shadow: 0 26px 70px rgba(91,124,255,.18);
+      box-shadow: 0 24px 60px rgba(91,124,255,.18);
     }
-    .btn.primary:hover{filter: brightness(1.06)}
+    .btn.primary:hover{filter: brightness(1.05)}
     .btn.ghost{background: rgba(255,255,255,.04)}
     .iconbtn{ width:44px; height:44px; padding:0; border-radius:16px; }
 
@@ -239,11 +197,12 @@
     @media (max-width: 920px){
       .nav{display:none}
       .menuBtn{display:inline-flex}
+      .btn.hideMobile{display:none}
     }
 
-    /* Mobile drawer */
+    /* Drawer */
     .drawer{
-      position:fixed; inset:0; z-index:80;
+      position:fixed; inset:0; z-index:90;
       background: rgba(0,0,0,.55);
       display:none;
     }
@@ -259,7 +218,7 @@
       box-shadow: var(--shadow);
       display:grid; gap:10px;
     }
-    .drawerPanel a{
+    .drawerPanel a, .drawerPanel button{
       text-decoration:none;
       color:var(--muted);
       font-weight:1000;
@@ -267,11 +226,77 @@
       border-radius:14px;
       border:1px solid rgba(255,255,255,.08);
       background: rgba(255,255,255,.05);
+      cursor:pointer;
+      text-align:left;
     }
-    .drawerPanel a:hover{color:var(--text); background: rgba(255,255,255,.07)}
+    .drawerPanel a:hover, .drawerPanel button:hover{color:var(--text); background: rgba(255,255,255,.07)}
     .closeX{justify-self:end}
 
-    /* Pills / Text */
+    /* Cards */
+    .card{
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      border-radius: var(--radius2);
+      box-shadow: var(--shadow);
+    }
+
+    /* Reveal */
+    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.show{ opacity:1; transform: translateY(0px); }
+
+    /* Toast */
+    .toast{
+      position:fixed;
+      left:50%; bottom:18px;
+      transform: translateX(-50%);
+      padding:12px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(52,214,255,.22);
+      background: rgba(7,10,18,.85);
+      color: rgba(238,242,255,.92);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      display:none;
+      font-weight:1000;
+      z-index:200;
+    }
+    .toast.show{display:block}
+
+    .toTop{
+      position:fixed;
+      right:18px; bottom:18px;
+      width:46px; height:46px;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.06);
+      color:var(--text);
+      cursor:pointer;
+      display:none;
+      box-shadow: 0 18px 60px rgba(0,0,0,.35);
+      z-index:120;
+    }
+    .toTop.show{display:inline-grid; place-items:center}
+
+    /* Gate */
+    .gate{
+      min-height: calc(100vh - 76px);
+      display:grid;
+      place-items:center;
+      padding: 36px 0 22px;
+    }
+    .gateCard{
+      width:min(980px, calc(100vw - 40px));
+      border-radius: 28px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      overflow:hidden;
+    }
+    .gateHead{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:12px;
+      margin-bottom: 14px;
+    }
     .pill{
       display:inline-flex; align-items:center; gap:10px;
       padding:10px 12px;
@@ -288,64 +313,27 @@
       background:#2cff7b;
       box-shadow: 0 0 18px rgba(44,255,123,.35);
     }
+    .gateTitle{
+      font-size: clamp(26px, 3.2vw, 40px);
+      line-height:1.06;
+      margin: 10px 0 6px;
+      font-weight: 1000;
+      letter-spacing:-.8px;
+    }
     .grad{
       background: linear-gradient(90deg, var(--cyan), var(--blue), var(--purple));
       -webkit-background-clip:text;
       background-clip:text;
       color:transparent;
     }
-
-    /* ---------- GATE (Free / Premium) ---------- */
-    .gate{
-      min-height: calc(100vh - 76px);
-      display:grid;
-      place-items:center;
-      padding: 36px 0 22px;
-    }
-    .gateCard{
-      width:min(980px, calc(100vw - 40px));
-      border-radius: 28px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      box-shadow: var(--shadow);
-      padding: 18px;
-      position:relative;
-      overflow:hidden;
-    }
-    .gateCard:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.14), transparent 55%),
-                  radial-gradient(circle at 80% 35%, rgba(91,124,255,.18), transparent 55%),
-                  radial-gradient(circle at 55% 85%, rgba(138,92,255,.14), transparent 55%);
-      filter: blur(18px);
-      opacity:.9;
-      pointer-events:none;
-    }
-    .gateHead{
-      position:relative;
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom: 14px;
-    }
-    .gateTitle{
-      font-size: clamp(26px, 3.2vw, 40px);
-      line-height:1.06;
-      margin: 8px 0 6px;
-      font-weight: 1000;
-      letter-spacing:-.8px;
-    }
     .gateDesc{
       color: var(--muted);
       font-weight:900;
       line-height:1.6;
-      max-width: 75ch;
+      max-width: 70ch;
       margin:0;
     }
     .gateGrid{
-      position:relative;
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 12px;
@@ -361,32 +349,29 @@
       background: rgba(255,255,255,.04);
       padding: 16px;
       cursor:pointer;
-      transition: transform .22s cubic-bezier(.2,.9,.2,1), background .18s ease, border-color .18s ease, filter .18s ease;
-      will-change: transform;
+      transition: transform .18s ease, background .18s ease, border-color .18s ease;
+      outline: none;
     }
-    .pick:focus{ outline: none; box-shadow: 0 0 0 3px rgba(52,214,255,.18), var(--shadow2); }
     .pick:hover{
-      transform: translateY(-3px) scale(1.01);
+      transform: translateY(-2px);
       background: rgba(255,255,255,.06);
       border-color: rgba(52,214,255,.22);
     }
+    .pick:focus-visible{
+      box-shadow: 0 0 0 3px rgba(52,214,255,.25);
+    }
     .pickGlow{
-      position:absolute; inset:-140px;
-      background: radial-gradient(circle at 30% 30%, rgba(52,214,255,.20), transparent 52%),
-                  radial-gradient(circle at 70% 40%, rgba(91,124,255,.18), transparent 56%),
-                  radial-gradient(circle at 55% 75%, rgba(138,92,255,.16), transparent 56%);
-      filter: blur(40px);
+      position:absolute; inset:-120px;
+      background: radial-gradient(circle at 30% 30%, rgba(52,214,255,.18), transparent 50%),
+                  radial-gradient(circle at 70% 40%, rgba(91,124,255,.16), transparent 55%),
+                  radial-gradient(circle at 55% 75%, rgba(138,92,255,.14), transparent 55%);
+      filter: blur(36px);
       opacity:.85;
-      transform: translate3d(0,0,0);
       transition: opacity .2s ease;
       pointer-events:none;
     }
     .pick:hover .pickGlow{ opacity:1; }
-    .pickTop{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-      position:relative;
-    }
+    .pickTop{ display:flex; align-items:center; justify-content:space-between; gap:12px; position:relative; }
     .tag{
       font-weight:1000;
       padding:8px 10px;
@@ -394,36 +379,23 @@
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.18);
       white-space:nowrap;
+      font-size:12px;
     }
     .tag.free{ border-color: rgba(52,214,255,.22); background: rgba(52,214,255,.10); }
     .tag.prem{ border-color: rgba(138,92,255,.25); background: rgba(138,92,255,.10); }
     .kbd{
       font-size:12px; font-weight:1000;
-      color: rgba(238,242,255,.86);
+      color: rgba(238,242,255,.85);
       padding:6px 10px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.18);
       white-space:nowrap;
     }
-    .pickTitle{
-      font-weight:1000;
-      font-size: 18px;
-      margin-top: 12px;
-      position:relative;
-    }
-    .pickText{
-      color: var(--muted);
-      margin-top: 8px;
-      line-height: 1.6;
-      position:relative;
-      font-weight:900;
-    }
-    .pickBtns{
-      display:flex; gap:10px; flex-wrap:wrap;
-      margin-top: 14px;
-      position:relative;
-    }
+    .pickTitle{ font-weight:1000; font-size:18px; margin-top: 12px; position:relative; }
+    .pickText{ color: var(--muted); margin-top: 8px; line-height: 1.6; position:relative; font-weight:900; }
+    .pickBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px; position:relative; }
+
     .miniBtn{
       padding:10px 12px;
       border-radius: 14px;
@@ -432,9 +404,7 @@
       color: var(--text);
       font-weight:1000;
       cursor:pointer;
-      transition: transform .14s ease, background .14s ease, border-color .14s ease, filter .14s ease;
-      position:relative;
-      overflow:hidden;
+      transition: transform .14s ease, background .14s ease, border-color .14s ease;
     }
     .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); }
     .miniBtn.primary{
@@ -442,25 +412,23 @@
       border-color: rgba(52,214,255,.22);
     }
 
-    /* Pages (Free / Premium) */
+    /* Pages */
     .page{ display:none; }
-    .page.show{ display:block; animation: pageIn .5s cubic-bezier(.2,.9,.2,1) both; }
-    @keyframes pageIn{
-      from{ opacity:0; transform: translateY(12px) scale(.99); filter: blur(3px); }
-      to{ opacity:1; transform: translateY(0) scale(1); filter: blur(0); }
+    .page.show{ display:block; animation: popIn .45s ease both; }
+    @keyframes popIn{
+      from{ opacity:0; transform: translateY(10px) scale(.99); }
+      to{ opacity:1; transform: translateY(0) scale(1); }
     }
 
-    /* Shared layout blocks */
+    /* Free content */
     .hero{
-      padding: 42px 0 22px;
+      padding: 42px 0 18px;
       display:grid;
       grid-template-columns: 1.05fr .95fr;
       gap: 22px;
       align-items:start;
     }
-    @media (max-width: 920px){
-      .hero{grid-template-columns:1fr; padding-top:26px}
-    }
+    @media (max-width: 920px){ .hero{grid-template-columns:1fr; padding-top:26px} }
 
     h1{
       margin:16px 0 10px;
@@ -473,7 +441,7 @@
       color: var(--muted);
       font-size:16px;
       line-height:1.65;
-      max-width: 65ch;
+      max-width: 60ch;
       font-weight:900;
     }
     .cta{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px}
@@ -491,47 +459,13 @@
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.04);
       box-shadow: 0 18px 50px rgba(0,0,0,.18);
-      position:relative;
-      overflow:hidden;
     }
-    .stat:before{
-      content:"";
-      position:absolute; inset:-60px;
-      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.10), transparent 55%),
-                  radial-gradient(circle at 80% 35%, rgba(91,124,255,.10), transparent 55%);
-      filter: blur(26px);
-      opacity:.65;
-      pointer-events:none;
-    }
-    .statTop{font-size:18px; position:relative}
-    .statBig{font-weight:1000; margin-top:6px; position:relative}
-    .statSub{color:var(--muted); font-size:13px; margin-top:4px; font-weight:900; position:relative}
+    .statTop{font-size:18px}
+    .statBig{font-weight:1000; margin-top:6px}
+    .statSub{color:var(--muted); font-size:13px; margin-top:4px; font-weight:900}
 
-    .card{
-      border: 1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow2);
-      position:relative;
-      overflow:hidden;
-    }
-    .card:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.12), transparent 55%),
-                  radial-gradient(circle at 80% 35%, rgba(91,124,255,.12), transparent 55%),
-                  radial-gradient(circle at 55% 85%, rgba(138,92,255,.10), transparent 55%);
-      filter: blur(20px);
-      opacity:.55;
-      pointer-events:none;
-    }
     .preview{padding:18px}
-    .cardTop{
-      display:flex; align-items:center; justify-content:space-between;
-      margin-bottom:12px;
-      gap:10px;
-      position:relative;
-    }
+    .cardTop{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:10px; }
     .badge{
       font-weight:1000;
       padding:8px 10px;
@@ -539,9 +473,9 @@
       background: rgba(91,124,255,.16);
       border:1px solid rgba(91,124,255,.28);
       white-space:nowrap;
-      position:relative;
+      font-size:12px;
     }
-    .chips{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end; position:relative}
+    .chips{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
     .chip{
       font-size:12px;
       font-weight:1000;
@@ -551,28 +485,21 @@
       background: rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.10);
     }
-
     .panel{
       padding:16px;
       border-radius: 22px;
       background: rgba(0,0,0,.22);
       border: 1px solid rgba(255,255,255,.08);
-      position:relative;
     }
-    .panelHead{
-      display:flex; align-items:center; gap:12px;
-      margin-bottom:10px;
-      position:relative;
-    }
+    .panelHead{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
     .panelAvatar{
       width:46px; height:46px; border-radius:16px;
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.06);
     }
-    .panelTitle{font-weight:1000; font-size:16px; position:relative}
-    .panelDesc{color:var(--muted); margin:6px 0 12px; line-height:1.55; font-weight:900; position:relative}
-    .panelBtns{display:grid; grid-template-columns:1fr; gap:10px; position:relative}
-
+    .panelTitle{font-weight:1000; font-size:16px}
+    .panelDesc{color:var(--muted); margin:6px 0 12px; line-height:1.55; font-weight:900}
+    .panelBtns{display:grid; grid-template-columns:1fr; gap:10px}
     .panelBtn{
       text-align:left;
       padding:12px 14px;
@@ -582,43 +509,21 @@
       color:var(--text);
       font-weight:1000;
       cursor:pointer;
-      transition: transform .15s ease, background .15s ease, border-color .15s ease, filter .15s ease;
+      transition: transform .15s ease, background .15s ease, border-color .15s ease;
       display:flex; align-items:center; justify-content:space-between;
       gap:12px;
-      position:relative;
-      overflow:hidden;
     }
     .panelBtn:hover{
       transform: translateY(-1px);
       background: rgba(255,255,255,.08);
       border-color: rgba(52,214,255,.24);
-      filter: brightness(1.02);
     }
-    .panelBtn small{color:var(--muted); font-weight:1000}
-    .smallNote{color:var(--muted); font-size:12px; margin-top:10px; font-weight:900; position:relative}
+    .panelBtn small{color:var(--muted); font-weight:900}
+    .smallNote{color:var(--muted); font-size:12px; margin-top:10px; font-weight:900}
 
-    .mini{padding:16px; margin-top:12px}
-    .miniRow{display:flex; gap:12px; align-items:flex-start; padding:10px 0; position:relative}
-    .miniRow + .miniRow{border-top:1px solid rgba(255,255,255,.08)}
-    .miniIcon{
-      width:38px; height:38px; border-radius: 14px;
-      display:grid; place-items:center;
-      background: rgba(52,214,255,.10);
-      border:1px solid rgba(52,214,255,.20);
-      font-weight:1000;
-      position:relative;
-    }
-    .miniTitle{font-weight:1000; position:relative}
-    .miniText{color:var(--muted); font-size:13px; margin-top:4px; line-height:1.45; font-weight:900; position:relative}
-
-    .section{padding: 28px 0}
-    .section h2{
-      margin:0 0 12px;
-      font-size:28px;
-      letter-spacing:-.4px;
-      position:relative;
-    }
-    .muted{color:var(--muted); font-weight:900}
+    .section{padding: 22px 0}
+    .section h2{ margin:0 0 12px; font-size:28px; letter-spacing:-.4px; }
+    .muted{color:var(--muted)}
 
     .grid{
       display:grid;
@@ -628,10 +533,10 @@
     @media (max-width: 920px){ .grid{grid-template-columns: repeat(2, minmax(0,1fr))} }
     @media (max-width: 520px){ .grid{grid-template-columns: 1fr} }
 
-    .feature{padding:16px; position:relative}
-    .icon{font-size:22px; position:relative}
-    .ftitle{font-weight:1000; margin-top:8px; position:relative}
-    .ftext{color:var(--muted); margin-top:6px; line-height:1.55; font-weight:900; position:relative}
+    .feature{padding:16px}
+    .icon{font-size:22px}
+    .ftitle{font-weight:1000; margin-top:8px}
+    .ftext{color:var(--muted); margin-top:6px; line-height:1.55; font-weight:900}
 
     .cmds .cmd{
       padding:18px 16px;
@@ -642,7 +547,6 @@
       transition: transform .15s ease, background .15s ease, border-color .15s ease;
       display:flex; align-items:center; justify-content:space-between;
       gap:12px;
-      position:relative;
     }
     .cmds .cmd:hover{
       transform: translateY(-2px);
@@ -650,110 +554,11 @@
       border-color: rgba(91,124,255,.22);
     }
 
-    /* Premium store blocks */
-    .tabsRow{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; position:relative}
-    .tabBtn{
-      padding:10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      font-weight:1000;
-      cursor:pointer;
-      transition: transform .14s ease, background .14s ease, border-color .14s ease;
-    }
-    .tabBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); }
-    .tabBtn.active{
-      background: linear-gradient(90deg, rgba(52,214,255,.60), rgba(91,124,255,.95), rgba(138,92,255,.60));
-      border-color: rgba(52,214,255,.22);
-    }
+    .faq details{padding:16px}
+    .faq summary{ cursor:pointer; font-weight:1000; list-style:none; }
+    .faq summary::-webkit-details-marker{display:none}
+    .faq p{color:var(--muted); margin:10px 0 0; line-height:1.65; font-weight:900}
 
-    .priceGrid{ display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:12px; margin-top: 14px; position:relative}
-    @media (max-width: 920px){ .priceGrid{grid-template-columns:1fr;} }
-
-    .priceCard{ padding:16px; border-radius: 26px; position:relative; overflow:hidden; cursor:pointer; }
-    .priceCard:hover{ transform: translateY(-3px) scale(1.01); }
-    .priceTop{ display:flex; align-items:center; justify-content:space-between; gap:10px; position:relative; }
-    .priceName{ font-weight:1000; font-size:16px; margin-top:10px; position:relative; }
-    .priceMoney{ font-weight:1000; font-size:28px; margin-top:6px; position:relative; letter-spacing:-.6px; }
-    .priceSub{ color:var(--muted); font-weight:900; margin-top:6px; line-height:1.55; position:relative; }
-    .priceList{ margin:10px 0 0; padding-left:18px; color:rgba(238,242,255,.9); font-weight:900; line-height:1.6; position:relative; }
-    .priceList li{ margin:6px 0; }
-    .best{
-      position:absolute; top:14px; right:14px;
-      padding:7px 10px; border-radius:999px;
-      background: rgba(255,79,216,.12);
-      border:1px solid rgba(255,79,216,.22);
-      font-weight:1000; font-size:12px;
-      z-index:2;
-    }
-
-    /* Modal */
-    .modal{
-      position:fixed; inset:0; z-index:120;
-      display:none;
-      background: rgba(0,0,0,.60);
-      place-items:center;
-      padding: 18px;
-    }
-    .modal.show{display:grid}
-    .modalCard{
-      width:min(620px, calc(100vw - 36px));
-      border-radius: 26px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(10,12,28,.92);
-      backdrop-filter: blur(16px);
-      box-shadow: var(--shadow);
-      padding: 16px;
-      position:relative;
-      overflow:hidden;
-    }
-    .modalCard:before{
-      content:"";
-      position:absolute; inset:-2px;
-      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.16), transparent 55%),
-                  radial-gradient(circle at 80% 35%, rgba(91,124,255,.18), transparent 55%),
-                  radial-gradient(circle at 55% 85%, rgba(138,92,255,.14), transparent 55%);
-      filter: blur(18px);
-      opacity:.75;
-      pointer-events:none;
-    }
-    .modalTop{
-      position:relative;
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      margin-bottom: 8px;
-    }
-    .modalTitle{ font-weight:1000; font-size:18px; position:relative }
-    .modalText{ color:var(--muted); line-height:1.65; font-weight:900; margin: 8px 0 12px; position:relative }
-
-    .field{ display:grid; gap:6px; margin-top:10px; position:relative}
-    .field label{ font-weight:1000; font-size:13px; color: rgba(238,242,255,.92); position:relative }
-    .field input, .field textarea, .field select{
-      width:100%;
-      padding:12px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      font-weight:1000;
-      outline:none;
-      position:relative;
-    }
-    .field textarea{ min-height: 110px; resize: vertical; font-weight:900; }
-    .hintSmall{ color: var(--muted); font-weight:900; font-size:12px; line-height:1.55; position:relative}
-    .copyRow{ display:flex; gap:10px; flex-wrap:wrap; align-items:center; position:relative }
-    .codeBox{
-      padding:10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.20);
-      font-weight:1000;
-      word-break: break-all;
-      flex: 1;
-      position:relative;
-    }
-
-    /* Footer */
     .footer{
       padding:22px 0 46px;
       display:flex; justify-content:space-between; align-items:center;
@@ -762,65 +567,157 @@
       margin-top:12px;
     }
     .footLeft{display:flex; align-items:center; gap:12px}
+    .footRight{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
     .footRight a{color:var(--muted); text-decoration:none; font-weight:1000}
     .footRight a:hover{color:var(--text)}
 
-    /* Reveal */
-    .reveal{
-      opacity:0;
-      transform: translateY(14px);
-      transition: opacity .65s ease, transform .65s ease;
+    /* Premium page */
+    .premWrap{
+      padding: 34px 0 18px;
     }
-    .reveal.show{ opacity:1; transform: translateY(0px); }
-
-    /* Toast + top */
-    .toTop{
-      position:fixed;
-      right:18px; bottom:18px;
-      width:46px; height:46px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color:var(--text);
-      cursor:pointer;
-      display:none;
-      box-shadow: var(--shadow2);
-      z-index:70;
+    .premTop{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      margin-bottom:12px;
     }
-    .toTop.show{display:inline-grid; place-items:center}
-
-    .toast{
-      position:fixed;
-      left:50%; bottom:18px;
-      transform: translateX(-50%);
-      padding:12px 14px;
-      border-radius: 16px;
-      border:1px solid rgba(52,214,255,.22);
-      background: rgba(7,10,18,.85);
-      color: rgba(238,242,255,.92);
-      box-shadow: var(--shadow2);
-      display:none;
+    .premTitle{
+      font-size: clamp(28px, 3.4vw, 44px);
+      margin: 10px 0 6px;
       font-weight:1000;
-      z-index:90;
+      letter-spacing:-.9px;
+      line-height:1.06;
     }
-    .toast.show{display:block}
+    .premDesc{
+      margin:0;
+      max-width: 72ch;
+      color: var(--muted);
+      font-weight:900;
+      line-height:1.6;
+    }
 
-    /* small shake animation */
-    @keyframes nudge{
-      0%{ transform: translateX(0); }
-      25%{ transform: translateX(-2px); }
-      50%{ transform: translateX(2px); }
-      75%{ transform: translateX(-1px); }
-      100%{ transform: translateX(0); }
+    .pricing{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0,1fr));
+      gap: 12px;
     }
-    .shake{ animation: nudge .22s ease; }
+    @media (max-width: 920px){ .pricing{grid-template-columns:1fr} }
+
+    .priceCard{
+      padding:16px;
+      border-radius: 26px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: var(--shadow);
+      position:relative;
+      overflow:hidden;
+      transition: transform .18s ease, border-color .18s ease, background .18s ease;
+    }
+    .priceCard:hover{
+      transform: translateY(-2px);
+      border-color: rgba(52,214,255,.22);
+      background: rgba(255,255,255,.06);
+    }
+    .priceGlow{
+      position:absolute; inset:-140px;
+      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.14), transparent 55%),
+                  radial-gradient(circle at 70% 40%, rgba(91,124,255,.16), transparent 55%),
+                  radial-gradient(circle at 60% 80%, rgba(138,92,255,.14), transparent 60%);
+      filter: blur(36px);
+      opacity:.85;
+      pointer-events:none;
+    }
+    .priceHead{ position:relative; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+    .priceTag{
+      font-weight:1000;
+      font-size:12px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+    .price{
+      position:relative;
+      margin-top:10px;
+      font-size:34px;
+      font-weight:1000;
+      letter-spacing:-.6px;
+    }
+    .per{
+      position:relative;
+      color: var(--muted);
+      font-weight:900;
+      margin-top:6px;
+    }
+    .ul{
+      position:relative;
+      margin: 12px 0 0;
+      padding-left: 18px;
+      color: rgba(238,242,255,.88);
+      font-weight:900;
+      line-height:1.7;
+      font-size:14px;
+    }
+    .checkout{
+      margin-top: 14px;
+      position:relative;
+      display:flex; gap:10px; flex-wrap:wrap;
+    }
+
+    .formRow{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-top:12px;
+    }
+    @media (max-width: 920px){ .formRow{grid-template-columns:1fr} }
+    .field{
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      border-radius: 16px;
+      padding: 12px 12px;
+      color: var(--text);
+      font-weight:900;
+      outline:none;
+      width:100%;
+    }
+    .field::placeholder{color: rgba(238,242,255,.45); font-weight:900;}
+
+    .howBox{
+      margin-top: 12px;
+      padding: 16px;
+      border-radius: 26px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      box-shadow: var(--shadow);
+    }
+    .howBox h3{ margin:0 0 8px; font-weight:1000; letter-spacing:-.2px;}
+    .howBox p{ margin:0; color:var(--muted); font-weight:900; line-height:1.7;}
+    .codeBox{
+      margin-top: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.22);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 13px;
+      font-weight:1000;
+      word-break: break-all;
+      color: rgba(238,242,255,.95);
+    }
+
   </style>
 </head>
 
 <body id="top">
   <div class="bg">
     <div class="noise"></div>
-    <div class="sheen" aria-hidden="true"></div>
     <canvas id="stars"></canvas>
   </div>
 
@@ -831,20 +728,20 @@
         <img class="loaderLogo" src="assets/dragon.png" alt="Dragon Services" />
         <div>
           <div class="loaderName">Dragon Services</div>
-          <div class="loaderSub">Loading UI…</div>
+          <div class="loaderSub">Loading the panel…</div>
         </div>
-        <div style="margin-left:auto" class="spinner" aria-hidden="true"></div>
+        <div class="spinner" aria-hidden="true"></div>
       </div>
       <div class="bar"><div id="barFill"></div></div>
       <div class="loaderHint">
-        <span id="loadText">Booting</span>
+        <span id="loadText">Booting UI</span>
         <span id="loadPct">0%</span>
       </div>
     </div>
   </div>
 
   <header class="topbar">
-    <a class="brand" href="#top" id="brandHome">
+    <a class="brand" href="#" id="brandHome">
       <img class="logo" src="assets/dragon.png" alt="Dragon Services" />
       <div>
         <div class="bname">Dragon Services</div>
@@ -853,13 +750,13 @@
     </a>
 
     <nav class="nav">
-      <a href="#features" class="navLink">Features</a>
-      <a href="#commands" class="navLink">Commands</a>
-      <a href="#faq" class="navLink">FAQ</a>
+      <a href="#" data-nav="gate">Home</a>
+      <a href="#" data-nav="free">Free</a>
+      <a href="#" data-nav="premium">Premium</a>
     </nav>
 
     <div class="actions">
-      <a class="btn ghost" id="youtubeBtn" href="#" target="_blank" rel="noreferrer" title="YouTube">▶️ YouTube</a>
+      <a class="btn ghost hideMobile" id="youtubeBtn" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
       <button class="btn ghost iconbtn" id="copyInvite" type="button" title="Copy invite">📋</button>
       <a class="btn primary" id="inviteBtn" href="#" target="_blank" rel="noreferrer">➕ Add Bot</a>
       <button class="btn ghost iconbtn menuBtn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
@@ -870,34 +767,33 @@
   <div class="drawer" id="drawer" aria-hidden="true">
     <div class="drawerPanel">
       <button class="btn ghost iconbtn closeX" id="closeDrawer" type="button" aria-label="Close">✕</button>
-      <a href="#features" class="navLink">Features</a>
-      <a href="#commands" class="navLink">Commands</a>
-      <a href="#faq" class="navLink">FAQ</a>
+      <button id="goGate">🏠 Home</button>
+      <button id="goFree">✅ Free</button>
+      <button id="goPrem">💎 Premium</button>
       <a class="btn primary" id="inviteBtn2" href="#" target="_blank" rel="noreferrer">➕ Add Bot</a>
       <a class="btn ghost" id="youtubeBtn2" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
       <button class="btn ghost" id="copyInvite2" type="button">📋 Copy invite</button>
     </div>
   </div>
 
-  <!-- SELECT (Free / Premium) -->
-  <main class="container" id="gateRoot">
+  <!-- GATE -->
+  <main class="container page show" id="pageGate">
     <section class="gate">
       <div class="gateCard reveal">
         <div class="gateHead">
           <div>
-            <div class="pill"><span class="dot"></span> Online • Blue/Purple • Clean</div>
-            <div class="gateTitle">Choose your <span class="grad">Dragon</span></div>
+            <div class="pill"><span class="dot"></span> Blue / Purple / Black • Smooth UI</div>
+            <div class="gateTitle">Choose <span class="grad">Free</span> or <span class="grad">Premium</span></div>
             <p class="gateDesc">
-              Pick <b>Free</b> to use the ticket bot right now. Pick <b>Premium</b> to unlock extra commands & customization.
+              Free gives you the ticket bot instantly. Premium gives you extra customization + premium-only commands.
             </p>
           </div>
-          <div style="display:flex; gap:10px; align-items:center;">
+          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
             <button class="btn ghost" id="copySite" type="button" title="Copy website link">🔗 Copy site</button>
           </div>
         </div>
 
         <div class="gateGrid">
-          <!-- FREE -->
           <div class="pick" id="pickFree" role="button" tabindex="0" aria-label="Select Free">
             <div class="pickGlow" aria-hidden="true"></div>
             <div class="pickTop">
@@ -906,28 +802,27 @@
             </div>
             <div class="pickTitle">Dragon Tickets — Free Panel</div>
             <div class="pickText">
-              Support + Trade tickets, logs, clean UI, safe permission checks. Perfect for public servers.
+              Support + Trade tickets, clean UI, logs, safe permission checks.
             </div>
             <div class="pickBtns">
-              <button class="miniBtn primary" id="freeOpen">Open Free Panel</button>
-              <button class="miniBtn" id="freeInvite">Invite Bot</button>
+              <button class="miniBtn primary" id="freeOpen">Open Free</button>
+              <button class="miniBtn" id="freeInvite">Invite</button>
             </div>
           </div>
 
-          <!-- PREMIUM -->
           <div class="pick" id="pickPrem" role="button" tabindex="0" aria-label="Select Premium">
             <div class="pickGlow" aria-hidden="true"></div>
             <div class="pickTop">
               <div class="tag prem">PREMIUM</div>
-              <div class="kbd">store</div>
+              <div class="kbd">buy access</div>
             </div>
             <div class="pickTitle">Dragon Tickets — Premium</div>
             <div class="pickText">
-              Premium unlocks more commands + customization. Buy a key, redeem it, and get access instantly after activation.
+              Premium commands, custom setup options, extra controls for ticket names + staff roles.
             </div>
             <div class="pickBtns">
-              <button class="miniBtn primary" id="premOpen">Open Premium Tab</button>
-              <button class="miniBtn" id="premBuy">Buy a Key</button>
+              <button class="miniBtn primary" id="premOpen">Open Premium</button>
+              <button class="miniBtn" id="premHow">How it works</button>
             </div>
           </div>
         </div>
@@ -936,7 +831,7 @@
   </main>
 
   <!-- FREE PAGE -->
-  <div class="page" id="freePage">
+  <div class="page" id="pageFree">
     <main class="container">
       <section class="hero">
         <div class="hero-left reveal">
@@ -953,7 +848,7 @@
             <a class="btn primary" id="inviteBtn3" href="#" target="_blank" rel="noreferrer">➕ Add Bot</a>
             <button class="btn ghost" id="copyInvite3" type="button">📋 Copy invite</button>
             <a class="btn ghost" id="youtubeBtn3" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
-            <button class="btn ghost" id="backGateFree" type="button">⬅️ Free / Premium</button>
+            <button class="btn ghost" id="backHome1" type="button">🏠 Back</button>
           </div>
 
           <div class="stats">
@@ -1006,83 +901,40 @@
                 </button>
               </div>
 
-              <div class="smallNote">Tip: staff can use <b>/close</b> inside ticket channels.</div>
-            </div>
-          </div>
-
-          <div class="card mini reveal">
-            <div class="miniRow">
-              <div class="miniIcon">✅</div>
-              <div>
-                <div class="miniTitle">Clean design</div>
-                <div class="miniText">Blue + purple glow, modern cards, smooth animations.</div>
-              </div>
-            </div>
-            <div class="miniRow">
-              <div class="miniIcon">🧠</div>
-              <div>
-                <div class="miniTitle">Easy to use</div>
-                <div class="miniText">Simple setup flow for server owners, fast staff workflow.</div>
-              </div>
+              <div class="smallNote">Tip: staff can use <b>?close</b> in ticket channels.</div>
             </div>
           </div>
         </div>
       </section>
 
-      <section id="features" class="section">
-        <h2 class="reveal">Features</h2>
-        <div class="grid">
-          <div class="feature card reveal">
-            <div class="icon">🎛️</div>
-            <div class="ftitle">Setup panel</div>
-            <div class="ftext">Pick categories, roles, logs, then post panels.</div>
-          </div>
-          <div class="feature card reveal">
-            <div class="icon">🔐</div>
-            <div class="ftitle">Private tickets</div>
-            <div class="ftext">Only the user + staff can see the channel.</div>
-          </div>
-          <div class="feature card reveal">
-            <div class="icon">🧾</div>
-            <div class="ftitle">Logs</div>
-            <div class="ftext">Ticket create/close actions sent to your log channel.</div>
-          </div>
-          <div class="feature card reveal">
-            <div class="icon">✨</div>
-            <div class="ftitle">Premium UI</div>
-            <div class="ftext">Clean panels, buttons, and safe error messages.</div>
-          </div>
-        </div>
-      </section>
-
-      <section id="commands" class="section">
-        <h2 class="reveal">Commands</h2>
-        <p class="muted reveal">Click a command to copy it.</p>
+      <section class="section" id="freeCommands">
+        <h2 class="reveal">Free Commands</h2>
+        <p class="muted reveal">Click to copy.</p>
 
         <div class="grid cmds">
-          <button class="cmd card reveal" data-copy="/help">
-            <span>/help</span> <span class="kbd">copy</span>
+          <button class="cmd card reveal" data-copy="?help">
+            <span>?help</span> <span class="kbd">copy</span>
           </button>
-          <button class="cmd card reveal" data-copy="/close">
-            <span>/close</span> <span class="kbd">copy</span>
+          <button class="cmd card reveal" data-copy="?close">
+            <span>?close</span> <span class="kbd">copy</span>
           </button>
           <button class="cmd card reveal" data-copy="?setup">
             <span>?setup (owner)</span> <span class="kbd">copy</span>
           </button>
-          <button class="cmd card reveal" data-copy="?help">
-            <span>?help (owner)</span> <span class="kbd">copy</span>
-          </button>
         </div>
       </section>
 
-      <section id="faq" class="section">
+      <section class="section" id="freeFaq">
         <h2 class="reveal">FAQ</h2>
-        <div class="card reveal" style="padding:16px">
-          <div class="muted" style="line-height:1.75">
-            ✅ No Administrator needed. The invite only uses ticket permissions.<br/>
-            ✅ If setup isn’t finished, the bot will tell you what is missing.<br/>
-            ✅ Premium keys are redeemed inside Discord with a premium command (see Premium tab).
-          </div>
+        <div class="faq">
+          <details class="card reveal">
+            <summary>Does the bot need Administrator?</summary>
+            <p>No. The invite uses only permissions needed for tickets. No Administrator.</p>
+          </details>
+          <details class="card reveal">
+            <summary>Why do tickets say “Finish setup”?</summary>
+            <p>If setup isn’t completed (categories/roles/log channel), the bot blocks ticket creation.</p>
+          </details>
         </div>
       </section>
 
@@ -1094,187 +946,165 @@
             <div class="muted">© <span id="year"></span> • Tickets Bot</div>
           </div>
         </div>
-        <div class="footRight" style="display:flex; gap:14px; align-items:center;">
-          <a href="#" id="footerGate">Free / Premium</a>
-          <a href="#" id="footerYoutube">YouTube</a>
-          <a href="#top">Back to top</a>
+        <div class="footRight">
+          <a href="#" id="goPremiumFromFooter">Premium</a>
+          <a href="#top">Top</a>
         </div>
       </footer>
     </main>
   </div>
 
   <!-- PREMIUM PAGE -->
-  <div class="page" id="premPage">
-    <main class="container">
-      <section class="hero">
-        <div class="hero-left reveal">
-          <div class="pill"><span class="dot"></span> Premium • Keys • Extra Commands</div>
-
-          <h1>Dragon Tickets <span class="grad">Premium</span></h1>
-
-          <p class="lead">
-            Premium unlocks extra commands and customization for your server.
-            Buy a key, then contact the owner to receive your premium code. (Manual verification = safer.)
+  <div class="page" id="pagePremium">
+    <main class="container premWrap">
+      <div class="premTop reveal">
+        <div>
+          <div class="pill"><span class="dot"></span> Premium • Extra Commands • Customization</div>
+          <div class="premTitle">Dragon <span class="grad">Premium</span></div>
+          <p class="premDesc">
+            Premium is manual-verified (crypto). You pay, then you send your TXID + Discord to owner, and you get your key.
+            (No auto-verification without a backend.)
           </p>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
+          <button class="btn ghost" id="backHome2" type="button">🏠 Back</button>
+          <a class="btn ghost" id="youtubeBtn4" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
+        </div>
+      </div>
 
-          <div class="cta">
-            <button class="btn primary" id="buyNowTop" type="button">💎 Buy Premium</button>
-            <button class="btn ghost" id="premGoCommands" type="button">✨ Premium commands</button>
-            <button class="btn ghost" id="copyOwner" type="button">👤 Copy owner</button>
-            <button class="btn ghost" id="backGatePrem" type="button">⬅️ Free / Premium</button>
+      <div class="howBox reveal">
+        <h3>How to buy (clear so people don’t think it’s scam)</h3>
+        <p>
+          1) Choose a plan → copy LTC address → send exact amount.<br>
+          2) Copy your TXID (transaction ID) from your wallet (Exodus).<br>
+          3) Add owner on Discord: <b id="ownerTagText"></b> and send: <b>Plan + TXID + Your Discord</b>.<br>
+          4) Owner sends you the Premium Key and you redeem it in the bot.
+        </p>
+
+        <div class="codeBox">
+          <div>
+            <div class="muted" style="font-weight:1000; margin-bottom:6px;">LTC address</div>
+            <div class="mono" id="ltcText"></div>
           </div>
-
-          <div class="tabsRow">
-            <button class="tabBtn active" data-premtab="features" type="button">Features</button>
-            <button class="tabBtn" data-premtab="commands" type="button">Commands</button>
-            <button class="tabBtn" data-premtab="howto" type="button">How to buy</button>
-          </div>
-
-          <div id="premTab_features" class="card" style="padding:16px; margin-top:12px">
-            <div style="font-weight:1000; font-size:16px; position:relative">What you get</div>
-            <div class="muted" style="margin-top:8px; line-height:1.75; position:relative">
-              • Premium-only ticket tools (extra setup & options)<br/>
-              • Custom ticket panel themes (more styles)<br/>
-              • Extra automation commands (templates / auto-messages)<br/>
-              • Priority updates & new premium-only features
-            </div>
-            <div class="smallNote">After you redeem your key in Discord, use <b>?premium-help</b> to see everything you unlocked.</div>
-          </div>
-
-          <div id="premTab_commands" class="card" style="display:none; padding:16px; margin-top:12px">
-            <div style="font-weight:1000; font-size:16px; position:relative">Premium commands</div>
-            <div class="muted" style="margin-top:8px; line-height:1.75; position:relative">
-              Click to copy. (These are shown as <b>?</b> commands like you asked.)
-            </div>
-
-            <div class="grid cmds" style="margin-top:12px">
-              <button class="cmd card" data-copy="?premium-help"><span>?premium-help</span> <span class="kbd">copy</span></button>
-              <button class="cmd card" data-copy="?premium-status"><span>?premium-status</span> <span class="kbd">copy</span></button>
-              <button class="cmd card" data-copy="?premium-redeem KEY"><span>?premium-redeem KEY</span> <span class="kbd">copy</span></button>
-              <button class="cmd card" data-copy="?p-theme neon"><span>?p-theme neon</span> <span class="kbd">copy</span></button>
-              <button class="cmd card" data-copy="?p-template set support"><span>?p-template set support</span> <span class="kbd">copy</span></button>
-              <button class="cmd card" data-copy="?p-autoclose 24h"><span>?p-autoclose 24h</span> <span class="kbd">copy</span></button>
-              <button class="cmd card" data-copy="?p-welcome on"><span>?p-welcome on</span> <span class="kbd">copy</span></button>
-              <button class="cmd card" data-copy="?p-logs verbose"><span>?p-logs verbose</span> <span class="kbd">copy</span></button>
-            </div>
-
-            <div class="smallNote">
-              These commands should only work if premium is enabled for your Discord ID (after redeem).
-            </div>
-          </div>
-
-          <div id="premTab_howto" class="card" style="display:none; padding:16px; margin-top:12px">
-            <div style="font-weight:1000; font-size:16px; position:relative">How to buy (not scam-looking)</div>
-            <div class="muted" style="margin-top:8px; line-height:1.75; position:relative">
-              1) Choose a plan and pay to the LTC address.<br/>
-              2) Copy the “I paid” message from the buy popup.<br/>
-              3) Add the owner on Discord: <b id="ownerNameInline">n_om_e</b> and send the message.<br/>
-              4) Owner verifies payment and sends you a premium key.<br/>
-              5) Redeem it with: <b>?premium-redeem KEY</b>
-            </div>
-            <div class="smallNote">
-              Tip: include <b>TXID</b> from your wallet history to verify faster.
-            </div>
+          <div style="display:flex; gap:10px; flex-wrap:wrap;">
+            <button class="btn primary" id="copyLtc" type="button">📋 Copy LTC</button>
+            <button class="btn ghost" id="copyOwner" type="button">📋 Copy owner</button>
           </div>
         </div>
 
-        <div class="hero-right reveal">
-          <div class="card preview">
-            <div class="cardTop">
-              <div class="badge">Premium Plans</div>
-              <div class="chips">
-                <span class="chip">Keys</span>
-                <span class="chip">Commands</span>
-                <span class="chip">Themes</span>
-              </div>
-            </div>
+        <div class="formRow" style="margin-top:12px;">
+          <input class="field" id="buyDiscord" placeholder="Your Discord (example: user#1234 or @user)" />
+          <input class="field" id="buyTxid" placeholder="TXID (transaction id)" />
+        </div>
 
-            <div class="priceGrid">
-              <div class="pick priceCard" data-plan="15d">
-                <div class="pickGlow" aria-hidden="true"></div>
-                <div class="priceTop">
-                  <div class="tag prem">15 DAYS</div>
-                  <div class="kbd">$1</div>
-                </div>
-                <div class="priceName">Starter Key</div>
-                <div class="priceMoney">$1</div>
-                <div class="priceSub">Try premium for 15 days.</div>
-                <ul class="priceList">
-                  <li>Unlock premium commands</li>
-                  <li>Premium themes</li>
-                  <li>Redeem in Discord</li>
-                </ul>
-                <div style="margin-top:12px; position:relative">
-                  <button class="miniBtn primary" data-buy="15d" type="button">Buy 15d</button>
-                </div>
-              </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
+          <select class="field" id="buyPlan" style="max-width:320px;">
+            <option value="15d">Premium 15 days — $1</option>
+            <option value="1m">Premium 1 month — $2</option>
+            <option value="3m">Premium 3 months — $4</option>
+          </select>
+          <button class="btn primary" id="prepareMsg" type="button">✅ Prepare message to owner</button>
+          <button class="btn ghost" id="copyMsg" type="button">📋 Copy message</button>
+        </div>
 
-              <div class="pick priceCard" data-plan="1m">
-                <div class="pickGlow" aria-hidden="true"></div>
-                <div class="best">BEST</div>
-                <div class="priceTop">
-                  <div class="tag prem">1 MONTH</div>
-                  <div class="kbd">$2</div>
-                </div>
-                <div class="priceName">Pro Key</div>
-                <div class="priceMoney">$2</div>
-                <div class="priceSub">Most popular plan.</div>
-                <ul class="priceList">
-                  <li>Everything in Starter</li>
-                  <li>More premium tools</li>
-                  <li>Priority updates</li>
-                </ul>
-                <div style="margin-top:12px; position:relative">
-                  <button class="miniBtn primary" data-buy="1m" type="button">Buy 1m</button>
-                </div>
-              </div>
-
-              <div class="pick priceCard" data-plan="3m">
-                <div class="pickGlow" aria-hidden="true"></div>
-                <div class="priceTop">
-                  <div class="tag prem">3 MONTHS</div>
-                  <div class="kbd">$4</div>
-                </div>
-                <div class="priceName">Ultra Key</div>
-                <div class="priceMoney">$4</div>
-                <div class="priceSub">Best value.</div>
-                <ul class="priceList">
-                  <li>Everything in Pro</li>
-                  <li>Longer access</li>
-                  <li>Early drops</li>
-                </ul>
-                <div style="margin-top:12px; position:relative">
-                  <button class="miniBtn primary" data-buy="3m" type="button">Buy 3m</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="smallNote" style="margin-top:12px">
-              Payments are in <b>LTC</b>. Send the USD value in LTC (rate changes). Always double-check the address.
-            </div>
-
-            <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; position:relative">
-              <button class="btn primary" id="buyNowSide" type="button">💎 Buy Premium</button>
-              <button class="btn ghost" id="copyLtcTop" type="button">📋 Copy LTC</button>
-            </div>
+        <div class="codeBox" style="margin-top:10px;">
+          <div style="flex:1;">
+            <div class="muted" style="font-weight:1000; margin-bottom:6px;">Message to send to owner</div>
+            <div class="mono" id="msgBox">Fill the fields and press “Prepare message”.</div>
           </div>
+        </div>
+      </div>
 
-          <div class="card mini" style="margin-top:12px">
-            <div class="miniRow">
-              <div class="miniIcon">👤</div>
-              <div>
-                <div class="miniTitle">Contact owner</div>
-                <div class="miniText">Add: <b id="ownerNameCard">n_om_e</b> on Discord and send the “I paid” message.</div>
-              </div>
-            </div>
-            <div class="miniRow">
-              <div class="miniIcon">🔑</div>
-              <div>
-                <div class="miniTitle">Get your key</div>
-                <div class="miniText">After verification, you receive a code and redeem it with <b>?premium-redeem</b>.</div>
-              </div>
-            </div>
+      <div class="pricing">
+        <div class="priceCard reveal">
+          <div class="priceGlow" aria-hidden="true"></div>
+          <div class="priceHead">
+            <div class="priceTag">15 days</div>
+            <div class="kbd">$1</div>
           </div>
+          <div class="price">$1</div>
+          <div class="per">best to try</div>
+          <ul class="ul">
+            <li>Premium-only commands access</li>
+            <li>Custom ticket naming templates</li>
+            <li>Premium role support</li>
+          </ul>
+          <div class="checkout">
+            <button class="miniBtn primary" data-plan="15d">Select 15 days</button>
+            <button class="miniBtn" data-copy="ltc">Copy LTC</button>
+          </div>
+        </div>
+
+        <div class="priceCard reveal">
+          <div class="priceGlow" aria-hidden="true"></div>
+          <div class="priceHead">
+            <div class="priceTag">1 month</div>
+            <div class="kbd">$2</div>
+          </div>
+          <div class="price">$2</div>
+          <div class="per">most popular</div>
+          <ul class="ul">
+            <li>Everything in 15d</li>
+            <li>Custom prefixes (ex: ? or $)</li>
+            <li>More premium settings</li>
+          </ul>
+          <div class="checkout">
+            <button class="miniBtn primary" data-plan="1m">Select 1 month</button>
+            <button class="miniBtn" data-copy="ltc">Copy LTC</button>
+          </div>
+        </div>
+
+        <div class="priceCard reveal">
+          <div class="priceGlow" aria-hidden="true"></div>
+          <div class="priceHead">
+            <div class="priceTag">3 months</div>
+            <div class="kbd">$4</div>
+          </div>
+          <div class="price">$4</div>
+          <div class="per">best value</div>
+          <ul class="ul">
+            <li>Everything in 1m</li>
+            <li>Priority support</li>
+            <li>More premium customization slots</li>
+          </ul>
+          <div class="checkout">
+            <button class="miniBtn primary" data-plan="3m">Select 3 months</button>
+            <button class="miniBtn" data-copy="ltc">Copy LTC</button>
+          </div>
+        </div>
+      </div>
+
+      <section class="section" id="premiumCommands">
+        <h2 class="reveal">Premium Commands (use “?”)</h2>
+        <p class="muted reveal">These will be shown to Premium users. Click to copy.</p>
+
+        <div class="grid cmds">
+          <button class="cmd card reveal" data-copy="?premium-help">
+            <span>?premium-help</span> <span class="kbd">copy</span>
+          </button>
+          <button class="cmd card reveal" data-copy="?prefix set $">
+            <span>?prefix set $</span> <span class="kbd">copy</span>
+          </button>
+          <button class="cmd card reveal" data-copy="?ticketname set {type}-{user}">
+            <span>?ticketname set {type}-{user}</span> <span class="kbd">copy</span>
+          </button>
+          <button class="cmd card reveal" data-copy="?prole set @Premium">
+            <span>?prole set @Premium</span> <span class="kbd">copy</span>
+          </button>
+        </div>
+      </section>
+
+      <section class="section" id="premFaq">
+        <h2 class="reveal">Premium FAQ</h2>
+        <div class="faq">
+          <details class="card reveal">
+            <summary>Do you verify LTC automatically?</summary>
+            <p>No. Auto verification needs a backend + blockchain API. This site is frontend only, so verification is manual (TXID → owner).</p>
+          </details>
+          <details class="card reveal">
+            <summary>Where do I send proof?</summary>
+            <p>Add the owner on Discord (<b id="ownerTagText2"></b>) and send your Plan + TXID + Discord.</p>
+          </details>
         </div>
       </section>
 
@@ -1283,139 +1113,39 @@
           <img class="logo" src="assets/dragon.png" alt="Dragon Services" style="width:36px;height:36px;border-radius:12px" />
           <div>
             <div class="bname">Dragon Services</div>
-            <div class="muted">© <span id="year2"></span> • Tickets Bot</div>
+            <div class="muted">© <span id="year2"></span> • Premium</div>
           </div>
         </div>
-        <div class="footRight" style="display:flex; gap:14px; align-items:center;">
-          <a href="#" id="footerGate2">Free / Premium</a>
-          <a href="#" id="footerYoutube2">YouTube</a>
-          <a href="#top">Back to top</a>
+        <div class="footRight">
+          <a href="#" id="goFreeFromFooter">Free</a>
+          <a href="#top">Top</a>
         </div>
       </footer>
     </main>
-  </div>
-
-  <!-- BUY MODAL -->
-  <div class="modal" id="buyModal" aria-hidden="true">
-    <div class="modalCard">
-      <div class="modalTop">
-        <div class="modalTitle">Buy Premium Key 💎</div>
-        <button class="btn ghost iconbtn" id="closeBuy" type="button" aria-label="Close">✕</button>
-      </div>
-
-      <div class="modalText">
-        ✅ This is <b>manual verification</b> (not a fake auto-check). After you pay, you message the owner on Discord and receive a key.
-      </div>
-
-      <div class="field">
-        <label for="planSel">Plan</label>
-        <select id="planSel">
-          <option value="15d">15 Days — $1</option>
-          <option value="1m">1 Month — $2</option>
-          <option value="3m">3 Months — $4</option>
-        </select>
-      </div>
-
-      <div class="field">
-        <label>Pay to this LTC address</label>
-        <div class="copyRow">
-          <div class="codeBox" id="ltcAddr">LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8</div>
-          <button class="miniBtn" id="copyLtc" type="button">📋 Copy</button>
-        </div>
-        <div class="hintSmall">
-          Send the <b>USD value</b> in LTC (rate changes). Crypto payments are irreversible — check the address carefully.
-        </div>
-      </div>
-
-      <div class="field">
-        <label>Contact owner on Discord</label>
-        <div class="copyRow">
-          <div class="codeBox" id="ownerBox">n_om_e</div>
-          <button class="miniBtn" id="copyOwner2" type="button">📋 Copy owner</button>
-        </div>
-        <div class="hintSmall">
-          After paying, add the owner and paste the “I paid” message below. (This makes it clear where to contact, so it doesn’t look like a scam.)
-        </div>
-      </div>
-
-      <div class="field">
-        <label for="discordUser">Your Discord username</label>
-        <input id="discordUser" placeholder="example: sanbar27 or sanbar27#0000" />
-      </div>
-
-      <div class="field">
-        <label for="txid">Transaction ID (TXID)</label>
-        <input id="txid" placeholder="Paste TXID from your wallet history (recommended)" />
-        <div class="hintSmall">TXID makes verification MUCH faster.</div>
-      </div>
-
-      <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; position:relative">
-        <button class="btn primary" id="iPaid" type="button">✅ Copy “I paid” message</button>
-        <button class="btn ghost" id="saveDraft" type="button">💾 Save draft</button>
-      </div>
-
-      <div class="field" style="margin-top:12px">
-        <label>Message to send owner (copy & paste in Discord DM)</label>
-        <textarea id="msgOut" readonly></textarea>
-        <div class="hintSmall">
-          This site cannot detect payments automatically. You send the message to the owner (<b>n_om_e</b>) after you pay.
-        </div>
-      </div>
-    </div>
   </div>
 
   <button id="toTop" class="toTop" type="button" aria-label="Back to top">⬆️</button>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // =========================
+    // ======================
     // CONFIG (EDIT THESE)
-    // =========================
+    // ======================
     const CLIENT_ID = "1442592762108186675";
 
-    // Minimal perms (no Administrator) but enough for ticket bot:
-    // VIEW_CHANNEL + SEND_MESSAGES + EMBED_LINKS + ATTACH_FILES + READ_MESSAGE_HISTORY + ADD_REACTIONS +
-    // MANAGE_CHANNELS + MANAGE_MESSAGES
+    // Invite perms (no admin) – enough for tickets + logs
     const PERMISSIONS = "126032";
-
-    const INVITE_URL =
-      `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=bot%20applications.commands&permissions=${PERMISSIONS}`;
+    const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=bot%20applications.commands&permissions=${PERMISSIONS}`;
 
     const YT_URL = "https://www.youtube.com/channel/UC8Ovc5xT-tXXIjxLnVe72dQ";
 
-    // Put the REAL Discord username of the owner here (so buyers know where to message)
-    const OWNER_DISCORD = "n_om_e";
+    // Owner contact shown on premium page
+    const OWNER_DISCORD_TAG = "n_om_e"; // <- change if needed
+    const LTC_ADDRESS = "LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8";
 
-    // Your LTC address
-    const LTC_ADDR = "LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8";
-
-    // =========================
-    // SET LINKS + TEXT
-    // =========================
-    const inviteBtn = document.getElementById("inviteBtn");
-    const inviteBtn2 = document.getElementById("inviteBtn2");
-    const inviteBtn3 = document.getElementById("inviteBtn3");
-    [inviteBtn, inviteBtn2, inviteBtn3].forEach(a => { if(a) a.href = INVITE_URL; });
-
-    const youtubeBtn = document.getElementById("youtubeBtn");
-    const youtubeBtn2 = document.getElementById("youtubeBtn2");
-    const youtubeBtn3 = document.getElementById("youtubeBtn3");
-    const footerYoutube = document.getElementById("footerYoutube");
-    const footerYoutube2 = document.getElementById("footerYoutube2");
-    [youtubeBtn, youtubeBtn2, youtubeBtn3, footerYoutube, footerYoutube2].forEach(a => { if(a) a.href = YT_URL; });
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-    document.getElementById("year2").textContent = new Date().getFullYear();
-
-    // owner + ltc injection in UI
-    document.getElementById("ownerBox").textContent = OWNER_DISCORD;
-    document.getElementById("ownerNameCard").textContent = OWNER_DISCORD;
-    document.getElementById("ownerNameInline").textContent = OWNER_DISCORD;
-    document.getElementById("ltcAddr").textContent = LTC_ADDR;
-
-    // =========================
-    // TOAST + COPY
-    // =========================
+    // ======================
+    // Helpers
+    // ======================
     const toast = document.getElementById("toast");
     let toastTimer = null;
 
@@ -1426,61 +1156,204 @@
       toastTimer = setTimeout(()=> toast.classList.remove("show"), 1700);
     }
 
-    async function copyText(text, elToShake){
+    async function copyText(text){
       try{
         await navigator.clipboard.writeText(text);
         showToast("Copied ✅");
       }catch{
         showToast("Copy failed ❌");
-        if(elToShake){
-          elToShake.classList.add("shake");
-          setTimeout(()=>elToShake.classList.remove("shake"), 260);
-        }
       }
     }
 
-    document.getElementById("copyInvite")?.addEventListener("click", ()=>copyText(INVITE_URL, document.getElementById("copyInvite")));
-    document.getElementById("copyInvite2")?.addEventListener("click", ()=>copyText(INVITE_URL, document.getElementById("copyInvite2")));
-    document.getElementById("copyInvite3")?.addEventListener("click", ()=>copyText(INVITE_URL, document.getElementById("copyInvite3")));
-    document.getElementById("copySite")?.addEventListener("click", ()=>copyText(location.href, document.getElementById("copySite")));
+    function showPage(which){
+      const gate = document.getElementById("pageGate");
+      const free = document.getElementById("pageFree");
+      const prem = document.getElementById("pagePremium");
+
+      [gate, free, prem].forEach(p => p.classList.remove("show"));
+      if(which === "gate") gate.classList.add("show");
+      if(which === "free") free.classList.add("show");
+      if(which === "premium") prem.classList.add("show");
+
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    // ======================
+    // Set links
+    // ======================
+    [document.getElementById("inviteBtn"), document.getElementById("inviteBtn2"), document.getElementById("inviteBtn3")]
+      .forEach(a => { if(a) a.href = INVITE_URL; });
+
+    [document.getElementById("youtubeBtn"), document.getElementById("youtubeBtn2"), document.getElementById("youtubeBtn3"), document.getElementById("youtubeBtn4")]
+      .forEach(a => { if(a) a.href = YT_URL; });
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+    document.getElementById("year2").textContent = new Date().getFullYear();
+
+    // Premium texts
+    document.getElementById("ltcText").textContent = LTC_ADDRESS;
+    document.getElementById("ownerTagText").textContent = OWNER_DISCORD_TAG;
+    document.getElementById("ownerTagText2").textContent = OWNER_DISCORD_TAG;
+
+    // ======================
+    // Copy buttons
+    // ======================
+    document.getElementById("copyInvite")?.addEventListener("click", ()=>copyText(INVITE_URL));
+    document.getElementById("copyInvite2")?.addEventListener("click", ()=>copyText(INVITE_URL));
+    document.getElementById("copyInvite3")?.addEventListener("click", ()=>copyText(INVITE_URL));
+    document.getElementById("copySite")?.addEventListener("click", ()=>copyText(location.href));
+
+    document.getElementById("copyLtc")?.addEventListener("click", ()=>copyText(LTC_ADDRESS));
+    document.getElementById("copyOwner")?.addEventListener("click", ()=>copyText(OWNER_DISCORD_TAG));
 
     document.querySelectorAll("[data-copy]").forEach(btn=>{
-      btn.addEventListener("click", ()=>copyText(btn.getAttribute("data-copy"), btn));
+      btn.addEventListener("click", ()=>{
+        const v = btn.getAttribute("data-copy");
+        if(v === "ltc") return copyText(LTC_ADDRESS);
+        copyText(v);
+      });
     });
 
-    // Fake demo click
+    // ======================
+    // Fake panel click
+    // ======================
     window.fakeClick = (name) => showToast(`${name} (demo)`);
 
-    // =========================
-    // MOBILE DRAWER
-    // =========================
+    // ======================
+    // Drawer
+    // ======================
     const drawer = document.getElementById("drawer");
     const menuBtn = document.getElementById("menuBtn");
     const closeDrawer = document.getElementById("closeDrawer");
 
     function setDrawer(open){
-      if(!drawer) return;
       drawer.classList.toggle("open", open);
       drawer.setAttribute("aria-hidden", String(!open));
     }
     menuBtn?.addEventListener("click", ()=>setDrawer(true));
     closeDrawer?.addEventListener("click", ()=>setDrawer(false));
     drawer?.addEventListener("click", (e)=>{ if(e.target === drawer) setDrawer(false); });
-    drawer?.querySelectorAll("a").forEach(a=>a.addEventListener("click", ()=>setDrawer(false)));
 
-    // =========================
-    // REVEAL ON SCROLL
-    // =========================
+    document.getElementById("goGate")?.addEventListener("click", ()=>{ setDrawer(false); showPage("gate"); });
+    document.getElementById("goFree")?.addEventListener("click", ()=>{ setDrawer(false); showPage("free"); });
+    document.getElementById("goPrem")?.addEventListener("click", ()=>{ setDrawer(false); showPage("premium"); });
+
+    // ======================
+    // Gate buttons
+    // ======================
+    document.getElementById("freeOpen").addEventListener("click", ()=>{ showPage("free"); showToast("Free opened ✅"); });
+    document.getElementById("freeInvite").addEventListener("click", ()=>window.open(INVITE_URL, "_blank"));
+
+    document.getElementById("premOpen").addEventListener("click", ()=>{ showPage("premium"); showToast("Premium opened 💎"); });
+    document.getElementById("premHow").addEventListener("click", ()=>{
+      showPage("premium");
+      setTimeout(()=>document.getElementById("premiumCommands").scrollIntoView({behavior:"smooth"}), 250);
+    });
+
+    document.getElementById("pickFree").addEventListener("click",(e)=>{ if(e.target.closest("button")) return; showPage("free"); });
+    document.getElementById("pickPrem").addEventListener("click",(e)=>{ if(e.target.closest("button")) return; showPage("premium"); });
+
+    // Keyboard access
+    ["pickFree","pickPrem"].forEach(id=>{
+      const el = document.getElementById(id);
+      el.addEventListener("keydown",(e)=>{
+        if(e.key === "Enter" || e.key === " "){
+          e.preventDefault();
+          id === "pickFree" ? showPage("free") : showPage("premium");
+        }
+      });
+    });
+
+    // Top nav
+    document.querySelectorAll("[data-nav]").forEach(a=>{
+      a.addEventListener("click",(e)=>{
+        e.preventDefault();
+        showPage(a.getAttribute("data-nav"));
+      });
+    });
+
+    document.getElementById("backHome1")?.addEventListener("click", ()=>showPage("gate"));
+    document.getElementById("backHome2")?.addEventListener("click", ()=>showPage("gate"));
+    document.getElementById("goPremiumFromFooter")?.addEventListener("click",(e)=>{ e.preventDefault(); showPage("premium"); });
+    document.getElementById("goFreeFromFooter")?.addEventListener("click",(e)=>{ e.preventDefault(); showPage("free"); });
+
+    document.getElementById("brandHome")?.addEventListener("click",(e)=>{ e.preventDefault(); showPage("gate"); });
+
+    // ======================
+    // Premium checkout UX
+    // ======================
+    const buyDiscord = document.getElementById("buyDiscord");
+    const buyTxid = document.getElementById("buyTxid");
+    const buyPlan = document.getElementById("buyPlan");
+    const msgBox = document.getElementById("msgBox");
+
+    function planLabel(v){
+      if(v === "15d") return "Premium 15 days ($1)";
+      if(v === "1m") return "Premium 1 month ($2)";
+      if(v === "3m") return "Premium 3 months ($4)";
+      return v;
+    }
+
+    function prepareMessage(){
+      const d = (buyDiscord.value || "").trim();
+      const t = (buyTxid.value || "").trim();
+      const p = buyPlan.value;
+
+      if(!d){
+        showToast("Add your Discord first");
+        buyDiscord.focus();
+        return;
+      }
+      if(!t){
+        showToast("Add TXID (proof) first");
+        buyTxid.focus();
+        return;
+      }
+      msgBox.textContent =
+`Hi! I want ${planLabel(p)}.
+My Discord: ${d}
+TXID: ${t}`;
+      showToast("Message prepared ✅");
+    }
+
+    document.getElementById("prepareMsg").addEventListener("click", prepareMessage);
+    document.getElementById("copyMsg").addEventListener("click", ()=>{
+      const text = msgBox.textContent || "";
+      if(!text.includes("TXID")) return showToast("Prepare message first");
+      copyText(text);
+    });
+
+    document.querySelectorAll("[data-plan]").forEach(b=>{
+      b.addEventListener("click", ()=>{
+        buyPlan.value = b.getAttribute("data-plan");
+        showToast("Plan selected ✅");
+        document.querySelector(".howBox").scrollIntoView({behavior:"smooth"});
+      });
+    });
+
+    // ======================
+    // Reveal on scroll
+    // ======================
     const io = new IntersectionObserver((entries)=>{
       for(const e of entries){
         if(e.isIntersecting) e.target.classList.add("show");
       }
-    }, {threshold: .15});
+    }, {threshold: .12});
     document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
 
-    // =========================
-    // STARS CANVAS
-    // =========================
+    // ======================
+    // Top button
+    // ======================
+    const toTop = document.getElementById("toTop");
+    window.addEventListener("scroll", ()=>{
+      if(window.scrollY > 500) toTop.classList.add("show");
+      else toTop.classList.remove("show");
+    }, {passive:true});
+    toTop.addEventListener("click", ()=>window.scrollTo({top:0, behavior:"smooth"}));
+
+    // ======================
+    // Stars canvas
+    // ======================
     const canvas = document.getElementById("stars");
     const ctx = canvas.getContext("2d");
 
@@ -1495,13 +1368,13 @@
 
     let stars = [];
     function initStars(){
-      const count = Math.min(220, Math.floor(innerWidth / 6));
+      const count = Math.min(210, Math.floor(innerWidth / 7));
       stars = Array.from({length: count}, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: (Math.random()*1.5 + .25) * devicePixelRatio,
-        a: Math.random()*.55 + .10,
-        s: (Math.random()*.40 + .06) * devicePixelRatio
+        r: (Math.random()*1.6 + .2) * devicePixelRatio,
+        a: Math.random()*.6 + .12,
+        s: (Math.random()*.35 + .05) * devicePixelRatio
       }));
     }
     initStars();
@@ -1525,9 +1398,9 @@
     }
     draw();
 
-    // =========================
-    // LOADER SIM
-    // =========================
+    // ======================
+    // Loader sim
+    // ======================
     const loader = document.getElementById("loader");
     const barFill = document.getElementById("barFill");
     const loadPct = document.getElementById("loadPct");
@@ -1535,12 +1408,13 @@
 
     const steps = [
       ["Booting UI", 18],
-      ["Loading assets", 44],
-      ["Syncing panels", 70],
+      ["Loading assets", 42],
+      ["Initializing animations", 70],
       ["Finalizing", 92],
       ["Ready", 100],
     ];
-    (function runLoader(){
+
+    function runLoader(){
       let i = 0;
       function step(){
         const [t, p] = steps[i];
@@ -1549,233 +1423,14 @@
         loadPct.textContent = p + "%";
         i++;
         if(i < steps.length){
-          setTimeout(step, 240 + Math.random()*220);
+          setTimeout(step, 230 + Math.random()*220);
         }else{
           setTimeout(() => loader.classList.add("hide"), 420);
         }
       }
-      setTimeout(step, 220);
-    })();
-
-    // =========================
-    // NAV / PAGES (Gate -> Free/Premium)
-    // =========================
-    const gateRoot = document.getElementById("gateRoot");
-    const freePage = document.getElementById("freePage");
-    const premPage = document.getElementById("premPage");
-
-    function openGate(){
-      freePage.classList.remove("show");
-      premPage.classList.remove("show");
-      freePage.style.display = "none";
-      premPage.style.display = "none";
-      gateRoot.style.display = "block";
-      window.scrollTo({top:0, behavior:"smooth"});
-      showToast("Free / Premium");
+      setTimeout(step, 260);
     }
-
-    function openFree(){
-      gateRoot.style.display = "none";
-      premPage.classList.remove("show");
-      premPage.style.display = "none";
-      freePage.style.display = "block";
-      freePage.classList.add("show");
-      window.scrollTo({top:0, behavior:"smooth"});
-      showToast("Free panel ✅");
-    }
-
-    function openPremium(){
-      gateRoot.style.display = "none";
-      freePage.classList.remove("show");
-      freePage.style.display = "none";
-      premPage.style.display = "block";
-      premPage.classList.add("show");
-      window.scrollTo({top:0, behavior:"smooth"});
-      showToast("Premium opened 💎");
-    }
-
-    // Gate buttons
-    const pickFree = document.getElementById("pickFree");
-    const freeOpen = document.getElementById("freeOpen");
-    const freeInvite = document.getElementById("freeInvite");
-
-    const pickPrem = document.getElementById("pickPrem");
-    const premOpen = document.getElementById("premOpen");
-    const premBuy = document.getElementById("premBuy");
-
-    pickFree.addEventListener("click", (e)=>{ if(e.target.closest("button")) return; openFree(); });
-    freeOpen.addEventListener("click", openFree);
-    freeInvite.addEventListener("click", ()=> window.open(INVITE_URL, "_blank"));
-
-    pickPrem.addEventListener("click", (e)=>{ if(e.target.closest("button")) return; openPremium(); });
-    premOpen.addEventListener("click", openPremium);
-    premBuy.addEventListener("click", ()=> openBuy(document.getElementById("planSel")?.value || "1m"));
-
-    // Back buttons
-    document.getElementById("backGateFree")?.addEventListener("click", openGate);
-    document.getElementById("backGatePrem")?.addEventListener("click", openGate);
-    document.getElementById("footerGate")?.addEventListener("click", (e)=>{ e.preventDefault(); openGate(); });
-    document.getElementById("footerGate2")?.addEventListener("click", (e)=>{ e.preventDefault(); openGate(); });
-
-    // Brand click
-    document.getElementById("brandHome")?.addEventListener("click", (e)=>{
-      e.preventDefault();
-      openGate();
-    });
-
-    // Nav links should open Free (so anchors exist)
-    document.querySelectorAll(".navLink").forEach(a=>{
-      a.addEventListener("click", ()=>{
-        if(!freePage.classList.contains("show") && !premPage.classList.contains("show")){
-          openFree();
-        }
-      });
-    });
-
-    // Keyboard access
-    [pickFree, pickPrem].forEach(el=>{
-      el.addEventListener("keydown", (e)=>{
-        if(e.key === "Enter" || e.key === " "){
-          e.preventDefault();
-          el === pickFree ? openFree() : openPremium();
-        }
-      });
-    });
-
-    // =========================
-    // PREMIUM TABS
-    // =========================
-    function setPremTab(name){
-      document.querySelectorAll("[data-premtab]").forEach(b=>{
-        b.classList.toggle("active", b.getAttribute("data-premtab")===name);
-      });
-      ["features","commands","howto"].forEach(t=>{
-        const el = document.getElementById("premTab_"+t);
-        if(el) el.style.display = (t===name) ? "block" : "none";
-      });
-    }
-    document.querySelectorAll("[data-premtab]").forEach(b=>{
-      b.addEventListener("click", ()=> setPremTab(b.getAttribute("data-premtab")));
-    });
-    document.getElementById("premGoCommands")?.addEventListener("click", ()=>{
-      setPremTab("commands");
-      showToast("Premium commands ✨");
-    });
-
-    // Copy owner quick
-    document.getElementById("copyOwner")?.addEventListener("click", ()=>copyText(OWNER_DISCORD, document.getElementById("copyOwner")));
-    document.getElementById("copyOwner2")?.addEventListener("click", ()=>copyText(OWNER_DISCORD, document.getElementById("copyOwner2")));
-
-    // =========================
-    // BUY MODAL FLOW (CLEAR CONTACT + MESSAGE)
-    // =========================
-    const buyModal = document.getElementById("buyModal");
-    const closeBuy = document.getElementById("closeBuy");
-    const planSel = document.getElementById("planSel");
-    const discordUser = document.getElementById("discordUser");
-    const txid = document.getElementById("txid");
-    const msgOut = document.getElementById("msgOut");
-
-    const priceMap = { "15d":"$1", "1m":"$2", "3m":"$4" };
-    const durMap = { "15d":"15 days", "1m":"1 month", "3m":"3 months" };
-
-    function openBuy(plan){
-      buyModal.classList.add("show");
-      buyModal.setAttribute("aria-hidden","false");
-      if(plan) planSel.value = plan;
-      updateBuyMessage();
-    }
-    function closeBuyModal(){
-      buyModal.classList.remove("show");
-      buyModal.setAttribute("aria-hidden","true");
-    }
-
-    function updateBuyMessage(){
-      const plan = planSel.value;
-      const u = (discordUser.value || "(your discord username)");
-      const t = (txid.value || "(txid from wallet history)");
-      msgOut.value =
-`Hello! I want to buy Dragon Tickets Premium.
-
-Plan: ${durMap[plan]} (${priceMap[plan]} in LTC value)
-My Discord username: ${u}
-TXID: ${t}
-
-I paid to this LTC address: ${LTC_ADDR}
-Please verify and send my premium key.`;
-    }
-    [planSel, discordUser, txid].forEach(el=> el?.addEventListener("input", updateBuyMessage));
-    planSel?.addEventListener("change", updateBuyMessage);
-
-    document.getElementById("buyNowTop")?.addEventListener("click", ()=>openBuy(planSel.value));
-    document.getElementById("buyNowSide")?.addEventListener("click", ()=>openBuy(planSel.value));
-
-    document.querySelectorAll("[data-buy]").forEach(btn=>{
-      btn.addEventListener("click", (e)=>{
-        e.stopPropagation();
-        openBuy(btn.getAttribute("data-buy"));
-      });
-    });
-
-    document.getElementById("copyLtcTop")?.addEventListener("click", ()=>copyText(LTC_ADDR, document.getElementById("copyLtcTop")));
-    document.getElementById("copyLtc")?.addEventListener("click", ()=>copyText(LTC_ADDR, document.getElementById("copyLtc")));
-
-    closeBuy?.addEventListener("click", closeBuyModal);
-    buyModal?.addEventListener("click", (e)=>{ if(e.target === buyModal) closeBuyModal(); });
-
-    document.getElementById("saveDraft")?.addEventListener("click", ()=>{
-      const draft = {
-        plan: planSel.value,
-        discord: discordUser.value,
-        txid: txid.value
-      };
-      localStorage.setItem("dragon_premium_draft", JSON.stringify(draft));
-      showToast("Draft saved 💾");
-    });
-
-    // Load draft
-    try{
-      const d = JSON.parse(localStorage.getItem("dragon_premium_draft") || "null");
-      if(d){
-        planSel.value = d.plan || planSel.value;
-        discordUser.value = d.discord || "";
-        txid.value = d.txid || "";
-      }
-    }catch{}
-
-    document.getElementById("iPaid")?.addEventListener("click", async ()=>{
-      updateBuyMessage();
-      await copyText(msgOut.value, document.getElementById("iPaid"));
-      showToast("Message copied ✅ DM the owner on Discord");
-    });
-
-    // Open buy from premium card quick button
-    document.getElementById("premBuy")?.addEventListener("click", ()=>openBuy(planSel.value));
-
-    // =========================
-    // TOP BUTTON
-    // =========================
-    const toTop = document.getElementById("toTop");
-    window.addEventListener("scroll", ()=>{
-      if(window.scrollY > 500) toTop.classList.add("show");
-      else toTop.classList.remove("show");
-    }, {passive:true});
-    toTop.addEventListener("click", ()=>window.scrollTo({top:0, behavior:"smooth"}));
-
-    // =========================
-    // YOUTUBE BUTTONS
-    // =========================
-    document.getElementById("youtubeBtn").href = YT_URL;
-    document.getElementById("youtubeBtn2").href = YT_URL;
-    document.getElementById("youtubeBtn3").href = YT_URL;
-
-    // =========================
-    // INVITE COPY BUTTONS
-    // =========================
-    document.getElementById("copyInvite")?.addEventListener("click", ()=>copyText(INVITE_URL, document.getElementById("copyInvite")));
-    document.getElementById("copyInvite2")?.addEventListener("click", ()=>copyText(INVITE_URL, document.getElementById("copyInvite2")));
-    document.getElementById("copyInvite3")?.addEventListener("click", ()=>copyText(INVITE_URL, document.getElementById("copyInvite3")));
+    runLoader();
   </script>
 </body>
 </html>
-
