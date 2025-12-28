@@ -3,15 +3,15 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Dragon Services | Tickets</title>
-  <meta name="description" content="Dragon Services — ticket bot for Discord. Free + Premium options, clean panels, logs, and more." />
+  <title>Nozzarri Ticket | Dragon Tickets</title>
+  <meta name="description" content="Nozzarri Ticket — ticket bot with Free + Premium commands, keys, and customization." />
 
-  <meta property="og:title" content="Dragon Services | Tickets" />
-  <meta property="og:description" content="Ticket bot for Discord — Free + Premium options, clean panels, logs, and more." />
+  <meta property="og:title" content="Nozzarri Ticket" />
+  <meta property="og:description" content="Free + Premium ticket bot with clean UI, keys, and premium commands." />
   <meta property="og:type" content="website" />
-  <meta property="og:image" content="assets/dragon.png" />
+  <meta property="og:image" content="assets/nozzarri.png" />
 
-  <link rel="icon" type="image/png" href="assets/dragon.png" />
+  <link rel="icon" type="image/png" href="assets/nozzarri.png" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,17 +20,17 @@
   <style>
     :root{
       --bg0:#040515;
-      --bg1:#060827;
+      --bg1:#07082a;
+      --bg2:#0b0d3a;
       --card: rgba(255,255,255,.06);
       --card2: rgba(255,255,255,.09);
-      --border: rgba(255,255,255,.11);
+      --border: rgba(255,255,255,.10);
       --text: #eef2ff;
       --muted: rgba(238,242,255,.72);
 
       --cyan: #34d6ff;
       --blue: #5b7cff;
-      --purple:#8a5cff;
-      --pink:#ff4fd8;
+      --purple: #8a5cff;
 
       --shadow: 0 22px 70px rgba(0,0,0,.62);
       --radius: 18px;
@@ -52,15 +52,15 @@
       overflow-x:hidden;
     }
 
-    /* BG */
+    /* Animated BG */
     .bg{ position:fixed; inset:0; z-index:-2; pointer-events:none; }
     .noise{
-      position:absolute; inset:-220px;
+      position:absolute; inset:-200px;
       background:
         radial-gradient(circle at 20% 20%, rgba(91,124,255,.18), transparent 45%),
         radial-gradient(circle at 80% 35%, rgba(138,92,255,.14), transparent 45%),
         radial-gradient(circle at 55% 85%, rgba(52,214,255,.10), transparent 45%);
-      filter: blur(48px);
+      filter: blur(45px);
       opacity:.95;
       animation: float 11s ease-in-out infinite;
     }
@@ -70,100 +70,40 @@
     }
     canvas#stars{ position:absolute; inset:0; width:100%; height:100%; opacity:.35; }
 
-    .container{max-width:1180px; margin:0 auto; padding:0 20px}
+    .container{max-width:1200px; margin:0 auto; padding:0 20px}
 
-    /* Loader */
-    .loaderWrap{
-      position:fixed; inset:0; z-index:999;
-      display:grid; place-items:center;
-      background: radial-gradient(1000px 800px at 20% 20%, rgba(91,124,255,.18), transparent 55%),
-                  radial-gradient(1000px 800px at 80% 35%, rgba(138,92,255,.18), transparent 55%),
-                  linear-gradient(180deg, #030416, #060827);
-      transition: opacity .55s ease, transform .55s ease;
+    /* Reveal */
+    .reveal{
+      opacity:0;
+      transform: translateY(14px) scale(.99);
+      transition: opacity .7s ease, transform .7s ease;
+      will-change: transform, opacity;
     }
-    .loaderWrap.hide{ opacity:0; pointer-events:none; transform: scale(1.02); }
-    .loaderCard{
-      width:min(560px, calc(100vw - 40px));
-      border-radius: 26px;
-      border:1px solid var(--border);
-      background: rgba(255,255,255,.05);
-      box-shadow: var(--shadow);
-      padding: 18px;
-    }
-    .loaderTop{ display:flex; align-items:center; gap:12px; }
-    .loaderLogo{
-      width:54px; height:54px; border-radius:18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(255,255,255,.06);
-      box-shadow: 0 0 34px rgba(91,124,255,.18);
-    }
-    .loaderName{ font-weight:1000; font-size:18px; letter-spacing:.2px; }
-    .loaderSub{ color:var(--muted); font-weight:800; font-size:13px; margin-top:2px; }
-    .spinner{
-      width:16px; height:16px; border-radius:50%;
-      border:2px solid rgba(255,255,255,.22);
-      border-top-color: rgba(52,214,255,.9);
-      animation: spin .9s linear infinite;
-      margin-left:auto;
-    }
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .bar{
-      margin-top:14px;
-      height:12px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.25);
-      overflow:hidden;
-    }
-    .bar > div{
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background: linear-gradient(90deg, rgba(52,214,255,.95), rgba(91,124,255,.95), rgba(138,92,255,.95));
-      box-shadow: 0 0 20px rgba(91,124,255,.25);
-      transition: width .22s ease;
-    }
-    .loaderHint{
-      margin-top:10px;
-      color: rgba(238,242,255,.82);
-      font-weight:900;
-      display:flex; justify-content:space-between; align-items:center;
-      font-size:13px;
-    }
+    .reveal.show{ opacity:1; transform: translateY(0) scale(1); }
 
-    /* Topbar */
+    /* Top bar */
     .topbar{
-      position:sticky; top:0; z-index:60;
+      position:sticky; top:0; z-index:50;
       display:flex; align-items:center; justify-content:space-between;
       padding:14px 18px;
       border-bottom:1px solid rgba(255,255,255,.08);
-      background: rgba(4,5,21,.58);
+      background: rgba(4,5,21,.56);
       backdrop-filter: blur(16px);
     }
     .brand{
       display:flex; gap:12px; align-items:center;
       text-decoration:none; color:var(--text);
+      min-width: 220px;
     }
     .logo{
       width:42px; height:42px; border-radius:14px;
       box-shadow: 0 0 30px rgba(91,124,255,.18);
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.06);
+      object-fit: cover;
     }
     .bname{font-weight:1000; letter-spacing:.2px}
-    .btag{font-size:12px; color:var(--muted); margin-top:2px; font-weight:800}
-
-    .nav{ display:flex; gap:14px; align-items:center; }
-    .nav a{
-      color:var(--muted);
-      text-decoration:none;
-      font-weight:900;
-      font-size:14px;
-      padding:10px 10px;
-      border-radius:12px;
-      transition:.18s ease;
-    }
-    .nav a:hover{ color:var(--text); background: rgba(255,255,255,.06); }
+    .btag{font-size:12px; color:var(--muted); margin-top:2px}
 
     .actions{display:flex; gap:10px; align-items:center}
     .btn{
@@ -175,17 +115,16 @@
       color:var(--text);
       background: rgba(255,255,255,.05);
       text-decoration:none;
-      font-weight:1000;
+      font-weight:900;
       cursor:pointer;
       transition: transform .14s ease, background .16s ease, border-color .16s ease, filter .16s ease;
       box-shadow: 0 18px 50px rgba(0,0,0,.25);
       user-select:none;
-      white-space:nowrap;
     }
     .btn:hover{transform: translateY(-1px); background: rgba(255,255,255,.07)}
     .btn:active{transform: translateY(0px)}
     .btn.primary{
-      background: linear-gradient(90deg, rgba(52,214,255,.75), rgba(91,124,255,.95), rgba(138,92,255,.75));
+      background: linear-gradient(90deg, rgba(52,214,255,.80), rgba(91,124,255,.95), rgba(138,92,255,.80));
       border-color: rgba(52,214,255,.25);
       box-shadow: 0 24px 60px rgba(91,124,255,.18);
     }
@@ -193,109 +132,57 @@
     .btn.ghost{background: rgba(255,255,255,.04)}
     .iconbtn{ width:44px; height:44px; padding:0; border-radius:16px; }
 
-    .menuBtn{display:none}
-    @media (max-width: 920px){
-      .nav{display:none}
-      .menuBtn{display:inline-flex}
-      .btn.hideMobile{display:none}
-    }
-
-    /* Drawer */
-    .drawer{
-      position:fixed; inset:0; z-index:90;
-      background: rgba(0,0,0,.55);
-      display:none;
-    }
-    .drawer.open{display:block}
-    .drawerPanel{
-      position:absolute; right:14px; top:14px;
-      width:min(360px, calc(100vw - 28px));
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(10,12,28,.92);
-      backdrop-filter: blur(16px);
-      border-radius: 18px;
-      padding: 14px;
-      box-shadow: var(--shadow);
-      display:grid; gap:10px;
-    }
-    .drawerPanel a, .drawerPanel button{
-      text-decoration:none;
-      color:var(--muted);
-      font-weight:1000;
-      padding:12px 12px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(255,255,255,.05);
-      cursor:pointer;
-      text-align:left;
-    }
-    .drawerPanel a:hover, .drawerPanel button:hover{color:var(--text); background: rgba(255,255,255,.07)}
-    .closeX{justify-self:end}
-
     /* Cards */
     .card{
       border:1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
-      border-radius: var(--radius2);
+      border-radius: 24px;
       box-shadow: var(--shadow);
     }
 
-    /* Reveal */
-    .reveal{ opacity:0; transform: translateY(14px); transition: opacity .6s ease, transform .6s ease; }
-    .reveal.show{ opacity:1; transform: translateY(0px); }
-
-    /* Toast */
-    .toast{
-      position:fixed;
-      left:50%; bottom:18px;
-      transform: translateX(-50%);
-      padding:12px 14px;
-      border-radius: 16px;
-      border:1px solid rgba(52,214,255,.22);
-      background: rgba(7,10,18,.85);
-      color: rgba(238,242,255,.92);
-      box-shadow: 0 18px 60px rgba(0,0,0,.55);
-      display:none;
-      font-weight:1000;
-      z-index:200;
+    /* Tabs */
+    .tabs{
+      display:flex; gap:10px; flex-wrap:wrap;
+      padding: 10px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.20);
+      width: fit-content;
     }
-    .toast.show{display:block}
-
-    .toTop{
-      position:fixed;
-      right:18px; bottom:18px;
-      width:46px; height:46px;
-      border-radius: 16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-      color:var(--text);
-      cursor:pointer;
-      display:none;
-      box-shadow: 0 18px 60px rgba(0,0,0,.35);
-      z-index:120;
-    }
-    .toTop.show{display:inline-grid; place-items:center}
-
-    /* Gate */
-    .gate{
-      min-height: calc(100vh - 76px);
-      display:grid;
-      place-items:center;
-      padding: 36px 0 22px;
-    }
-    .gateCard{
-      width:min(980px, calc(100vw - 40px));
-      border-radius: 28px;
-      border:1px solid rgba(255,255,255,.10);
+    .tab{
+      padding: 10px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
-      box-shadow: var(--shadow);
-      padding: 18px;
-      overflow:hidden;
+      color: var(--muted);
+      font-weight: 1000;
+      cursor:pointer;
+      transition: transform .14s ease, background .14s ease, border-color .14s ease;
+      user-select:none;
     }
-    .gateHead{
-      display:flex; align-items:flex-start; justify-content:space-between;
-      gap:12px;
-      margin-bottom: 14px;
+    .tab:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); }
+    .tab.active{
+      color: var(--text);
+      border-color: rgba(52,214,255,.22);
+      background: linear-gradient(90deg, rgba(52,214,255,.18), rgba(91,124,255,.18), rgba(138,92,255,.18));
+    }
+
+    /* Premium Layout FIX (desktop) */
+    .premiumWrap{
+      padding: 28px 0 44px;
+    }
+    .premiumGrid{
+      display:grid;
+      grid-template-columns: 1.05fr .95fr; /* LEFT text / RIGHT store */
+      gap: 18px;
+      align-items:start;
+    }
+    @media (max-width: 980px){
+      .premiumGrid{ grid-template-columns: 1fr; }
+    }
+
+    .heroLeft{
+      padding: 18px;
     }
     .pill{
       display:inline-flex; align-items:center; gap:10px;
@@ -313,12 +200,12 @@
       background:#2cff7b;
       box-shadow: 0 0 18px rgba(44,255,123,.35);
     }
-    .gateTitle{
-      font-size: clamp(26px, 3.2vw, 40px);
-      line-height:1.06;
-      margin: 10px 0 6px;
+    .title{
+      margin: 14px 0 10px;
+      font-size: clamp(40px, 4.6vw, 74px);
+      line-height:1.02;
+      letter-spacing: -1px;
       font-weight: 1000;
-      letter-spacing:-.8px;
     }
     .grad{
       background: linear-gradient(90deg, var(--cyan), var(--blue), var(--purple));
@@ -326,829 +213,562 @@
       background-clip:text;
       color:transparent;
     }
-    .gateDesc{
+    .lead{
+      margin: 0;
       color: var(--muted);
-      font-weight:900;
-      line-height:1.6;
+      line-height: 1.7;
+      font-weight: 800;
       max-width: 70ch;
-      margin:0;
     }
-    .gateGrid{
-      display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
+    .heroBtns{
       margin-top: 14px;
+      display:flex; gap:10px; flex-wrap:wrap;
     }
-    @media (max-width: 920px){ .gateGrid{grid-template-columns:1fr} }
 
-    .pick{
+    /* Store card (right) */
+    .store{
+      padding: 14px;
       position:relative;
       overflow:hidden;
-      border-radius: 26px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      padding: 16px;
-      cursor:pointer;
-      transition: transform .18s ease, background .18s ease, border-color .18s ease;
-      outline: none;
+      min-width: 0;
     }
-    .pick:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.06);
-      border-color: rgba(52,214,255,.22);
-    }
-    .pick:focus-visible{
-      box-shadow: 0 0 0 3px rgba(52,214,255,.25);
-    }
-    .pickGlow{
-      position:absolute; inset:-120px;
-      background: radial-gradient(circle at 30% 30%, rgba(52,214,255,.18), transparent 50%),
-                  radial-gradient(circle at 70% 40%, rgba(91,124,255,.16), transparent 55%),
-                  radial-gradient(circle at 55% 75%, rgba(138,92,255,.14), transparent 55%);
-      filter: blur(36px);
-      opacity:.85;
-      transition: opacity .2s ease;
+    .store::before{
+      content:"";
+      position:absolute; inset:-140px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(52,214,255,.16), transparent 55%),
+        radial-gradient(circle at 70% 40%, rgba(91,124,255,.16), transparent 60%),
+        radial-gradient(circle at 55% 80%, rgba(138,92,255,.14), transparent 60%);
+      filter: blur(42px);
+      opacity:.95;
       pointer-events:none;
     }
-    .pick:hover .pickGlow{ opacity:1; }
-    .pickTop{ display:flex; align-items:center; justify-content:space-between; gap:12px; position:relative; }
-    .tag{
+    .storeInner{ position:relative; }
+
+    .storeTop{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px; flex-wrap:wrap;
+      margin-bottom: 10px;
+    }
+    .storeTitle{
       font-weight:1000;
-      padding:8px 10px;
+      font-size: 18px;
+      padding: 10px 12px;
       border-radius: 999px;
-      border:1px solid rgba(255,255,255,.12);
+      border: 1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.18);
-      white-space:nowrap;
-      font-size:12px;
-    }
-    .tag.free{ border-color: rgba(52,214,255,.22); background: rgba(52,214,255,.10); }
-    .tag.prem{ border-color: rgba(138,92,255,.25); background: rgba(138,92,255,.10); }
-    .kbd{
-      font-size:12px; font-weight:1000;
-      color: rgba(238,242,255,.85);
-      padding:6px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(0,0,0,.18);
-      white-space:nowrap;
-    }
-    .pickTitle{ font-weight:1000; font-size:18px; margin-top: 12px; position:relative; }
-    .pickText{ color: var(--muted); margin-top: 8px; line-height: 1.6; position:relative; font-weight:900; }
-    .pickBtns{ display:flex; gap:10px; flex-wrap:wrap; margin-top: 14px; position:relative; }
-
-    .miniBtn{
-      padding:10px 12px;
-      border-radius: 14px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      color: var(--text);
-      font-weight:1000;
-      cursor:pointer;
-      transition: transform .14s ease, background .14s ease, border-color .14s ease;
-    }
-    .miniBtn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.07); }
-    .miniBtn.primary{
-      background: linear-gradient(90deg, rgba(52,214,255,.75), rgba(91,124,255,.95), rgba(138,92,255,.75));
-      border-color: rgba(52,214,255,.22);
     }
 
-    /* Pages */
-    .page{ display:none; }
-    .page.show{ display:block; animation: popIn .45s ease both; }
-    @keyframes popIn{
-      from{ opacity:0; transform: translateY(10px) scale(.99); }
-      to{ opacity:1; transform: translateY(0) scale(1); }
-    }
-
-    /* Free content */
-    .hero{
-      padding: 42px 0 18px;
+    .plans{
       display:grid;
-      grid-template-columns: 1.05fr .95fr;
-      gap: 22px;
-      align-items:start;
-    }
-    @media (max-width: 920px){ .hero{grid-template-columns:1fr; padding-top:26px} }
-
-    h1{
-      margin:16px 0 10px;
-      font-size: clamp(38px, 4.4vw, 64px);
-      line-height:1.03;
-      letter-spacing: -1px;
-    }
-    .lead{
-      margin:0 0 18px;
-      color: var(--muted);
-      font-size:16px;
-      line-height:1.65;
-      max-width: 60ch;
-      font-weight:900;
-    }
-    .cta{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:18px}
-
-    .stats{
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap:10px;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
       margin-top: 10px;
     }
-    @media (max-width: 520px){ .stats{grid-template-columns:1fr} }
-    .stat{
-      padding:14px;
-      border-radius: var(--radius);
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.04);
-      box-shadow: 0 18px 50px rgba(0,0,0,.18);
+    @media (max-width: 980px){
+      .plans{ grid-template-columns: 1fr; }
     }
-    .statTop{font-size:18px}
-    .statBig{font-weight:1000; margin-top:6px}
-    .statSub{color:var(--muted); font-size:13px; margin-top:4px; font-weight:900}
-
-    .preview{padding:18px}
-    .cardTop{ display:flex; align-items:center; justify-content:space-between; margin-bottom:12px; gap:10px; }
-    .badge{
-      font-weight:1000;
-      padding:8px 10px;
-      border-radius: 999px;
-      background: rgba(91,124,255,.16);
-      border:1px solid rgba(91,124,255,.28);
-      white-space:nowrap;
-      font-size:12px;
-    }
-    .chips{display:flex; gap:6px; flex-wrap:wrap; justify-content:flex-end}
-    .chip{
-      font-size:12px;
-      font-weight:1000;
-      color: rgba(238,242,255,.92);
-      padding:7px 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .panel{
-      padding:16px;
+    .plan{
       border-radius: 22px;
-      background: rgba(0,0,0,.22);
-      border: 1px solid rgba(255,255,255,.08);
-    }
-    .panelHead{ display:flex; align-items:center; gap:12px; margin-bottom:10px; }
-    .panelAvatar{
-      width:46px; height:46px; border-radius:16px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.06);
-    }
-    .panelTitle{font-weight:1000; font-size:16px}
-    .panelDesc{color:var(--muted); margin:6px 0 12px; line-height:1.55; font-weight:900}
-    .panelBtns{display:grid; grid-template-columns:1fr; gap:10px}
-    .panelBtn{
-      text-align:left;
-      padding:12px 14px;
-      border-radius: 16px;
-      background: rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.10);
-      color:var(--text);
-      font-weight:1000;
-      cursor:pointer;
-      transition: transform .15s ease, background .15s ease, border-color .15s ease;
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-    }
-    .panelBtn:hover{
-      transform: translateY(-1px);
-      background: rgba(255,255,255,.08);
-      border-color: rgba(52,214,255,.24);
-    }
-    .panelBtn small{color:var(--muted); font-weight:900}
-    .smallNote{color:var(--muted); font-size:12px; margin-top:10px; font-weight:900}
-
-    .section{padding: 22px 0}
-    .section h2{ margin:0 0 12px; font-size:28px; letter-spacing:-.4px; }
-    .muted{color:var(--muted)}
-
-    .grid{
-      display:grid;
-      grid-template-columns: repeat(4, minmax(0,1fr));
-      gap:12px;
-    }
-    @media (max-width: 920px){ .grid{grid-template-columns: repeat(2, minmax(0,1fr))} }
-    @media (max-width: 520px){ .grid{grid-template-columns: 1fr} }
-
-    .feature{padding:16px}
-    .icon{font-size:22px}
-    .ftitle{font-weight:1000; margin-top:8px}
-    .ftext{color:var(--muted); margin-top:6px; line-height:1.55; font-weight:900}
-
-    .cmds .cmd{
-      padding:18px 16px;
-      text-align:left;
-      font-weight:1000;
-      font-size:16px;
-      cursor:pointer;
-      transition: transform .15s ease, background .15s ease, border-color .15s ease;
-      display:flex; align-items:center; justify-content:space-between;
-      gap:12px;
-    }
-    .cmds .cmd:hover{
-      transform: translateY(-2px);
-      background: rgba(255,255,255,.07);
-      border-color: rgba(91,124,255,.22);
-    }
-
-    .faq details{padding:16px}
-    .faq summary{ cursor:pointer; font-weight:1000; list-style:none; }
-    .faq summary::-webkit-details-marker{display:none}
-    .faq p{color:var(--muted); margin:10px 0 0; line-height:1.65; font-weight:900}
-
-    .footer{
-      padding:22px 0 46px;
-      display:flex; justify-content:space-between; align-items:center;
-      gap:14px;
-      border-top:1px solid rgba(255,255,255,.08);
-      margin-top:12px;
-    }
-    .footLeft{display:flex; align-items:center; gap:12px}
-    .footRight{display:flex; gap:14px; align-items:center; flex-wrap:wrap}
-    .footRight a{color:var(--muted); text-decoration:none; font-weight:1000}
-    .footRight a:hover{color:var(--text)}
-
-    /* Premium page */
-    .premWrap{
-      padding: 34px 0 18px;
-    }
-    .premTop{
-      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
-      margin-bottom:12px;
-    }
-    .premTitle{
-      font-size: clamp(28px, 3.4vw, 44px);
-      margin: 10px 0 6px;
-      font-weight:1000;
-      letter-spacing:-.9px;
-      line-height:1.06;
-    }
-    .premDesc{
-      margin:0;
-      max-width: 72ch;
-      color: var(--muted);
-      font-weight:900;
-      line-height:1.6;
-    }
-
-    .pricing{
-      margin-top: 14px;
-      display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap: 12px;
-    }
-    @media (max-width: 920px){ .pricing{grid-template-columns:1fr} }
-
-    .priceCard{
-      padding:16px;
-      border-radius: 26px;
-      border:1px solid rgba(255,255,255,.10);
+      border: 1px solid rgba(255,255,255,.10);
       background: rgba(255,255,255,.05);
-      box-shadow: var(--shadow);
-      position:relative;
+      padding: 14px;
       overflow:hidden;
+      position:relative;
       transition: transform .18s ease, border-color .18s ease, background .18s ease;
+      min-width: 0;
     }
-    .priceCard:hover{
+    .plan:hover{
       transform: translateY(-2px);
       border-color: rgba(52,214,255,.22);
       background: rgba(255,255,255,.06);
     }
-    .priceGlow{
-      position:absolute; inset:-140px;
-      background: radial-gradient(circle at 20% 20%, rgba(52,214,255,.14), transparent 55%),
-                  radial-gradient(circle at 70% 40%, rgba(91,124,255,.16), transparent 55%),
-                  radial-gradient(circle at 60% 80%, rgba(138,92,255,.14), transparent 60%);
-      filter: blur(36px);
-      opacity:.85;
-      pointer-events:none;
+    .planBadgeRow{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
     }
-    .priceHead{ position:relative; display:flex; justify-content:space-between; align-items:center; gap:10px; }
-    .priceTag{
+    .planBadge{
       font-weight:1000;
-      font-size:12px;
-      padding:7px 10px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.12);
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.18);
+      white-space:nowrap;
     }
-    .price{
-      position:relative;
-      margin-top:10px;
-      font-size:34px;
+    .planPrice{
       font-weight:1000;
-      letter-spacing:-.6px;
+      font-size: 34px;
+      margin-top: 10px;
+      letter-spacing: -.6px;
     }
-    .per{
-      position:relative;
+    .planSmall{
       color: var(--muted);
-      font-weight:900;
-      margin-top:6px;
+      font-weight: 900;
+      margin-top: 4px;
+      line-height: 1.5;
     }
-    .ul{
-      position:relative;
+    .planList{
       margin: 12px 0 0;
       padding-left: 18px;
       color: rgba(238,242,255,.88);
-      font-weight:900;
-      line-height:1.7;
-      font-size:14px;
+      font-weight: 800;
+      line-height: 1.7;
     }
-    .checkout{
-      margin-top: 14px;
+
+    /* Buy modal + form (dark, no white) */
+    .modal{
+      position:fixed; inset:0; z-index:200;
+      display:none;
+      background: rgba(0,0,0,.62);
+      place-items:center;
+      padding: 18px;
+    }
+    .modal.show{display:grid}
+    .modalCard{
+      width:min(640px, calc(100vw - 36px));
+      border-radius: 26px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(10,12,28,.92);
+      backdrop-filter: blur(16px);
+      box-shadow: var(--shadow);
+      padding: 14px;
       position:relative;
-      display:flex; gap:10px; flex-wrap:wrap;
+      overflow:hidden;
     }
+    .modalCard::before{
+      content:"";
+      position:absolute; inset:-140px;
+      background:
+        radial-gradient(circle at 30% 30%, rgba(52,214,255,.16), transparent 55%),
+        radial-gradient(circle at 70% 40%, rgba(91,124,255,.16), transparent 60%),
+        radial-gradient(circle at 55% 80%, rgba(138,92,255,.14), transparent 60%);
+      filter: blur(42px);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .modalInner{ position:relative; }
+    .modalTop{
+      display:flex; align-items:center; justify-content:space-between; gap:10px;
+      margin-bottom: 10px;
+    }
+    .modalTitle{ font-weight:1000; font-size:18px; }
+    .modalText{ color:var(--muted); line-height:1.65; font-weight:800; margin: 8px 0 12px; }
 
     .formRow{
       display:grid;
       grid-template-columns: 1fr 1fr;
       gap: 10px;
-      margin-top:12px;
-    }
-    @media (max-width: 920px){ .formRow{grid-template-columns:1fr} }
-    .field{
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      border-radius: 16px;
-      padding: 12px 12px;
-      color: var(--text);
-      font-weight:900;
-      outline:none;
-      width:100%;
-    }
-    .field::placeholder{color: rgba(238,242,255,.45); font-weight:900;}
-
-    .howBox{
-      margin-top: 12px;
-      padding: 16px;
-      border-radius: 26px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.05);
-      box-shadow: var(--shadow);
-    }
-    .howBox h3{ margin:0 0 8px; font-weight:1000; letter-spacing:-.2px;}
-    .howBox p{ margin:0; color:var(--muted); font-weight:900; line-height:1.7;}
-    .codeBox{
       margin-top: 10px;
-      padding: 12px;
-      border-radius: 18px;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(0,0,0,.22);
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      flex-wrap:wrap;
+    }
+    @media (max-width: 620px){
+      .formRow{ grid-template-columns: 1fr; }
+    }
+
+    label{
+      font-weight: 1000;
+      font-size: 12px;
+      color: rgba(238,242,255,.86);
+      display:block;
+      margin: 0 0 6px;
+    }
+    .input{
+      width:100%;
+      padding: 12px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.25);
+      color: var(--text);
+      font-weight: 900;
+      outline:none;
+      transition: border-color .15s ease, background .15s ease;
+    }
+    .input:focus{
+      border-color: rgba(52,214,255,.30);
+      background: rgba(0,0,0,.32);
     }
     .mono{
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      font-size: 13px;
-      font-weight:1000;
-      word-break: break-all;
-      color: rgba(238,242,255,.95);
+      letter-spacing: .2px;
     }
 
+    .copyBox{
+      display:flex; gap:10px; flex-wrap:wrap;
+      align-items:center;
+      padding: 12px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      margin-top: 10px;
+    }
+    .copyBox span{
+      color: rgba(238,242,255,.90);
+      font-weight: 900;
+      font-size: 12px;
+    }
+
+    /* Premium commands list */
+    .section{
+      margin-top: 16px;
+      padding: 14px;
+    }
+    .sectionTitle{
+      font-weight: 1000;
+      font-size: 16px;
+      margin: 0 0 8px;
+    }
+    .cmdGrid{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 980px){
+      .cmdGrid{ grid-template-columns: 1fr; }
+    }
+    .cmd{
+      padding: 14px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(255,255,255,.05);
+      cursor:pointer;
+      transition: transform .14s ease, background .14s ease, border-color .14s ease;
+      min-width: 0;
+      overflow:hidden;
+    }
+    .cmd:hover{
+      transform: translateY(-1px);
+      background: rgba(255,255,255,.07);
+      border-color: rgba(91,124,255,.22);
+    }
+    .cmdName{
+      font-weight: 1000;
+      font-size: 14px;
+    }
+    .cmdDesc{
+      margin-top: 6px;
+      color: var(--muted);
+      font-weight: 800;
+      line-height: 1.5;
+      font-size: 13px;
+    }
+
+    /* Toast */
+    .toast{
+      position:fixed;
+      left:50%; bottom:18px;
+      transform: translateX(-50%);
+      padding:12px 14px;
+      border-radius: 16px;
+      border:1px solid rgba(52,214,255,.22);
+      background: rgba(7,10,18,.85);
+      color: rgba(238,242,255,.92);
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      display:none;
+      font-weight:1000;
+      z-index:999;
+    }
+    .toast.show{display:block}
   </style>
 </head>
 
-<body id="top">
+<body>
   <div class="bg">
     <div class="noise"></div>
     <canvas id="stars"></canvas>
   </div>
 
-  <!-- LOADER -->
-  <div class="loaderWrap" id="loader" aria-label="Loading">
-    <div class="loaderCard">
-      <div class="loaderTop">
-        <img class="loaderLogo" src="assets/dragon.png" alt="Dragon Services" />
-        <div>
-          <div class="loaderName">Dragon Services</div>
-          <div class="loaderSub">Loading the panel…</div>
-        </div>
-        <div class="spinner" aria-hidden="true"></div>
-      </div>
-      <div class="bar"><div id="barFill"></div></div>
-      <div class="loaderHint">
-        <span id="loadText">Booting UI</span>
-        <span id="loadPct">0%</span>
-      </div>
-    </div>
-  </div>
-
   <header class="topbar">
-    <a class="brand" href="#" id="brandHome">
-      <img class="logo" src="assets/dragon.png" alt="Dragon Services" />
+    <a class="brand" href="#">
+      <img class="logo" id="logoTop" src="assets/nozzarri.png" alt="Nozzarri Ticket" />
       <div>
-        <div class="bname">Dragon Services</div>
-        <div class="btag">Tickets Bot</div>
+        <div class="bname" id="botNameTop">Nozzarri Ticket</div>
+        <div class="btag">Tickets • Free + Premium</div>
       </div>
     </a>
 
-    <nav class="nav">
-      <a href="#" data-nav="gate">Home</a>
-      <a href="#" data-nav="free">Free</a>
-      <a href="#" data-nav="premium">Premium</a>
-    </nav>
-
     <div class="actions">
-      <a class="btn ghost hideMobile" id="youtubeBtn" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
-      <button class="btn ghost iconbtn" id="copyInvite" type="button" title="Copy invite">📋</button>
-      <a class="btn primary" id="inviteBtn" href="#" target="_blank" rel="noreferrer">➕ Add Bot</a>
-      <button class="btn ghost iconbtn menuBtn" id="menuBtn" type="button" aria-label="Open menu">☰</button>
+      <button class="btn ghost" id="openBuy">💎 Buy Premium</button>
+      <button class="btn ghost" id="copyOwner">👤 Copy owner</button>
+      <button class="btn primary" id="copyLtc">🪙 Copy LTC</button>
     </div>
   </header>
 
-  <!-- Mobile drawer -->
-  <div class="drawer" id="drawer" aria-hidden="true">
-    <div class="drawerPanel">
-      <button class="btn ghost iconbtn closeX" id="closeDrawer" type="button" aria-label="Close">✕</button>
-      <button id="goGate">🏠 Home</button>
-      <button id="goFree">✅ Free</button>
-      <button id="goPrem">💎 Premium</button>
-      <a class="btn primary" id="inviteBtn2" href="#" target="_blank" rel="noreferrer">➕ Add Bot</a>
-      <a class="btn ghost" id="youtubeBtn2" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
-      <button class="btn ghost" id="copyInvite2" type="button">📋 Copy invite</button>
-    </div>
-  </div>
+  <main class="container premiumWrap">
+    <div class="premiumGrid">
+      <!-- LEFT -->
+      <div class="card heroLeft reveal">
+        <div class="pill"><span class="dot"></span> Premium • Keys • Extra Commands</div>
 
-  <!-- GATE -->
-  <main class="container page show" id="pageGate">
-    <section class="gate">
-      <div class="gateCard reveal">
-        <div class="gateHead">
-          <div>
-            <div class="pill"><span class="dot"></span> Blue / Purple / Black • Smooth UI</div>
-            <div class="gateTitle">Choose <span class="grad">Free</span> or <span class="grad">Premium</span></div>
-            <p class="gateDesc">
-              Free gives you the ticket bot instantly. Premium gives you extra customization + premium-only commands.
-            </p>
-          </div>
-          <div style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
-            <button class="btn ghost" id="copySite" type="button" title="Copy website link">🔗 Copy site</button>
-          </div>
+        <div class="title">
+          Dragon Tickets <span class="grad">Premium</span>
         </div>
 
-        <div class="gateGrid">
-          <div class="pick" id="pickFree" role="button" tabindex="0" aria-label="Select Free">
-            <div class="pickGlow" aria-hidden="true"></div>
-            <div class="pickTop">
-              <div class="tag free">FREE</div>
-              <div class="kbd">instant access</div>
-            </div>
-            <div class="pickTitle">Dragon Tickets — Free Panel</div>
-            <div class="pickText">
-              Support + Trade tickets, clean UI, logs, safe permission checks.
-            </div>
-            <div class="pickBtns">
-              <button class="miniBtn primary" id="freeOpen">Open Free</button>
-              <button class="miniBtn" id="freeInvite">Invite</button>
+        <p class="lead">
+          Premium unlocks extra commands + customization for your server.
+          <b>Buy a key</b>, then <b>contact the owner</b> to receive your redeem code (manual verify = safer).
+        </p>
+
+        <div class="heroBtns">
+          <button class="btn primary" id="openBuy2">💎 Buy Premium</button>
+          <button class="btn ghost" id="openCmds">✨ Premium commands</button>
+          <button class="btn ghost" id="openHow">📌 How to buy</button>
+        </div>
+
+        <div class="card section" style="margin-top:14px;">
+          <div class="tabs" style="margin-bottom:12px;">
+            <div class="tab active" data-tab="commands">Commands</div>
+            <div class="tab" data-tab="features">Features</div>
+            <div class="tab" data-tab="how">How to buy</div>
+          </div>
+
+          <div id="tab-commands">
+            <div class="sectionTitle">Premium commands (click to copy)</div>
+            <div class="cmdGrid">
+              <div class="cmd" data-copy="?premium-help">
+                <div class="cmdName">?premium-help</div>
+                <div class="cmdDesc">Shows ALL premium commands + examples.</div>
+              </div>
+              <div class="cmd" data-copy="?premium-status">
+                <div class="cmdName">?premium-status</div>
+                <div class="cmdDesc">Check if your server has premium + expiry time.</div>
+              </div>
+              <div class="cmd" data-copy="?premium-redeem YOUR_KEY">
+                <div class="cmdName">?premium-redeem YOUR_KEY</div>
+                <div class="cmdDesc">Redeem a premium key (owner sends you the key).</div>
+              </div>
+
+              <div class="cmd" data-copy="?p-prefix $">
+                <div class="cmdName">?p-prefix $</div>
+                <div class="cmdDesc">Change premium command prefix (ex: $ instead of ?).</div>
+              </div>
+              <div class="cmd" data-copy="?p-ticketname Trade • {user}">
+                <div class="cmdName">?p-ticketname Trade • {user}</div>
+                <div class="cmdDesc">Custom ticket channel names (premium).</div>
+              </div>
+              <div class="cmd" data-copy="?p-staffrole @Role">
+                <div class="cmdName">?p-staffrole @Role</div>
+                <div class="cmdDesc">Premium staff role override (extra safety).</div>
+              </div>
             </div>
           </div>
 
-          <div class="pick" id="pickPrem" role="button" tabindex="0" aria-label="Select Premium">
-            <div class="pickGlow" aria-hidden="true"></div>
-            <div class="pickTop">
-              <div class="tag prem">PREMIUM</div>
-              <div class="kbd">buy access</div>
+          <div id="tab-features" style="display:none;">
+            <div class="sectionTitle">Why Premium?</div>
+            <div class="cmdGrid">
+              <div class="cmd">
+                <div class="cmdName">Custom ticket naming</div>
+                <div class="cmdDesc">Make tickets look professional with your own naming format.</div>
+              </div>
+              <div class="cmd">
+                <div class="cmdName">Custom prefix</div>
+                <div class="cmdDesc">Hide premium commands behind your own prefix ($, !, etc).</div>
+              </div>
+              <div class="cmd">
+                <div class="cmdName">Premium roles</div>
+                <div class="cmdDesc">Extra role controls to lock premium features to staff.</div>
+              </div>
             </div>
-            <div class="pickTitle">Dragon Tickets — Premium</div>
-            <div class="pickText">
-              Premium commands, custom setup options, extra controls for ticket names + staff roles.
-            </div>
-            <div class="pickBtns">
-              <button class="miniBtn primary" id="premOpen">Open Premium</button>
-              <button class="miniBtn" id="premHow">How it works</button>
-            </div>
+            <p class="lead" style="margin-top:12px;">
+              More premium commands can be added any time — you just expand the premium-help list in the bot.
+            </p>
+          </div>
+
+          <div id="tab-how" style="display:none;">
+            <div class="sectionTitle">How to buy (safe)</div>
+            <p class="lead">
+              1) Choose a plan ➜ 2) Send LTC ➜ 3) Contact the owner on Discord ➜ 4) Receive your key ➜ 5) Redeem in your server.
+            </p>
+            <p class="lead" style="margin-top:10px;">
+              Contact owner on Discord: <b id="ownerTagShow">n_om_e</b> (copy it from top button).
+            </p>
           </div>
         </div>
       </div>
-    </section>
-  </main>
 
-  <!-- FREE PAGE -->
-  <div class="page" id="pageFree">
-    <main class="container">
-      <section class="hero">
-        <div class="hero-left reveal">
-          <div class="pill"><span class="dot"></span> Free Panel • Tickets • Logs</div>
-
-          <h1>Ticket bot <span class="grad">premium</span> style</h1>
-
-          <p class="lead">
-            Support Tickets + Trade Tickets, clean panels, setup, logs, and smart permission checks.
-            Built for public servers and smooth staff workflows.
-          </p>
-
-          <div class="cta">
-            <a class="btn primary" id="inviteBtn3" href="#" target="_blank" rel="noreferrer">➕ Add Bot</a>
-            <button class="btn ghost" id="copyInvite3" type="button">📋 Copy invite</button>
-            <a class="btn ghost" id="youtubeBtn3" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
-            <button class="btn ghost" id="backHome1" type="button">🏠 Back</button>
-          </div>
-
-          <div class="stats">
-            <div class="stat">
-              <div class="statTop">⚡</div>
-              <div class="statBig">Instant</div>
-              <div class="statSub">Ticket creation</div>
-            </div>
-            <div class="stat">
-              <div class="statTop">🧩</div>
-              <div class="statBig">Panels</div>
-              <div class="statSub">Buttons + menus</div>
-            </div>
-            <div class="stat">
-              <div class="statTop">🔒</div>
-              <div class="statBig">Safe</div>
-              <div class="statSub">No admin needed</div>
+      <!-- RIGHT STORE -->
+      <div class="card store reveal">
+        <div class="storeInner">
+          <div class="storeTop">
+            <div class="storeTitle">Premium Plans</div>
+            <div class="tabs">
+              <div class="tab active" data-store="plans">Plans</div>
+              <div class="tab" data-store="keys">Keys</div>
+              <div class="tab" data-store="themes">Themes</div>
             </div>
           </div>
-        </div>
 
-        <div class="hero-right">
-          <div class="card preview reveal">
-            <div class="cardTop">
-              <div class="badge">Ticket Panel</div>
-              <div class="chips">
-                <span class="chip">Support</span>
-                <span class="chip">Trade</span>
-                <span class="chip">Logs</span>
-              </div>
-            </div>
-
-            <div class="panel">
-              <div class="panelHead">
-                <img class="panelAvatar" src="assets/dragon.png" alt="bot" />
-                <div>
-                  <div class="panelTitle">Open a ticket</div>
-                  <div class="panelDesc">Choose what you need — the bot creates a private channel.</div>
+          <div id="store-plans">
+            <div class="plans">
+              <div class="plan" data-plan="15d">
+                <div class="planBadgeRow">
+                  <div class="planBadge">15 DAYS</div>
+                  <div class="planBadge">$1</div>
+                </div>
+                <div class="planPrice">$1</div>
+                <div class="planSmall">Starter key — try premium for 15 days.</div>
+                <ul class="planList">
+                  <li>Premium commands</li>
+                  <li>Premium themes</li>
+                  <li>Redeem in Discord</li>
+                </ul>
+                <div style="margin-top:12px;">
+                  <button class="btn primary" style="width:100%" data-buy="15d">Buy 15d</button>
                 </div>
               </div>
 
-              <div class="panelBtns">
-                <button class="panelBtn" type="button" onclick="fakeClick('Support Ticket')">
-                  <span>🎟️ Support Ticket</span>
-                  <small>Fast help</small>
-                </button>
-                <button class="panelBtn" type="button" onclick="fakeClick('Trade Ticket')">
-                  <span>🤝 Trade Ticket</span>
-                  <small>Private deal</small>
-                </button>
+              <div class="plan" data-plan="1m">
+                <div class="planBadgeRow">
+                  <div class="planBadge">1 MONTH</div>
+                  <div class="planBadge">BEST • $2</div>
+                </div>
+                <div class="planPrice">$2</div>
+                <div class="planSmall">Pro key — most popular plan.</div>
+                <ul class="planList">
+                  <li>Everything in 15d</li>
+                  <li>More premium tools</li>
+                  <li>Priority updates</li>
+                </ul>
+                <div style="margin-top:12px;">
+                  <button class="btn primary" style="width:100%" data-buy="1m">Buy 1m</button>
+                </div>
               </div>
 
-              <div class="smallNote">Tip: staff can use <b>?close</b> in ticket channels.</div>
+              <div class="plan" data-plan="3m">
+                <div class="planBadgeRow">
+                  <div class="planBadge">3 MONTHS</div>
+                  <div class="planBadge">$4</div>
+                </div>
+                <div class="planPrice">$4</div>
+                <div class="planSmall">Ultra key — best value.</div>
+                <ul class="planList">
+                  <li>Everything in Pro</li>
+                  <li>Longer access</li>
+                  <li>Early drops</li>
+                </ul>
+                <div style="margin-top:12px;">
+                  <button class="btn primary" style="width:100%" data-buy="3m">Buy 3m</button>
+                </div>
+              </div>
+            </div>
+
+            <p class="lead" style="margin-top:12px; font-size:13px;">
+              Payments are in LTC. Send the USD value in LTC (rate changes). Always double-check address.
+            </p>
+
+            <div class="copyBox">
+              <span>LTC address:</span>
+              <span class="mono" id="ltcAddrShow">LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8</span>
+            </div>
+
+            <div style="margin-top:10px; display:flex; gap:10px; flex-wrap:wrap;">
+              <button class="btn primary" id="openBuy3">💎 Buy Premium</button>
+              <button class="btn ghost" id="copyLtc2">🪙 Copy LTC</button>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section class="section" id="freeCommands">
-        <h2 class="reveal">Free Commands</h2>
-        <p class="muted reveal">Click to copy.</p>
-
-        <div class="grid cmds">
-          <button class="cmd card reveal" data-copy="?help">
-            <span>?help</span> <span class="kbd">copy</span>
-          </button>
-          <button class="cmd card reveal" data-copy="?close">
-            <span>?close</span> <span class="kbd">copy</span>
-          </button>
-          <button class="cmd card reveal" data-copy="?setup">
-            <span>?setup (owner)</span> <span class="kbd">copy</span>
-          </button>
-        </div>
-      </section>
-
-      <section class="section" id="freeFaq">
-        <h2 class="reveal">FAQ</h2>
-        <div class="faq">
-          <details class="card reveal">
-            <summary>Does the bot need Administrator?</summary>
-            <p>No. The invite uses only permissions needed for tickets. No Administrator.</p>
-          </details>
-          <details class="card reveal">
-            <summary>Why do tickets say “Finish setup”?</summary>
-            <p>If setup isn’t completed (categories/roles/log channel), the bot blocks ticket creation.</p>
-          </details>
-        </div>
-      </section>
-
-      <footer class="footer">
-        <div class="footLeft">
-          <img class="logo" src="assets/dragon.png" alt="Dragon Services" style="width:36px;height:36px;border-radius:12px" />
-          <div>
-            <div class="bname">Dragon Services</div>
-            <div class="muted">© <span id="year"></span> • Tickets Bot</div>
+          <div id="store-keys" style="display:none;">
+            <p class="lead">
+              After you pay, you will receive a key from the owner. Example keys:
+            </p>
+            <div class="copyBox">
+              <span class="mono">NOZZ-15D-XXXX-XXXX</span>
+              <span class="mono">NOZZ-1M-XXXX-XXXX</span>
+              <span class="mono">NOZZ-3M-XXXX-XXXX</span>
+            </div>
+            <p class="lead" style="margin-top:10px;">
+              Redeem in your server with:
+              <b class="mono">?premium-redeem YOUR_KEY</b>
+            </p>
           </div>
-        </div>
-        <div class="footRight">
-          <a href="#" id="goPremiumFromFooter">Premium</a>
-          <a href="#top">Top</a>
-        </div>
-      </footer>
-    </main>
-  </div>
 
-  <!-- PREMIUM PAGE -->
-  <div class="page" id="pagePremium">
-    <main class="container premWrap">
-      <div class="premTop reveal">
-        <div>
-          <div class="pill"><span class="dot"></span> Premium • Extra Commands • Customization</div>
-          <div class="premTitle">Dragon <span class="grad">Premium</span></div>
-          <p class="premDesc">
-            Premium is manual-verified (crypto). You pay, then you send your TXID + Discord to owner, and you get your key.
-            (No auto-verification without a backend.)
-          </p>
-        </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; align-items:center;">
-          <button class="btn ghost" id="backHome2" type="button">🏠 Back</button>
-          <a class="btn ghost" id="youtubeBtn4" href="#" target="_blank" rel="noreferrer">▶️ YouTube</a>
+          <div id="store-themes" style="display:none;">
+            <p class="lead">
+              Premium themes let you customize ticket embed colors and panel style (if your bot supports it).
+              You can list your themes here later.
+            </p>
+          </div>
         </div>
       </div>
+    </div>
+  </main>
 
-      <div class="howBox reveal">
-        <h3>How to buy (clear so people don’t think it’s scam)</h3>
-        <p>
-          1) Choose a plan → copy LTC address → send exact amount.<br>
-          2) Copy your TXID (transaction ID) from your wallet (Exodus).<br>
-          3) Add owner on Discord: <b id="ownerTagText"></b> and send: <b>Plan + TXID + Your Discord</b>.<br>
-          4) Owner sends you the Premium Key and you redeem it in the bot.
-        </p>
+  <!-- BUY MODAL -->
+  <div class="modal" id="buyModal" aria-hidden="true">
+    <div class="modalCard">
+      <div class="modalInner">
+        <div class="modalTop">
+          <div class="modalTitle">Buy Premium (manual verify)</div>
+          <button class="btn ghost iconbtn" id="closeBuy" type="button" aria-label="Close">✕</button>
+        </div>
 
-        <div class="codeBox">
+        <div class="modalText">
+          Fill your Discord username, choose plan, then copy the LTC address and send the payment.
+          After payment, <b>DM the owner</b> and send your transaction ID (TXID) + your Discord user.
+        </div>
+
+        <div class="formRow">
           <div>
-            <div class="muted" style="font-weight:1000; margin-bottom:6px;">LTC address</div>
-            <div class="mono" id="ltcText"></div>
+            <label>Discord username (ex: user#0001)</label>
+            <input class="input" id="buyDiscord" placeholder="yourdiscord#1234" />
           </div>
-          <div style="display:flex; gap:10px; flex-wrap:wrap;">
-            <button class="btn primary" id="copyLtc" type="button">📋 Copy LTC</button>
-            <button class="btn ghost" id="copyOwner" type="button">📋 Copy owner</button>
+          <div>
+            <label>Plan</label>
+            <select class="input" id="buyPlan">
+              <option value="15d">15 days — $1</option>
+              <option value="1m" selected>1 month — $2</option>
+              <option value="3m">3 months — $4</option>
+            </select>
           </div>
         </div>
 
-        <div class="formRow" style="margin-top:12px;">
-          <input class="field" id="buyDiscord" placeholder="Your Discord (example: user#1234 or @user)" />
-          <input class="field" id="buyTxid" placeholder="TXID (transaction id)" />
+        <div class="formRow">
+          <div>
+            <label>TXID (after you pay)</label>
+            <input class="input mono" id="buyTxid" placeholder="paste transaction id here (optional now)" />
+          </div>
+          <div>
+            <label>Owner contact</label>
+            <input class="input" id="ownerField" readonly />
+          </div>
+        </div>
+
+        <div class="copyBox">
+          <span>Send LTC to:</span>
+          <span class="mono" id="ltcAddr2">LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8</span>
         </div>
 
         <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
-          <select class="field" id="buyPlan" style="max-width:320px;">
-            <option value="15d">Premium 15 days — $1</option>
-            <option value="1m">Premium 1 month — $2</option>
-            <option value="3m">Premium 3 months — $4</option>
-          </select>
-          <button class="btn primary" id="prepareMsg" type="button">✅ Prepare message to owner</button>
-          <button class="btn ghost" id="copyMsg" type="button">📋 Copy message</button>
+          <button class="btn primary" id="copyLtc3">🪙 Copy LTC</button>
+          <button class="btn ghost" id="copyOwner2">👤 Copy owner</button>
+          <button class="btn ghost" id="copyBuyMsg">📩 Copy DM message</button>
         </div>
 
-        <div class="codeBox" style="margin-top:10px;">
-          <div style="flex:1;">
-            <div class="muted" style="font-weight:1000; margin-bottom:6px;">Message to send to owner</div>
-            <div class="mono" id="msgBox">Fill the fields and press “Prepare message”.</div>
-          </div>
-        </div>
+        <p class="modalText" style="margin-top:10px; font-size:13px;">
+          DM message will include your username + plan + TXID (if you added it).
+        </p>
       </div>
-
-      <div class="pricing">
-        <div class="priceCard reveal">
-          <div class="priceGlow" aria-hidden="true"></div>
-          <div class="priceHead">
-            <div class="priceTag">15 days</div>
-            <div class="kbd">$1</div>
-          </div>
-          <div class="price">$1</div>
-          <div class="per">best to try</div>
-          <ul class="ul">
-            <li>Premium-only commands access</li>
-            <li>Custom ticket naming templates</li>
-            <li>Premium role support</li>
-          </ul>
-          <div class="checkout">
-            <button class="miniBtn primary" data-plan="15d">Select 15 days</button>
-            <button class="miniBtn" data-copy="ltc">Copy LTC</button>
-          </div>
-        </div>
-
-        <div class="priceCard reveal">
-          <div class="priceGlow" aria-hidden="true"></div>
-          <div class="priceHead">
-            <div class="priceTag">1 month</div>
-            <div class="kbd">$2</div>
-          </div>
-          <div class="price">$2</div>
-          <div class="per">most popular</div>
-          <ul class="ul">
-            <li>Everything in 15d</li>
-            <li>Custom prefixes (ex: ? or $)</li>
-            <li>More premium settings</li>
-          </ul>
-          <div class="checkout">
-            <button class="miniBtn primary" data-plan="1m">Select 1 month</button>
-            <button class="miniBtn" data-copy="ltc">Copy LTC</button>
-          </div>
-        </div>
-
-        <div class="priceCard reveal">
-          <div class="priceGlow" aria-hidden="true"></div>
-          <div class="priceHead">
-            <div class="priceTag">3 months</div>
-            <div class="kbd">$4</div>
-          </div>
-          <div class="price">$4</div>
-          <div class="per">best value</div>
-          <ul class="ul">
-            <li>Everything in 1m</li>
-            <li>Priority support</li>
-            <li>More premium customization slots</li>
-          </ul>
-          <div class="checkout">
-            <button class="miniBtn primary" data-plan="3m">Select 3 months</button>
-            <button class="miniBtn" data-copy="ltc">Copy LTC</button>
-          </div>
-        </div>
-      </div>
-
-      <section class="section" id="premiumCommands">
-        <h2 class="reveal">Premium Commands (use “?”)</h2>
-        <p class="muted reveal">These will be shown to Premium users. Click to copy.</p>
-
-        <div class="grid cmds">
-          <button class="cmd card reveal" data-copy="?premium-help">
-            <span>?premium-help</span> <span class="kbd">copy</span>
-          </button>
-          <button class="cmd card reveal" data-copy="?prefix set $">
-            <span>?prefix set $</span> <span class="kbd">copy</span>
-          </button>
-          <button class="cmd card reveal" data-copy="?ticketname set {type}-{user}">
-            <span>?ticketname set {type}-{user}</span> <span class="kbd">copy</span>
-          </button>
-          <button class="cmd card reveal" data-copy="?prole set @Premium">
-            <span>?prole set @Premium</span> <span class="kbd">copy</span>
-          </button>
-        </div>
-      </section>
-
-      <section class="section" id="premFaq">
-        <h2 class="reveal">Premium FAQ</h2>
-        <div class="faq">
-          <details class="card reveal">
-            <summary>Do you verify LTC automatically?</summary>
-            <p>No. Auto verification needs a backend + blockchain API. This site is frontend only, so verification is manual (TXID → owner).</p>
-          </details>
-          <details class="card reveal">
-            <summary>Where do I send proof?</summary>
-            <p>Add the owner on Discord (<b id="ownerTagText2"></b>) and send your Plan + TXID + Discord.</p>
-          </details>
-        </div>
-      </section>
-
-      <footer class="footer">
-        <div class="footLeft">
-          <img class="logo" src="assets/dragon.png" alt="Dragon Services" style="width:36px;height:36px;border-radius:12px" />
-          <div>
-            <div class="bname">Dragon Services</div>
-            <div class="muted">© <span id="year2"></span> • Premium</div>
-          </div>
-        </div>
-        <div class="footRight">
-          <a href="#" id="goFreeFromFooter">Free</a>
-          <a href="#top">Top</a>
-        </div>
-      </footer>
-    </main>
+    </div>
   </div>
 
-  <button id="toTop" class="toTop" type="button" aria-label="Back to top">⬆️</button>
   <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
   <script>
-    // ======================
-    // CONFIG (EDIT THESE)
-    // ======================
-    const CLIENT_ID = "1442592762108186675";
-
-    // Invite perms (no admin) – enough for tickets + logs
-    const PERMISSIONS = "126032";
-    const INVITE_URL = `https://discord.com/oauth2/authorize?client_id=${CLIENT_ID}&scope=bot%20applications.commands&permissions=${PERMISSIONS}`;
-
-    const YT_URL = "https://www.youtube.com/channel/UC8Ovc5xT-tXXIjxLnVe72dQ";
-
-    // Owner contact shown on premium page
-    const OWNER_DISCORD_TAG = "n_om_e"; // <- change if needed
+    // ===== EDIT THESE =====
+    const BOT_NAME = "Nozzarri Ticket";
+    const LOGO_SRC = "assets/nozzarri.png"; // put your image here
+    const OWNER_DISCORD_TAG = "n_om_e"; // <-- change to your real Discord tag/name
     const LTC_ADDRESS = "LPxonLCBtrcHnYAompBSXsboTfJQ8Eyuz8";
 
-    // ======================
-    // Helpers
-    // ======================
+    // Apply branding
+    document.getElementById("botNameTop").textContent = BOT_NAME;
+    document.getElementById("logoTop").src = LOGO_SRC;
+    document.getElementById("logoTop").alt = BOT_NAME;
+    document.getElementById("ownerTagShow").textContent = OWNER_DISCORD_TAG;
+    document.getElementById("ownerField").value = OWNER_DISCORD_TAG;
+    document.getElementById("ltcAddrShow").textContent = LTC_ADDRESS;
+    document.getElementById("ltcAddr2").textContent = LTC_ADDRESS;
+
+    // Toast
     const toast = document.getElementById("toast");
     let toastTimer = null;
-
     function showToast(msg){
       toast.textContent = msg;
       toast.classList.add("show");
@@ -1165,198 +785,9 @@
       }
     }
 
-    function showPage(which){
-      const gate = document.getElementById("pageGate");
-      const free = document.getElementById("pageFree");
-      const prem = document.getElementById("pagePremium");
-
-      [gate, free, prem].forEach(p => p.classList.remove("show"));
-      if(which === "gate") gate.classList.add("show");
-      if(which === "free") free.classList.add("show");
-      if(which === "premium") prem.classList.add("show");
-
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    }
-
-    // ======================
-    // Set links
-    // ======================
-    [document.getElementById("inviteBtn"), document.getElementById("inviteBtn2"), document.getElementById("inviteBtn3")]
-      .forEach(a => { if(a) a.href = INVITE_URL; });
-
-    [document.getElementById("youtubeBtn"), document.getElementById("youtubeBtn2"), document.getElementById("youtubeBtn3"), document.getElementById("youtubeBtn4")]
-      .forEach(a => { if(a) a.href = YT_URL; });
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-    document.getElementById("year2").textContent = new Date().getFullYear();
-
-    // Premium texts
-    document.getElementById("ltcText").textContent = LTC_ADDRESS;
-    document.getElementById("ownerTagText").textContent = OWNER_DISCORD_TAG;
-    document.getElementById("ownerTagText2").textContent = OWNER_DISCORD_TAG;
-
-    // ======================
-    // Copy buttons
-    // ======================
-    document.getElementById("copyInvite")?.addEventListener("click", ()=>copyText(INVITE_URL));
-    document.getElementById("copyInvite2")?.addEventListener("click", ()=>copyText(INVITE_URL));
-    document.getElementById("copyInvite3")?.addEventListener("click", ()=>copyText(INVITE_URL));
-    document.getElementById("copySite")?.addEventListener("click", ()=>copyText(location.href));
-
-    document.getElementById("copyLtc")?.addEventListener("click", ()=>copyText(LTC_ADDRESS));
-    document.getElementById("copyOwner")?.addEventListener("click", ()=>copyText(OWNER_DISCORD_TAG));
-
-    document.querySelectorAll("[data-copy]").forEach(btn=>{
-      btn.addEventListener("click", ()=>{
-        const v = btn.getAttribute("data-copy");
-        if(v === "ltc") return copyText(LTC_ADDRESS);
-        copyText(v);
-      });
-    });
-
-    // ======================
-    // Fake panel click
-    // ======================
-    window.fakeClick = (name) => showToast(`${name} (demo)`);
-
-    // ======================
-    // Drawer
-    // ======================
-    const drawer = document.getElementById("drawer");
-    const menuBtn = document.getElementById("menuBtn");
-    const closeDrawer = document.getElementById("closeDrawer");
-
-    function setDrawer(open){
-      drawer.classList.toggle("open", open);
-      drawer.setAttribute("aria-hidden", String(!open));
-    }
-    menuBtn?.addEventListener("click", ()=>setDrawer(true));
-    closeDrawer?.addEventListener("click", ()=>setDrawer(false));
-    drawer?.addEventListener("click", (e)=>{ if(e.target === drawer) setDrawer(false); });
-
-    document.getElementById("goGate")?.addEventListener("click", ()=>{ setDrawer(false); showPage("gate"); });
-    document.getElementById("goFree")?.addEventListener("click", ()=>{ setDrawer(false); showPage("free"); });
-    document.getElementById("goPrem")?.addEventListener("click", ()=>{ setDrawer(false); showPage("premium"); });
-
-    // ======================
-    // Gate buttons
-    // ======================
-    document.getElementById("freeOpen").addEventListener("click", ()=>{ showPage("free"); showToast("Free opened ✅"); });
-    document.getElementById("freeInvite").addEventListener("click", ()=>window.open(INVITE_URL, "_blank"));
-
-    document.getElementById("premOpen").addEventListener("click", ()=>{ showPage("premium"); showToast("Premium opened 💎"); });
-    document.getElementById("premHow").addEventListener("click", ()=>{
-      showPage("premium");
-      setTimeout(()=>document.getElementById("premiumCommands").scrollIntoView({behavior:"smooth"}), 250);
-    });
-
-    document.getElementById("pickFree").addEventListener("click",(e)=>{ if(e.target.closest("button")) return; showPage("free"); });
-    document.getElementById("pickPrem").addEventListener("click",(e)=>{ if(e.target.closest("button")) return; showPage("premium"); });
-
-    // Keyboard access
-    ["pickFree","pickPrem"].forEach(id=>{
-      const el = document.getElementById(id);
-      el.addEventListener("keydown",(e)=>{
-        if(e.key === "Enter" || e.key === " "){
-          e.preventDefault();
-          id === "pickFree" ? showPage("free") : showPage("premium");
-        }
-      });
-    });
-
-    // Top nav
-    document.querySelectorAll("[data-nav]").forEach(a=>{
-      a.addEventListener("click",(e)=>{
-        e.preventDefault();
-        showPage(a.getAttribute("data-nav"));
-      });
-    });
-
-    document.getElementById("backHome1")?.addEventListener("click", ()=>showPage("gate"));
-    document.getElementById("backHome2")?.addEventListener("click", ()=>showPage("gate"));
-    document.getElementById("goPremiumFromFooter")?.addEventListener("click",(e)=>{ e.preventDefault(); showPage("premium"); });
-    document.getElementById("goFreeFromFooter")?.addEventListener("click",(e)=>{ e.preventDefault(); showPage("free"); });
-
-    document.getElementById("brandHome")?.addEventListener("click",(e)=>{ e.preventDefault(); showPage("gate"); });
-
-    // ======================
-    // Premium checkout UX
-    // ======================
-    const buyDiscord = document.getElementById("buyDiscord");
-    const buyTxid = document.getElementById("buyTxid");
-    const buyPlan = document.getElementById("buyPlan");
-    const msgBox = document.getElementById("msgBox");
-
-    function planLabel(v){
-      if(v === "15d") return "Premium 15 days ($1)";
-      if(v === "1m") return "Premium 1 month ($2)";
-      if(v === "3m") return "Premium 3 months ($4)";
-      return v;
-    }
-
-    function prepareMessage(){
-      const d = (buyDiscord.value || "").trim();
-      const t = (buyTxid.value || "").trim();
-      const p = buyPlan.value;
-
-      if(!d){
-        showToast("Add your Discord first");
-        buyDiscord.focus();
-        return;
-      }
-      if(!t){
-        showToast("Add TXID (proof) first");
-        buyTxid.focus();
-        return;
-      }
-      msgBox.textContent =
-`Hi! I want ${planLabel(p)}.
-My Discord: ${d}
-TXID: ${t}`;
-      showToast("Message prepared ✅");
-    }
-
-    document.getElementById("prepareMsg").addEventListener("click", prepareMessage);
-    document.getElementById("copyMsg").addEventListener("click", ()=>{
-      const text = msgBox.textContent || "";
-      if(!text.includes("TXID")) return showToast("Prepare message first");
-      copyText(text);
-    });
-
-    document.querySelectorAll("[data-plan]").forEach(b=>{
-      b.addEventListener("click", ()=>{
-        buyPlan.value = b.getAttribute("data-plan");
-        showToast("Plan selected ✅");
-        document.querySelector(".howBox").scrollIntoView({behavior:"smooth"});
-      });
-    });
-
-    // ======================
-    // Reveal on scroll
-    // ======================
-    const io = new IntersectionObserver((entries)=>{
-      for(const e of entries){
-        if(e.isIntersecting) e.target.classList.add("show");
-      }
-    }, {threshold: .12});
-    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
-
-    // ======================
-    // Top button
-    // ======================
-    const toTop = document.getElementById("toTop");
-    window.addEventListener("scroll", ()=>{
-      if(window.scrollY > 500) toTop.classList.add("show");
-      else toTop.classList.remove("show");
-    }, {passive:true});
-    toTop.addEventListener("click", ()=>window.scrollTo({top:0, behavior:"smooth"}));
-
-    // ======================
-    // Stars canvas
-    // ======================
+    // Stars
     const canvas = document.getElementById("stars");
     const ctx = canvas.getContext("2d");
-
     function resize(){
       canvas.width = Math.floor(innerWidth * devicePixelRatio);
       canvas.height = Math.floor(innerHeight * devicePixelRatio);
@@ -1365,10 +796,9 @@ TXID: ${t}`;
     }
     addEventListener("resize", resize, {passive:true});
     resize();
-
     let stars = [];
     function initStars(){
-      const count = Math.min(210, Math.floor(innerWidth / 7));
+      const count = Math.min(220, Math.floor(innerWidth / 6.8));
       stars = Array.from({length: count}, () => ({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -1378,7 +808,6 @@ TXID: ${t}`;
       }));
     }
     initStars();
-
     function draw(){
       ctx.clearRect(0,0,canvas.width, canvas.height);
       for(const st of stars){
@@ -1398,39 +827,104 @@ TXID: ${t}`;
     }
     draw();
 
-    // ======================
-    // Loader sim
-    // ======================
-    const loader = document.getElementById("loader");
-    const barFill = document.getElementById("barFill");
-    const loadPct = document.getElementById("loadPct");
-    const loadText = document.getElementById("loadText");
-
-    const steps = [
-      ["Booting UI", 18],
-      ["Loading assets", 42],
-      ["Initializing animations", 70],
-      ["Finalizing", 92],
-      ["Ready", 100],
-    ];
-
-    function runLoader(){
-      let i = 0;
-      function step(){
-        const [t, p] = steps[i];
-        loadText.textContent = t;
-        barFill.style.width = p + "%";
-        loadPct.textContent = p + "%";
-        i++;
-        if(i < steps.length){
-          setTimeout(step, 230 + Math.random()*220);
-        }else{
-          setTimeout(() => loader.classList.add("hide"), 420);
-        }
+    // Reveal
+    const io = new IntersectionObserver((entries)=>{
+      for(const e of entries){
+        if(e.isIntersecting) e.target.classList.add("show");
       }
-      setTimeout(step, 260);
+    }, {threshold: .12});
+    document.querySelectorAll(".reveal").forEach(el=>io.observe(el));
+
+    // Tabs (left)
+    const tabs = document.querySelectorAll(".tab[data-tab]");
+    tabs.forEach(t=>{
+      t.addEventListener("click", ()=>{
+        tabs.forEach(x=>x.classList.remove("active"));
+        t.classList.add("active");
+        const key = t.getAttribute("data-tab");
+        ["commands","features","how"].forEach(k=>{
+          document.getElementById("tab-"+k).style.display = (k===key) ? "block" : "none";
+        });
+      });
+    });
+
+    // Tabs (store)
+    const storeTabs = document.querySelectorAll(".tab[data-store]");
+    storeTabs.forEach(t=>{
+      t.addEventListener("click", ()=>{
+        storeTabs.forEach(x=>x.classList.remove("active"));
+        t.classList.add("active");
+        const key = t.getAttribute("data-store");
+        ["plans","keys","themes"].forEach(k=>{
+          document.getElementById("store-"+k).style.display = (k===key) ? "block" : "none";
+        });
+      });
+    });
+
+    // Copy commands
+    document.querySelectorAll("[data-copy]").forEach(el=>{
+      el.addEventListener("click", ()=> copyText(el.getAttribute("data-copy")));
+    });
+
+    // Buy modal
+    const buyModal = document.getElementById("buyModal");
+    function openBuy(plan){
+      buyModal.classList.add("show");
+      buyModal.setAttribute("aria-hidden","false");
+      if(plan){
+        const planSel = document.getElementById("buyPlan");
+        planSel.value = plan;
+      }
     }
-    runLoader();
+    function closeBuy(){
+      buyModal.classList.remove("show");
+      buyModal.setAttribute("aria-hidden","true");
+    }
+
+    document.getElementById("openBuy").addEventListener("click", ()=>openBuy());
+    document.getElementById("openBuy2").addEventListener("click", ()=>openBuy());
+    document.getElementById("openBuy3").addEventListener("click", ()=>openBuy());
+    document.getElementById("closeBuy").addEventListener("click", closeBuy);
+    buyModal.addEventListener("click", (e)=>{ if(e.target === buyModal) closeBuy(); });
+
+    // Plan buttons open modal with selected plan
+    document.querySelectorAll("[data-buy]").forEach(btn=>{
+      btn.addEventListener("click", ()=> openBuy(btn.getAttribute("data-buy")));
+    });
+
+    // Copy LTC + owner
+    document.getElementById("copyLtc").addEventListener("click", ()=>copyText(LTC_ADDRESS));
+    document.getElementById("copyLtc2").addEventListener("click", ()=>copyText(LTC_ADDRESS));
+    document.getElementById("copyLtc3").addEventListener("click", ()=>copyText(LTC_ADDRESS));
+
+    document.getElementById("copyOwner").addEventListener("click", ()=>copyText(OWNER_DISCORD_TAG));
+    document.getElementById("copyOwner2").addEventListener("click", ()=>copyText(OWNER_DISCORD_TAG));
+
+    // Copy DM message template
+    document.getElementById("copyBuyMsg").addEventListener("click", ()=>{
+      const discord = document.getElementById("buyDiscord").value.trim() || "(your discord)";
+      const plan = document.getElementById("buyPlan").value;
+      const txid = document.getElementById("buyTxid").value.trim() || "(txid after payment)";
+      const planName = plan==="15d" ? "15 days ($1)" : plan==="1m" ? "1 month ($2)" : "3 months ($4)";
+      const msg =
+`Hi! I want Premium for Nozzarri Ticket.
+Discord: ${discord}
+Plan: ${planName}
+TXID: ${txid}
+I paid to: ${LTC_ADDRESS}
+Please send me my premium key.`;
+      copyText(msg);
+    });
+
+    // Quick navigation buttons
+    document.getElementById("openCmds").addEventListener("click", ()=>{
+      document.querySelector('.tab[data-tab="commands"]').click();
+      showToast("Premium commands opened ✨");
+    });
+    document.getElementById("openHow").addEventListener("click", ()=>{
+      document.querySelector('.tab[data-tab="how"]').click();
+      showToast("How to buy opened 📌");
+    });
   </script>
 </body>
 </html>
